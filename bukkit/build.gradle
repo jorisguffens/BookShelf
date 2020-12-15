@@ -1,0 +1,47 @@
+plugins {
+    id 'java'
+    id 'com.github.johnrengelman.shadow' version '2.0.4'
+}
+
+repositories {
+    mavenCentral()
+
+    // Bukkit
+    maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
+
+    // Vault
+    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
+
+    // Protocollib
+    maven { url 'https://repo.dmulloy2.net/nexus/repository/public/' }
+}
+
+dependencies {
+    compile project(':api')
+
+    compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
+    compileOnly 'com.comphenix.protocol:ProtocolLib:4.6.0-SNAPSHOT'
+}
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        expand 'pluginVersion': project.ext.fullVersion
+        include 'plugin.yml'
+    }
+}
+
+shadowJar {
+//    archiveBaseName.set("${project.name}")
+//    archiveVersion.set("${project.ext.fullVersion}")
+
+//    dependencies {
+//        exclude(dependency(':junit'))
+//        exclude(dependency(':snakeyaml'))
+//        exclude(dependency(':sqlite-jdbc'))
+//        exclude(dependency(':gson'))
+//    }
+}
+
+artifacts {
+    archives shadowJar
+}
