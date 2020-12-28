@@ -20,7 +20,7 @@ package com.gufli.bookshelf.bukkit.entity;
 import com.gufli.bookshelf.bukkit.util.LocationConverter;
 import com.gufli.bookshelf.entity.AbstractPlatformPlayer;
 import com.gufli.bookshelf.entity.PlatformLocation;
-import com.gufli.bookshelf.gui.Inventory;
+import com.gufli.bookshelf.gui.AbstractInventory;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -84,7 +84,7 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     // gui
 
     @Override
-    public void openInventory(Inventory<?, ?> inventory) {
+    public void openInventory(AbstractInventory<?, ?> inventory) {
         if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
             player.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
             super.openInventory(inventory);

@@ -18,7 +18,7 @@
 package com.gufli.bookshelf.entity;
 
 
-import com.gufli.bookshelf.gui.Inventory;
+import com.gufli.bookshelf.gui.AbstractInventory;
 
 import java.util.UUID;
 
@@ -37,11 +37,11 @@ public interface PlatformPlayer extends PlatformSender {
 
     String CUSTOM_GUI_KEY = "CUSTOM_GUI";
 
-    default Inventory<?, ?> getInventory() {
-        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, Inventory.class) : null;
+    default AbstractInventory<?, ?> getInventory() {
+        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, AbstractInventory.class) : null;
     }
 
-    default void openInventory(Inventory<?, ?> inventory) {
+    default void openInventory(AbstractInventory<?, ?> inventory) {
         set(CUSTOM_GUI_KEY, inventory);
     }
 

@@ -25,6 +25,6 @@ public interface InventoryCallback {
 
     void onClose(PlatformPlayer player);
 
-    void onClick(PlatformPlayer player, InventoryClickType clickType, int slot, InventoryItem<?> item);
+    void onClick(PlatformPlayer player, InventoryClickType clickType, int slot, InventoryItem item);
 
 }

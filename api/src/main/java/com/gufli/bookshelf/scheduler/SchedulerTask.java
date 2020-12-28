@@ -15,15 +15,8 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.gui;
+package com.gufli.bookshelf.scheduler;
 
-public interface InventoryFactory<T extends Inventory<?, ?>, U extends InventoryItem<?>> {
-
-    T createInventory(Object handle);
-
-    T createInventory(Object handle, InventoryCallback callback);
-
-    U createItem(Object handle);
-
-    U createItem(Object handle, InventoryItemCallback callback);
+public interface SchedulerTask {
+    void cancel();
 }

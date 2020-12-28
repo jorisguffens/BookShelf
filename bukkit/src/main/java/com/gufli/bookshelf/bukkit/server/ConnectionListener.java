@@ -3,13 +3,13 @@ package com.gufli.bookshelf.bukkit.server;
 import com.gufli.bookshelf.bukkit.BukkitShelf;
 import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
 import com.gufli.bookshelf.entity.PlatformPlayer;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
+import com.gufli.bookshelf.events.Event;
+import com.gufli.bookshelf.events.EventListener;
+import com.gufli.bookshelf.events.EventPriority;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class ConnectionListener implements Listener {
+public class ConnectionListener implements EventListener {
 
     private final BukkitShelf shelf;
 
@@ -17,7 +17,7 @@ public class ConnectionListener implements Listener {
         this.shelf = shelf;
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @Event(priority = EventPriority.MONITOR)
     public void onLogin(PlayerLoginEvent e) {
         if ( e.getResult() != PlayerLoginEvent.Result.ALLOWED ) {
             return;
@@ -26,7 +26,7 @@ public class ConnectionListener implements Listener {
         shelf.server.login(new BukkitPlayer(e.getPlayer()));
     }
 
-    @EventHandler(priority = EventPriority.MONITOR)
+    @Event(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
         PlatformPlayer player = shelf.server.getPlayer(e.getPlayer().getUniqueId());
         shelf.server.quit(player);

@@ -18,27 +18,27 @@
 package com.gufli.bookshelf.bukkit.gui;
 
 import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.events.Event;
+import com.gufli.bookshelf.events.EventListener;
+import com.gufli.bookshelf.events.EventPriority;
 import com.gufli.bookshelf.gui.Inventory;
 import com.gufli.bookshelf.gui.InventoryClickType;
 import com.gufli.bookshelf.server.Server;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class InventoryListener implements Listener {
+public class InventoryListener implements EventListener {
 
-    @EventHandler(priority = EventPriority.LOW)
+    @Event(priority = EventPriority.LOW)
     public void onQuit(PlayerQuitEvent e) {
         PlatformPlayer player = Server.getPlayer(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
-    @EventHandler
+    @Event
     public void onInventoryClose(InventoryCloseEvent e) {
         if ( !(e.getPlayer() instanceof Player) ) {
             return;
@@ -52,7 +52,7 @@ public class InventoryListener implements Listener {
         handleClose(player);
     }
 
-    @EventHandler
+    @Event
     public void onInventoryClick(InventoryClickEvent e) {
         if ( !(e.getWhoClicked() instanceof Player) ) {
             return;

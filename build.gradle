@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group 'com.gufli'
+group 'com.gufli.bookshelf'
 version '1.0-SNAPSHOT'
 
 repositories {
@@ -12,7 +12,6 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
-
 
 subprojects {
     apply plugin: 'java'
@@ -27,9 +26,6 @@ subprojects {
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
     }
-
-    project.ext.apiVersion = version
-    project.ext.fullVersion = version
 
     repositories {
         mavenCentral()

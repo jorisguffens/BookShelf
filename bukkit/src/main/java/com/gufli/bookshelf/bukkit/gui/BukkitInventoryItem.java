@@ -17,11 +17,11 @@
 
 package com.gufli.bookshelf.bukkit.gui;
 
-import com.gufli.bookshelf.gui.InventoryItem;
+import com.gufli.bookshelf.gui.AbstractInventoryItem;
 import com.gufli.bookshelf.gui.InventoryItemCallback;
 import org.bukkit.inventory.ItemStack;
 
-public class BukkitInventoryItem extends InventoryItem<ItemStack> {
+public class BukkitInventoryItem extends AbstractInventoryItem<ItemStack> {
 
     public BukkitInventoryItem(ItemStack itemStack, InventoryItemCallback callback) {
         super(itemStack, callback);

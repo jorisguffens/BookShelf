@@ -6,11 +6,8 @@ plugins {
 repositories {
     mavenCentral()
 
-    // Bukkit
+    // Spigot
     maven { url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
-
-    // Vault
-    maven { url 'http://nexus.hc.to/content/repositories/pub_releases' }
 
     // Protocollib
     maven { url 'https://repo.dmulloy2.net/nexus/repository/public/' }
@@ -25,14 +22,14 @@ dependencies {
 
 processResources {
     from(sourceSets.main.resources.srcDirs) {
-        expand 'pluginVersion': project.ext.fullVersion
+        expand 'pluginVersion': project.version
         include 'plugin.yml'
     }
 }
 
 shadowJar {
-//    archiveBaseName.set("${project.name}")
-//    archiveVersion.set("${project.ext.fullVersion}")
+    archiveBaseName.set("${rootProject.name}")
+    archiveVersion.set("${rootProject.version}")
 
 //    dependencies {
 //        exclude(dependency(':junit'))

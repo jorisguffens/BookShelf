@@ -24,6 +24,10 @@ import org.bukkit.Location;
 public class LocationConverter {
 
     public static Location convert(PlatformLocation loc) {
+        if ( loc == null ) {
+            return null;
+        }
+
         if ( Bukkit.getWorld(loc.getWorldName()) == null ) {
             return null;
         }
@@ -33,6 +37,10 @@ public class LocationConverter {
     }
 
     public static PlatformLocation convert(Location loc) {
+        if ( loc == null || loc.getWorld() == null ) {
+            return null;
+        }
+
         return new PlatformLocation(loc.getWorld().getName(),
                 loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
     }

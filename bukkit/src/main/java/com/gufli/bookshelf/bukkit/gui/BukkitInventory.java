@@ -17,11 +17,14 @@
 
 package com.gufli.bookshelf.bukkit.gui;
 
+import com.gufli.bookshelf.gui.AbstractInventory;
 import com.gufli.bookshelf.gui.InventoryCallback;
-import com.gufli.bookshelf.gui.Inventory;
+import com.gufli.bookshelf.gui.InventoryItem;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 
-public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.inventory.Inventory> {
+public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
 
     public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback callback) {
         super(inv, callback);
@@ -40,14 +43,14 @@ public class BukkitInventory extends Inventory<BukkitInventoryItem, org.bukkit.i
     }
 
     @Override
-    public void setItem(int slot, BukkitInventoryItem item) {
-        super.setItem(slot, item);
-        handle.setItem(slot, item.getHandle());
-    }
-
-    @Override
     public void removeItem(int slot) {
         super.removeItem(slot);
         handle.setItem(slot, null);
+    }
+
+    @Override
+    public <V extends InventoryItem<ItemStack>> void setItem(int slot, V item) {
+        super.setItem(slot, item);
+        handle.setItem(slot, item.getHandle());
     }
 }

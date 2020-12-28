@@ -6,19 +6,9 @@ import java.util.stream.Collectors;
 
 public class EventManager {
 
-    private final static EventManager manager = new EventManager();
+    private static final Map<EventListener, EventListenerExecutor> listeners = new HashMap<>();
 
-    public static EventManager get() {
-        return manager;
-    }
-
-    private EventManager() {}
-
-    //
-
-    private final Map<EventListener, EventListenerExecutor> listeners = new HashMap<>();
-
-    public EventListenerExecutor register(EventListener listener) {
+    public static EventListenerExecutor register(EventListener listener) {
         List<EventExecutor> executors = new ArrayList<>();
         for ( Method method : listener.getClass().getMethods() ) {
             if ( method.getParameterCount() != 1 ) {
@@ -37,11 +27,11 @@ public class EventManager {
         return eventListenerExecutor;
     }
 
-    public void unregister(EventListener listener) {
+    public static void unregister(EventListener listener) {
         listeners.remove(listener);
     }
 
-    public void dispatch(Object event) {
+    public static <T> T dispatch(T event) {
         List<EventExecutor> executors = listeners.values().stream()
                 .flatMap(ex -> ex.match(event).stream())
                 .sorted(Comparator.comparing(ex -> ex.getPriority().ordinal()))
@@ -50,6 +40,7 @@ public class EventManager {
         for ( EventExecutor ex : executors ) {
             ex.execute(event);
         }
+        return event;
     }
 
 }
