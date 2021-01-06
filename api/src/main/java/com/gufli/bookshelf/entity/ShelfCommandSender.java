@@ -17,40 +17,10 @@
 
 package com.gufli.bookshelf.entity;
 
-import java.util.HashMap;
-import java.util.Map;
+public interface ShelfCommandSender {
 
-public abstract class AbstractPlatformPlayer implements PlatformPlayer {
+    boolean hasPermission(String permission);
 
-    final Map<String, Object> cache = new HashMap<>();
-
-    @Override
-    public void set(String key, Object value) {
-        if ( value == null ) {
-            remove(key);
-        } else {
-            cache.put(key, value);
-        }
-    }
-
-    @Override
-    public boolean has(String key) {
-        return cache.containsKey(key);
-    }
-
-    @Override
-    public void remove(String key) {
-        cache.remove(key);
-    }
-
-    @Override
-    public Object get(String key) {
-        return cache.get(key);
-    }
-
-    @Override
-    public <T> T get(String key, Class<T> clazz) {
-        return (T) cache.get(key);
-    }
+    void sendMessage(String msg);
 
 }

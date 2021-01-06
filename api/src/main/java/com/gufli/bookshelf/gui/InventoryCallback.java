@@ -17,14 +17,14 @@
 
 package com.gufli.bookshelf.gui;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public interface InventoryCallback {
 
-    void onOpen(PlatformPlayer player);
+    void onOpen(ShelfPlayer player);
 
-    void onClose(PlatformPlayer player);
+    void onClose(ShelfPlayer player);
 
-    void onClick(PlatformPlayer player, InventoryClickType clickType, int slot, InventoryItem item);
+    void onClick(ShelfPlayer player, InventoryClickType clickType, int slot, InventoryItem item);
 
 }

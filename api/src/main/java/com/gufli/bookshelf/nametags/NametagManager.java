@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.nametags;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public class NametagManager {
 
@@ -14,19 +14,19 @@ public class NametagManager {
         nametagHandler = handler;
     }
 
-    public static void setNametag(PlatformPlayer player, String prefix, String suffix) {
+    public static void setNametag(ShelfPlayer player, String prefix, String suffix) {
         nametagHandler.setNametag(player, prefix, suffix);
     }
 
-    public static void setPrefix(PlatformPlayer player, String prefix) {
+    public static void setPrefix(ShelfPlayer player, String prefix) {
         nametagHandler.setPrefix(player, prefix);
     }
 
-    public static void setSuffix(PlatformPlayer player, String suffix) {
+    public static void setSuffix(ShelfPlayer player, String suffix) {
         nametagHandler.setSuffix(player, suffix);
     }
 
-    public static void clear(PlatformPlayer player) {
+    public static void clear(ShelfPlayer player) {
         nametagHandler.clear(player);
     }
 }

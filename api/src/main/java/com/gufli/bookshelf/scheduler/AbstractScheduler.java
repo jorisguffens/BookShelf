@@ -21,7 +21,7 @@ import com.google.common.util.concurrent.ThreadFactoryBuilder;
 
 import java.util.concurrent.*;
 
-public abstract class AbstractScheduler {
+public abstract class AbstractScheduler implements Scheduler {
 
     private final ScheduledThreadPoolExecutor scheduler;
     private final CustomExecutor schedulerWorkerPool;
@@ -42,35 +42,33 @@ public abstract class AbstractScheduler {
         this.worker = new ForkJoinPool(32, ForkJoinPool.defaultForkJoinWorkerThreadFactory, (t, e) -> e.printStackTrace(), false);
     }
 
+    @Override
     public abstract Executor sync();
 
+    @Override
     public Executor async() {
         return this.worker;
     }
 
-    public final void executeAsync(Runnable task) {
-        async().execute(task);
-    }
-
-    public final void executeSync(Runnable task) {
-        sync().execute(task);
-    }
-
+    @Override
     public SchedulerTask asyncLater(Runnable task, long delay, TimeUnit unit) {
         ScheduledFuture<?> future = this.scheduler.schedule(() -> this.schedulerWorkerPool.execute(task), delay, unit);
         return () -> future.cancel(false);
     }
 
+    @Override
     public SchedulerTask asyncRepeating(Runnable task, long interval, TimeUnit unit) {
         ScheduledFuture<?> future = this.scheduler.scheduleAtFixedRate(() -> this.schedulerWorkerPool.execute(task), interval, interval, unit);
         return () -> future.cancel(false);
     }
 
+    @Override
     public SchedulerTask syncLater(Runnable task, long delay, TimeUnit unit) {
         ScheduledFuture<?> future = this.scheduler.schedule(() -> this.sync().execute(task), delay, unit);
         return () -> future.cancel(false);
     }
 
+    @Override
     public SchedulerTask syncRepeating(Runnable task, long interval, TimeUnit unit) {
         ScheduledFuture<?> future = this.scheduler.scheduleAtFixedRate(() -> this.sync().execute(task), interval, interval, unit);
         return () -> future.cancel(false);
@@ -104,26 +102,6 @@ public abstract class AbstractScheduler {
                 e.printStackTrace();
             }
         }
-    }
-
-    public <T> CompletableFuture<T> makeAsyncFuture(Callable<T> supplier) {
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return supplier.call();
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        }, async());
-    }
-
-    public CompletableFuture<Void> makeAsyncFuture(Runnable runnable) {
-        return CompletableFuture.runAsync(() -> {
-            try {
-                runnable.run();
-            } catch (Exception e) {
-                throw new CompletionException(e);
-            }
-        }, async());
     }
 
 }

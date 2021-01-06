@@ -1,11 +1,11 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.PlatformSender;
+import com.gufli.bookshelf.entity.ShelfCommandSender;
 
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Command<T extends PlatformSender> {
+public abstract class Command<T extends ShelfCommandSender> {
 
     private final CommandInfo info;
 
@@ -21,29 +21,29 @@ public abstract class Command<T extends PlatformSender> {
         return info;
     }
 
-    final boolean hasAnyPermission(PlatformSender sender) {
+    final boolean hasAnyPermission(ShelfCommandSender sender) {
         return getInfo().permissions().length == 0 || Arrays.stream(getInfo().permissions()).anyMatch(sender::hasPermission);
     }
 
-    final boolean hasAllPermissions(PlatformSender sender) {
+    final boolean hasAllPermissions(ShelfCommandSender sender) {
         return getInfo().permissions().length == 0 || Arrays.stream(getInfo().permissions()).allMatch(sender::hasPermission);
     }
 
     //
 
-    final void executeInternal(PlatformSender sender, String[] args) {
+    public final void execute(ShelfCommandSender sender, String[] args) {
         execute((T) sender, args);
     }
 
-    final List<String> autocompleteInternal(PlatformSender sender, String[] args) {
+    public final List<String> autocomplete(ShelfCommandSender sender, String[] args) {
         return autocomplete((T) sender, args);
     }
 
     // implementation
 
-    public abstract void execute(T sender, String[] args);
+    protected abstract void onExecute(T sender, String[] args);
 
-    public List<String> autocomplete(T sender, String[] args) {
+    protected List<String> onAutocomplete(T sender, String[] args) {
         return null;
     }
 

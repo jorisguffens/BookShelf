@@ -1,7 +1,7 @@
 package com.gufli.bookshelf.bukkit.nametags;
 
 import com.gufli.bookshelf.bukkit.BukkitShelf;
-import com.gufli.bookshelf.server.Server;
+import com.gufli.bookshelf.server.Shelf;
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -27,7 +27,7 @@ public class ConnectionListener implements Listener {
 
     @EventHandler
     public void onLeave(PlayerQuitEvent e) {
-        nametagHandler.clear(Server.getPlayer(e.getPlayer().getUniqueId()));
+        nametagHandler.clear(Shelf.getPlayer(e.getPlayer().getUniqueId()));
     }
 
 }

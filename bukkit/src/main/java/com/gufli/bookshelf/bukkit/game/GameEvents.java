@@ -2,11 +2,11 @@ package com.gufli.bookshelf.bukkit.game;
 
 import com.gufli.bookshelf.arenas.WorldArena;
 import com.gufli.bookshelf.bukkit.util.LocationConverter;
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.events.EventListenerExecutor;
 import com.gufli.bookshelf.events.defaults.PlayerEvent;
 import com.gufli.bookshelf.game.AbstractGame;
-import com.gufli.bookshelf.server.Server;
+import com.gufli.bookshelf.server.Shelf;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockEvent;
 import org.bukkit.event.enchantment.EnchantItemEvent;
@@ -39,7 +39,7 @@ public class GameEvents {
     }
 
     private static boolean on(AbstractGame game, org.bukkit.event.player.PlayerEvent event) {
-        PlatformPlayer player = Server.getPlayer(event.getPlayer().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(event.getPlayer().getUniqueId());
         return player != null && game.contains(player);
     }
 
@@ -52,7 +52,7 @@ public class GameEvents {
 
     private static boolean on(AbstractGame game, EntityEvent event) {
         if ( event.getEntity() instanceof Player ) {
-            PlatformPlayer player = Server.getPlayer(event.getEntity().getUniqueId());
+            ShelfPlayer player = Shelf.getPlayer(event.getEntity().getUniqueId());
             return player != null && game.contains(player);
         }
         if ( game.getArena() == null ) {
@@ -85,7 +85,7 @@ public class GameEvents {
     }
 
     private static boolean on(AbstractGame game, EnchantItemEvent event) {
-        PlatformPlayer player = Server.getPlayer(event.getEnchanter().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(event.getEnchanter().getUniqueId());
         return player != null && game.contains(player);
     }
 

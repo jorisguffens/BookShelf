@@ -1,14 +1,14 @@
 package com.gufli.bookshelf.gui;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public interface Inventory<T, U> {
 
-    boolean dispatchClick(PlatformPlayer player, InventoryClickType clickType, int slot);
+    boolean dispatchClick(ShelfPlayer player, InventoryClickType clickType, int slot);
 
-    void dispatchClose(PlatformPlayer player);
+    void dispatchClose(ShelfPlayer player);
 
-    void dispatchOpen(PlatformPlayer player);
+    void dispatchOpen(ShelfPlayer player);
 
     T getHandle();
 

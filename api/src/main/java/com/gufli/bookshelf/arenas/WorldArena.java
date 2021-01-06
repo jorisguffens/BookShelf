@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.arenas;
 
-import com.gufli.bookshelf.entity.PlatformLocation;
+import com.gufli.bookshelf.entity.ShelfLocation;
 
 public class WorldArena implements Arena {
 
@@ -11,7 +11,7 @@ public class WorldArena implements Arena {
     }
 
     @Override
-    public boolean contains(PlatformLocation loc) {
+    public boolean contains(ShelfLocation loc) {
         return loc.getWorldName().equals(worldName);
     }
 

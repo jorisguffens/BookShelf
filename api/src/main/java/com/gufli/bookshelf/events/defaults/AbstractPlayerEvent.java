@@ -1,16 +1,16 @@
 package com.gufli.bookshelf.events.defaults;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public abstract class AbstractPlayerEvent {
 
-    private final PlatformPlayer player;
+    private final ShelfPlayer player;
 
-    public AbstractPlayerEvent(PlatformPlayer player) {
+    public AbstractPlayerEvent(ShelfPlayer player) {
         this.player = player;
     }
 
-    public PlatformPlayer getPlayer() {
+    public ShelfPlayer getPlayer() {
         return player;
     }
 

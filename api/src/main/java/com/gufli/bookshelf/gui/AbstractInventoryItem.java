@@ -17,7 +17,7 @@
 
 package com.gufli.bookshelf.gui;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public class AbstractInventoryItem<T> implements InventoryItem<T> {
 
@@ -33,7 +33,7 @@ public class AbstractInventoryItem<T> implements InventoryItem<T> {
         this(handle, null);
     }
 
-    public boolean dispatchClick(PlatformPlayer player, InventoryClickType type) {
+    public boolean dispatchClick(ShelfPlayer player, InventoryClickType type) {
         if ( callback == null ) {
             return false;
         }

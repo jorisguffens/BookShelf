@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 import java.util.Collections;
 import java.util.Set;
@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 public class GameTeam {
 
-    private final Set<PlatformPlayer> players = new CopyOnWriteArraySet<>();
+    private final Set<ShelfPlayer> players = new CopyOnWriteArraySet<>();
 
     private final String name;
     private final String color;
@@ -18,11 +18,11 @@ public class GameTeam {
         this.color = color;
     }
 
-    public Set<PlatformPlayer> getPlayers() {
+    public Set<ShelfPlayer> getPlayers() {
         return Collections.unmodifiableSet(players);
     }
 
-    public boolean contains(PlatformPlayer player) {
+    public boolean contains(ShelfPlayer player) {
         return players.contains(player);
     }
 
@@ -40,11 +40,11 @@ public class GameTeam {
 
     //
 
-    void addPlayer(PlatformPlayer player) {
+    void addPlayer(ShelfPlayer player) {
         players.add(player);
     }
 
-    void removePlayer(PlatformPlayer player) {
+    void removePlayer(ShelfPlayer player) {
         players.remove(player);
     }
 

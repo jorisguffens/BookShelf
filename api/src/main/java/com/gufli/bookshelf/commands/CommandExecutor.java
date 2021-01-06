@@ -1,15 +1,14 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
-import com.gufli.bookshelf.entity.PlatformSender;
+import com.gufli.bookshelf.entity.ShelfCommandSender;
 
 import java.util.List;
 
-public abstract class CommandExecutor {
+public interface CommandExecutor<T extends ShelfCommandSender> {
 
-    public abstract void execute(PlatformSender sender, String[] args);
+    void execute(T sender, String[] args);
 
-    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+    default List<String> autocomplete(T sender, String[] args) {
         return null;
     }
 

@@ -1,9 +1,9 @@
 package com.gufli.bookshelf.arenas;
 
-import com.gufli.bookshelf.entity.PlatformLocation;
+import com.gufli.bookshelf.entity.ShelfLocation;
 
 public interface Arena {
 
-    boolean contains(PlatformLocation loc);
+    boolean contains(ShelfLocation loc);
 
 }

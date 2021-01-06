@@ -18,7 +18,7 @@
 package com.gufli.bookshelf.gui;
 
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,7 +39,7 @@ public class AbstractInventory<T, U> implements Inventory<T, U> {
         this(handle, null);
     }
 
-    public boolean dispatchClick(PlatformPlayer player, InventoryClickType clickType, int slot) {
+    public boolean dispatchClick(ShelfPlayer player, InventoryClickType clickType, int slot) {
         InventoryItem<U> item = items.get(slot);
 
         if ( callback != null ) {
@@ -52,13 +52,13 @@ public class AbstractInventory<T, U> implements Inventory<T, U> {
         return false;
     }
 
-    public void dispatchClose(PlatformPlayer player) {
+    public void dispatchClose(ShelfPlayer player) {
         if ( callback != null ) {
             callback.onClose(player);
         }
     }
 
-    public void dispatchOpen(PlatformPlayer player) {
+    public void dispatchOpen(ShelfPlayer player) {
         if ( callback != null ) {
             callback.onOpen(player);
         }

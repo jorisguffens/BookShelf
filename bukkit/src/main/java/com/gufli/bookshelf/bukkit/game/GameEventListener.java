@@ -2,12 +2,10 @@ package com.gufli.bookshelf.bukkit.game;
 
 import com.gufli.bookshelf.events.Event;
 import com.gufli.bookshelf.events.defaults.PlayerDeathEvent;
-import com.gufli.bookshelf.game.AbstractGame;
-import com.gufli.bookshelf.game.AbstractTeamGame;
-import com.gufli.bookshelf.game.GameTeam;
+import com.gufli.bookshelf.game.*;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameEvent;
-import com.gufli.bookshelf.game.server.GameServer;
+import com.gufli.bookshelf.game.manager.GameManager;
 import org.bukkit.ChatColor;
 
 public class GameEventListener implements com.gufli.bookshelf.events.EventListener {
@@ -24,15 +22,15 @@ public class GameEventListener implements com.gufli.bookshelf.events.EventListen
 
     @Event
     public void onKill(PlayerDeathEvent event) {
-        AbstractGame game = GameServer.getGame(event.getPlayer());
+        Game game = GameManager.getGame(event.getPlayer());
         if ( game == null ) {
             return;
         }
 
         event.setDeathMessage(null);
 
-        if ( game instanceof AbstractTeamGame ) {
-            GameTeam team = ((AbstractTeamGame<?>) game).getTeam(event.getPlayer());
+        if ( game instanceof TeamGame) {
+            GameTeam team = ((TeamGame<?>) game).getTeam(event.getPlayer());
             String color = team == null ? ChatColor.GOLD + "" : team.getColor();
 
             if ( event.getKiller() == null ) {
@@ -40,7 +38,7 @@ public class GameEventListener implements com.gufli.bookshelf.events.EventListen
                 return;
             }
 
-            GameTeam kteam = ((AbstractTeamGame<?>) game).getTeam(event.getKiller());
+            GameTeam kteam = ((TeamGame<?>) game).getTeam(event.getKiller());
             String kcolor = kteam == null ? ChatColor.GOLD + "" : kteam.getColor();
 
             game.broadcast(color + event.getPlayer().getName() + ChatColor.YELLOW + " was killed by "

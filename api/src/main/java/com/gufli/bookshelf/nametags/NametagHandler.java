@@ -1,15 +1,15 @@
 package com.gufli.bookshelf.nametags;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public interface NametagHandler {
 
-    void setNametag(PlatformPlayer player, String prefix, String suffix);
+    void setNametag(ShelfPlayer player, String prefix, String suffix);
 
-    void setPrefix(PlatformPlayer player, String prefix);
+    void setPrefix(ShelfPlayer player, String prefix);
 
-    void setSuffix(PlatformPlayer player, String suffix);
+    void setSuffix(ShelfPlayer player, String suffix);
 
-    void clear(PlatformPlayer player);
+    void clear(ShelfPlayer player);
 
 }

@@ -17,14 +17,14 @@
 
 package com.gufli.bookshelf.bukkit.entity;
 
-import com.gufli.bookshelf.entity.PlatformSender;
+import com.gufli.bookshelf.entity.ShelfCommandSender;
 import org.bukkit.command.CommandSender;
 
-public class BukkitSender implements PlatformSender {
+public class BukkitCommandSender implements ShelfCommandSender {
 
     protected final CommandSender commandSender;
 
-    public BukkitSender(CommandSender commandSender) {
+    public BukkitCommandSender(CommandSender commandSender) {
         this.commandSender = commandSender;
     }
 

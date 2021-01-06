@@ -22,15 +22,17 @@ import com.gufli.bookshelf.gui.AbstractInventory;
 
 import java.util.UUID;
 
-public interface PlatformPlayer extends PlatformSender {
+public interface ShelfPlayer extends ShelfCommandSender {
 
     UUID getUniqueId();
 
     String getName();
 
-    void teleport(PlatformLocation location);
+    void teleport(ShelfLocation location);
 
-    PlatformLocation getLocation();
+    ShelfLocation getLocation();
+
+    boolean isOnline();
 
 
     // gui

@@ -22,7 +22,7 @@ import java.text.DecimalFormatSymbols;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
-public class PlatformLocation {
+public class ShelfLocation {
 
     String worldName;
 
@@ -33,14 +33,14 @@ public class PlatformLocation {
     float yaw;
     float pitch;
 
-    public PlatformLocation(String worldName, double x, double y, double z) {
+    public ShelfLocation(String worldName, double x, double y, double z) {
         this.worldName = worldName;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public PlatformLocation(String worldName, double x, double y, double z, float yaw, float pitch) {
+    public ShelfLocation(String worldName, double x, double y, double z, float yaw, float pitch) {
         this(worldName, x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
@@ -90,7 +90,7 @@ public class PlatformLocation {
         this.pitch = pitch;
     }
 
-    public double distanceTo(PlatformLocation l) {
+    public double distanceTo(ShelfLocation l) {
         return Math.sqrt(Math.pow(x - l.x, 2) + Math.pow(y - l.y, 2) + Math.pow(z - l.z, 2));
 
     }
@@ -105,7 +105,7 @@ public class PlatformLocation {
                 + df.format(pitch);
     }
 
-    public static PlatformLocation deserialize(String str) {
+    public static ShelfLocation deserialize(String str) {
         if ( str == null ) {
             return null;
         }
@@ -120,7 +120,7 @@ public class PlatformLocation {
             return null;
         }
 
-        PlatformLocation loc = new PlatformLocation(
+        ShelfLocation loc = new ShelfLocation(
                 parts[0],
                 Double.parseDouble(parts[1]),
                 Double.parseDouble(parts[2]),

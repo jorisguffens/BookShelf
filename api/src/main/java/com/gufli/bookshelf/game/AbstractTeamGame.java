@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.events.EventManager;
 import com.gufli.bookshelf.game.events.PlayerJoinGameTeamEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameTeamEvent;
@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame {
+public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame implements TeamGame<T> {
 
     protected final Set<T> teams = new CopyOnWriteArraySet<>();
 
@@ -19,11 +19,11 @@ public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame 
         return Collections.unmodifiableSet(teams);
     }
 
-    public T getTeam(PlatformPlayer player) {
+    public T getTeam(ShelfPlayer player) {
         return teams.stream().filter(team -> team.contains(player)).findFirst().orElse(null);
     }
 
-    public void setTeam(PlatformPlayer player, T team) {
+    public void setTeam(ShelfPlayer player, T team) {
         if ( !teams.contains(team) ) {
             throw new InvalidGameTeamException("Team is not registred with this game instance.");
         }
@@ -38,7 +38,7 @@ public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame 
         EventManager.dispatch(new PlayerJoinGameTeamEvent(this, team, player));
     }
 
-    public void setTeam(PlatformPlayer player) {
+    public void setTeam(ShelfPlayer player) {
         T team = teams.stream().min(Comparator.comparing(t -> t.getPlayers().size())).orElse(null);
         if ( team == null ) {
             return;
@@ -48,7 +48,7 @@ public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame 
     }
 
     @Override
-    public void removePlayer(PlatformPlayer player) {
+    public void removePlayer(ShelfPlayer player) {
         super.removePlayer(player);
 
         GameTeam team = getTeam(player);

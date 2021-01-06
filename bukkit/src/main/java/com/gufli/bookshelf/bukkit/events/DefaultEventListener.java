@@ -1,13 +1,13 @@
 package com.gufli.bookshelf.bukkit.events;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.events.Event;
 import com.gufli.bookshelf.events.EventListener;
 import com.gufli.bookshelf.events.EventManager;
 import com.gufli.bookshelf.events.EventPriority;
 import com.gufli.bookshelf.events.defaults.PlayerAttackByPlayerEvent;
 import com.gufli.bookshelf.events.defaults.PlayerDeathEvent;
-import com.gufli.bookshelf.server.Server;
+import com.gufli.bookshelf.server.Shelf;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -33,20 +33,20 @@ public class DefaultEventListener implements EventListener {
             return;
         }
 
-        PlatformPlayer p = Server.getPlayer(entity.getUniqueId());
+        ShelfPlayer p = Shelf.getPlayer(entity.getUniqueId());
         if ( p == null ) {
             return;
         }
 
-        PlatformPlayer d = null;
+        ShelfPlayer d = null;
         if ( damager instanceof Player) {
-            d = Server.getPlayer(damager.getUniqueId());
+            d = Shelf.getPlayer(damager.getUniqueId());
         }
         else if ( damager instanceof Projectile ) {
             Projectile projectile = (Projectile) damager;
             if ( projectile.getShooter() != null && projectile.getShooter() instanceof Player ) {
                 Player shooter = (Player) projectile.getShooter();
-                d = Server.getPlayer(shooter.getUniqueId());
+                d = Shelf.getPlayer(shooter.getUniqueId());
             }
         }
 
@@ -60,7 +60,7 @@ public class DefaultEventListener implements EventListener {
 
     @Event(priority = EventPriority.LOWEST)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent event) {
-        PlatformPlayer player = Server.getPlayer(event.getEntity().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(event.getEntity().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -71,7 +71,7 @@ public class DefaultEventListener implements EventListener {
             return;
         }
 
-        PlatformPlayer killer = Server.getPlayer(event.getEntity().getKiller().getUniqueId());
+        ShelfPlayer killer = Shelf.getPlayer(event.getEntity().getKiller().getUniqueId());
         if ( killer == null ) {
             PlayerDeathEvent e = EventManager.dispatch(new PlayerDeathEvent(player, event.getDeathMessage()));
             event.setDeathMessage(e.getDeathMessage());

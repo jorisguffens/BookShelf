@@ -17,13 +17,13 @@
 
 package com.gufli.bookshelf.bukkit.gui;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.events.Event;
 import com.gufli.bookshelf.events.EventListener;
 import com.gufli.bookshelf.events.EventPriority;
 import com.gufli.bookshelf.gui.Inventory;
 import com.gufli.bookshelf.gui.InventoryClickType;
-import com.gufli.bookshelf.server.Server;
+import com.gufli.bookshelf.server.Shelf;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -34,7 +34,7 @@ public class InventoryListener implements EventListener {
 
     @Event(priority = EventPriority.LOW)
     public void onQuit(PlayerQuitEvent e) {
-        PlatformPlayer player = Server.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
@@ -44,7 +44,7 @@ public class InventoryListener implements EventListener {
             return;
         }
 
-        PlatformPlayer player = Server.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(e.getPlayer().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -58,7 +58,7 @@ public class InventoryListener implements EventListener {
             return;
         }
 
-        PlatformPlayer player = Server.getPlayer(e.getWhoClicked().getUniqueId());
+        ShelfPlayer player = Shelf.getPlayer(e.getWhoClicked().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -118,11 +118,11 @@ public class InventoryListener implements EventListener {
         p.playSound(p.getLocation().add(0, 1.8, 0), sound, 1f, 1f);
     }
 
-    private void handleClose(PlatformPlayer player) {
+    private void handleClose(ShelfPlayer player) {
         Inventory<?, ?> inv = player.getInventory();
         if ( inv != null ) {
             inv.dispatchClose(player);
-            player.set(PlatformPlayer.CUSTOM_GUI_KEY, null);
+            player.set(ShelfPlayer.CUSTOM_GUI_KEY, null);
         }
     }
 

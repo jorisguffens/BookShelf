@@ -17,9 +17,9 @@
 
 package com.gufli.bookshelf.gui;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 @FunctionalInterface
 public interface InventoryItemCallback {
-    boolean onClick(PlatformPlayer player, InventoryClickType clickType);
+    boolean onClick(ShelfPlayer player, InventoryClickType clickType);
 }

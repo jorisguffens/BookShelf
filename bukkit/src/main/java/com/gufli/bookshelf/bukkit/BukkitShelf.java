@@ -3,20 +3,20 @@ package com.gufli.bookshelf.bukkit;
 import com.gufli.bookshelf.bukkit.events.DefaultEventListener;
 import com.gufli.bookshelf.bukkit.events.MainEventListener;
 import com.gufli.bookshelf.bukkit.gui.InventoryListener;
-import com.gufli.bookshelf.bukkit.server.BukkitServer;
+import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
 import com.gufli.bookshelf.events.EventManager;
-import com.gufli.bookshelf.server.Server;
+import com.gufli.bookshelf.server.Shelf;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BukkitShelf extends JavaPlugin {
 
-    public final BukkitServer server;
+    public final BukkitShelfServer server;
 
     public BukkitShelf() {
-        this.server = new BukkitServer();
-        Server.register(this.server);
+        this.server = new BukkitShelfServer(new BukkitScheduler(this));
+        Shelf.register(this.server);
     }
 
     @Override

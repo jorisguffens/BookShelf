@@ -4,7 +4,7 @@ import com.comphenix.packetwrapper.AbstractPacket;
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.gufli.bookshelf.bukkit.BukkitShelf;
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.nametags.NametagHandler;
 import com.gufli.bookshelf.nametags.NametagManager;
 import org.apache.commons.lang3.RandomStringUtils;
@@ -30,7 +30,7 @@ public class BukkitNametagHandler implements NametagHandler {
     }
 
     @Override
-    public void setNametag(PlatformPlayer player, String prefix, String suffix) {
+    public void setNametag(ShelfPlayer player, String prefix, String suffix) {
         // If player is already in the team -> ignore
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null && previous.isSimilar(prefix, suffix) ) {
@@ -60,7 +60,7 @@ public class BukkitNametagHandler implements NametagHandler {
     }
 
     @Override
-    public void setPrefix(PlatformPlayer player, String prefix) {
+    public void setPrefix(ShelfPlayer player, String prefix) {
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null ) {
             setNametag(player, prefix, previous.getSuffix());
@@ -70,7 +70,7 @@ public class BukkitNametagHandler implements NametagHandler {
     }
 
     @Override
-    public void setSuffix(PlatformPlayer player, String suffix) {
+    public void setSuffix(ShelfPlayer player, String suffix) {
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null ) {
             setNametag(player, previous.getPrefix(), suffix);
@@ -80,7 +80,7 @@ public class BukkitNametagHandler implements NametagHandler {
     }
 
     @Override
-    public void clear(PlatformPlayer player) {
+    public void clear(ShelfPlayer player) {
         FakeTeam team = getFakeTeam(player);
         if ( team == null ) {
             return;
@@ -103,7 +103,7 @@ public class BukkitNametagHandler implements NametagHandler {
                 .findFirst().orElse(null);
     }
 
-    private FakeTeam getFakeTeam(PlatformPlayer player) {
+    private FakeTeam getFakeTeam(ShelfPlayer player) {
         return fakeTeams.stream().filter(t -> t.getPlayers().contains(player.getName()))
                 .findFirst().orElse(null);
     }

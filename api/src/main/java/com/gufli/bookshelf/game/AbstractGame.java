@@ -1,7 +1,7 @@
 package com.gufli.bookshelf.game;
 
 import com.gufli.bookshelf.arenas.Arena;
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.events.EventManager;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameEvent;
@@ -13,36 +13,39 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-public abstract class AbstractGame {
+public abstract class AbstractGame implements Game {
 
-    private final Map<PlatformPlayer, PlayerGameStatus> players = new ConcurrentHashMap<>();
+    protected final Map<ShelfPlayer, PlayerGameStatus> players = new ConcurrentHashMap<>();
 
     private Arena arena;
     private GameStatus gameStatus = GameStatus.WAITING;
 
-    public Set<PlatformPlayer> getPlayers() {
+    @Override
+    public Set<ShelfPlayer> getPlayers() {
         return Collections.unmodifiableSet(players.keySet());
     }
 
-    public boolean contains(PlatformPlayer player) {
+    @Override
+    public boolean contains(ShelfPlayer player) {
         return players.containsKey(player);
     }
 
-    public void addPlayer(PlatformPlayer player) {
+    public void addPlayer(ShelfPlayer player) {
         players.put(player, PlayerGameStatus.WAITING);
         EventManager.dispatch(new PlayerJoinGameEvent(this, player));
     }
 
-    public void removePlayer(PlatformPlayer player) {
+    public void removePlayer(ShelfPlayer player) {
         players.remove(player);
         EventManager.dispatch(new PlayerLeaveGameEvent(this, player));
     }
 
-    public PlayerGameStatus getStatus(PlatformPlayer player) {
+    @Override
+    public PlayerGameStatus getStatus(ShelfPlayer player) {
         return players.get(player);
     }
 
-    public void setStatus(PlatformPlayer player, PlayerGameStatus status) {
+    public void setStatus(ShelfPlayer player, PlayerGameStatus status) {
         if ( !contains(player) ) {
             throw new PlayerNotInGameException("That player is not registered with this game instance.");
         }
@@ -52,6 +55,7 @@ public abstract class AbstractGame {
         players.put(player, status);
     }
 
+    @Override
     public GameStatus getStatus() {
         return gameStatus;
     }
@@ -60,10 +64,12 @@ public abstract class AbstractGame {
         this.gameStatus = status;
     }
 
+    @Override
     public void broadcast(String msg) {
         players.keySet().forEach(p -> p.sendMessage(msg));
     }
 
+    @Override
     public Arena getArena() {
         return arena;
     }

@@ -1,23 +1,23 @@
 package com.gufli.bookshelf.events.defaults;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public class PlayerDeathEvent extends AbstractPlayerEvent {
 
-    private final PlatformPlayer killer;
+    private final ShelfPlayer killer;
     private String deathMessage;
 
-    public PlayerDeathEvent(PlatformPlayer player, PlatformPlayer killer, String deathMessage) {
+    public PlayerDeathEvent(ShelfPlayer player, ShelfPlayer killer, String deathMessage) {
         super(player);
         this.killer = killer;
         this.deathMessage = deathMessage;
     }
 
-    public PlayerDeathEvent(PlatformPlayer player, String deathMessage) {
+    public PlayerDeathEvent(ShelfPlayer player, String deathMessage) {
         this(player, null, deathMessage);
     }
 
-    public PlatformPlayer getKiller() {
+    public ShelfPlayer getKiller() {
         return killer;
     }
 

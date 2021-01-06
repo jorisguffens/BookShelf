@@ -17,13 +17,13 @@
 
 package com.gufli.bookshelf.bukkit.util;
 
-import com.gufli.bookshelf.entity.PlatformLocation;
+import com.gufli.bookshelf.entity.ShelfLocation;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 
 public class LocationConverter {
 
-    public static Location convert(PlatformLocation loc) {
+    public static Location convert(ShelfLocation loc) {
         if ( loc == null ) {
             return null;
         }
@@ -36,12 +36,12 @@ public class LocationConverter {
                 loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
     }
 
-    public static PlatformLocation convert(Location loc) {
+    public static ShelfLocation convert(Location loc) {
         if ( loc == null || loc.getWorld() == null ) {
             return null;
         }
 
-        return new PlatformLocation(loc.getWorld().getName(),
+        return new ShelfLocation(loc.getWorld().getName(),
                 loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
     }
 

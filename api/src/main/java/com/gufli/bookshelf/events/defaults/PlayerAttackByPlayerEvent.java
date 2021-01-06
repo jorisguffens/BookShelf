@@ -1,18 +1,18 @@
 package com.gufli.bookshelf.events.defaults;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
 public class PlayerAttackByPlayerEvent extends AbstractPlayerEvent implements Cancellable {
 
-    private final PlatformPlayer attacker;
+    private final ShelfPlayer attacker;
     private boolean cancelled = false;
 
-    public PlayerAttackByPlayerEvent(PlatformPlayer player, PlatformPlayer attacker) {
+    public PlayerAttackByPlayerEvent(ShelfPlayer player, ShelfPlayer attacker) {
         super(player);
         this.attacker = attacker;
     }
 
-    public PlatformPlayer getAttacker() {
+    public ShelfPlayer getAttacker() {
         return attacker;
     }
 

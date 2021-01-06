@@ -18,15 +18,15 @@
 package com.gufli.bookshelf.bukkit.entity;
 
 import com.gufli.bookshelf.bukkit.util.LocationConverter;
-import com.gufli.bookshelf.entity.AbstractPlatformPlayer;
-import com.gufli.bookshelf.entity.PlatformLocation;
+import com.gufli.bookshelf.entity.AbstractShelfPlayer;
+import com.gufli.bookshelf.entity.ShelfLocation;
 import com.gufli.bookshelf.gui.AbstractInventory;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BukkitPlayer extends AbstractPlatformPlayer {
+public class BukkitPlayer extends AbstractShelfPlayer {
 
     private boolean admin;
     private final Player player;
@@ -57,7 +57,7 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     }
 
     @Override
-    public void teleport(PlatformLocation location) {
+    public void teleport(ShelfLocation location) {
         Location loc = LocationConverter.convert(location);
         if ( loc == null ) {
             return;
@@ -67,7 +67,7 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     }
 
     @Override
-    public PlatformLocation getLocation() {
+    public ShelfLocation getLocation() {
         return LocationConverter.convert(player.getLocation());
     }
 
@@ -80,6 +80,12 @@ public class BukkitPlayer extends AbstractPlatformPlayer {
     public void sendMessage(String msg) {
         player.sendMessage(msg);
     }
+
+    @Override
+    public boolean isOnline() {
+        return player.isOnline();
+    }
+
 
     // gui
 

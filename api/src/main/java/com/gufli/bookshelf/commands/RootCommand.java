@@ -1,14 +1,14 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.PlatformPlayer;
-import com.gufli.bookshelf.entity.PlatformSender;
+import com.gufli.bookshelf.entity.ShelfPlayer;
+import com.gufli.bookshelf.entity.ShelfCommandSender;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class RootCommand extends CommandExecutor {
+public class RootCommand extends Command<ShelfCommandSender> {
 
     private final Set<Command<?>> commands = new HashSet<>();
     private final RootCommandMessages messages;
@@ -25,14 +25,15 @@ public class RootCommand extends CommandExecutor {
         commands.remove(cmd);
     }
 
-    public void execute(PlatformSender sender, String[] args) {
+    @Override
+    public void onExecute(ShelfCommandSender sender, String[] args) {
         if ( args.length == 0 ) {
             return;
         }
 
         Command<?> invalidSubCommand = null;
 
-        for ( Command<? extends PlatformSender> subCmd : commands ) {
+        for ( Command<? extends ShelfCommandSender> subCmd : commands ) {
             for ( String alias : subCmd.getInfo().commands() ) {
                 if ( !(String.join(" ", args).toLowerCase() + " ").startsWith(alias.toLowerCase() + " ") ) {
                     continue;
@@ -47,7 +48,7 @@ public class RootCommand extends CommandExecutor {
                     continue;
                 }
 
-                if ( subCmd.getInfo().playerOnly() && !(sender instanceof PlatformPlayer) ) {
+                if ( subCmd.getInfo().playerOnly() && !(sender instanceof ShelfPlayer) ) {
                     messages.sendPlayerOnly(sender);
                     return;
                 }
@@ -57,7 +58,7 @@ public class RootCommand extends CommandExecutor {
                     return;
                 }
 
-                subCmd.executeInternal(sender, cmdArgs);
+                subCmd.execute(sender, cmdArgs);
                 return;
             }
         }
@@ -136,7 +137,8 @@ public class RootCommand extends CommandExecutor {
 
     }
 
-    public List<String> autocomplete(PlatformPlayer sender, String[] args) {
+    @Override
+    public List<String> onAutocomplete(ShelfCommandSender sender, String[] args) {
 
         // autocomplete command
         if ( args.length <= 1 ) {
@@ -169,7 +171,7 @@ public class RootCommand extends CommandExecutor {
                 // check full command match
                 if ( (input + " ").startsWith(cmd.toLowerCase() + " ") ) {
                     String[] cmdArgs = Arrays.copyOfRange(args, cmd.split(Pattern.quote(" ")).length, args.length);
-                    List<String> options = subCmd.autocompleteInternal(sender, cmdArgs);
+                    List<String> options = subCmd.autocomplete(sender, cmdArgs);
                     if ( options != null ) {
                         result.addAll(options);
                     }
@@ -208,6 +210,5 @@ public class RootCommand extends CommandExecutor {
 
         return args;
     }
-
 
 }

@@ -1,15 +1,15 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.PlatformSender;
+import com.gufli.bookshelf.entity.ShelfCommandSender;
 
 public interface RootCommandMessages {
 
-    void sendPlayerOnly(PlatformSender sender);
+    void sendPlayerOnly(ShelfCommandSender sender);
 
-    void sendNoPermission(PlatformSender sender);
+    void sendNoPermission(ShelfCommandSender sender);
 
-    void sendSuggestion(PlatformSender sender, String command);
+    void sendSuggestion(ShelfCommandSender sender, String command);
 
-    void sendInvalidUsage(PlatformSender sender, String command);
+    void sendInvalidUsage(ShelfCommandSender sender, String command);
 
 }
