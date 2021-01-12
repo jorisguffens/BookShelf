@@ -4,7 +4,7 @@ import com.gufli.bookshelf.bukkit.entity.BukkitCommandSender;
 import com.gufli.bookshelf.commands.Command;
 import com.gufli.bookshelf.entity.ShelfPlayer;
 import com.gufli.bookshelf.entity.ShelfCommandSender;
-import com.gufli.bookshelf.server.Shelf;
+import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
@@ -26,7 +26,7 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return null;
         }
 
-        ShelfPlayer psender = Shelf.getPlayer(((Player) sender).getUniqueId());
+        ShelfPlayer psender = Bookshelf.getPlayer(((Player) sender).getUniqueId());
         return this.command.autocomplete(psender, args);
     }
 
@@ -34,7 +34,7 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         ShelfCommandSender psender;
         if ( sender instanceof Player ) {
-            psender = Shelf.getPlayer(((Player) sender).getUniqueId());
+            psender = Bookshelf.getPlayer(((Player) sender).getUniqueId());
         } else {
             psender = new BukkitCommandSender(sender);
         }

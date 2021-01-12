@@ -14,7 +14,9 @@ repositories {
 }
 
 dependencies {
-    compile project(':api')
+    compile project(':core')
+
+    //compileOnly 'me.lucko:helper:5.6.2'
 
     compileOnly 'org.spigotmc:spigot-api:1.16.4-R0.1-SNAPSHOT'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.6.0-SNAPSHOT'

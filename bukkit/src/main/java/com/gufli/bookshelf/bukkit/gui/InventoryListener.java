@@ -18,33 +18,29 @@
 package com.gufli.bookshelf.bukkit.gui;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.events.Event;
-import com.gufli.bookshelf.events.EventListener;
-import com.gufli.bookshelf.events.EventPriority;
 import com.gufli.bookshelf.gui.Inventory;
 import com.gufli.bookshelf.gui.InventoryClickType;
-import com.gufli.bookshelf.server.Shelf;
+import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class InventoryListener implements EventListener {
+public class InventoryListener implements Listener {
 
-    @Event(priority = EventPriority.LOW)
     public void onQuit(PlayerQuitEvent e) {
-        ShelfPlayer player = Shelf.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = Bookshelf.getPlayer(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
-    @Event
     public void onInventoryClose(InventoryCloseEvent e) {
         if ( !(e.getPlayer() instanceof Player) ) {
             return;
         }
 
-        ShelfPlayer player = Shelf.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = Bookshelf.getPlayer(e.getPlayer().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -52,13 +48,12 @@ public class InventoryListener implements EventListener {
         handleClose(player);
     }
 
-    @Event
     public void onInventoryClick(InventoryClickEvent e) {
         if ( !(e.getWhoClicked() instanceof Player) ) {
             return;
         }
 
-        ShelfPlayer player = Shelf.getPlayer(e.getWhoClicked().getUniqueId());
+        ShelfPlayer player = Bookshelf.getPlayer(e.getWhoClicked().getUniqueId());
         if ( player == null ) {
             return;
         }

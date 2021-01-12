@@ -1,29 +1,27 @@
 package com.gufli.bookshelf.bukkit.events;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.events.Event;
-import com.gufli.bookshelf.events.EventListener;
-import com.gufli.bookshelf.events.EventManager;
-import com.gufli.bookshelf.events.EventPriority;
-import com.gufli.bookshelf.events.defaults.PlayerAttackByPlayerEvent;
-import com.gufli.bookshelf.events.defaults.PlayerDeathEvent;
-import com.gufli.bookshelf.server.Shelf;
+import com.gufli.bookshelf.event.Events;
+import com.gufli.bookshelf.events.PlayerAttackByPlayerEvent;
+import com.gufli.bookshelf.events.PlayerDeathEvent;
+import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 
-public class DefaultEventListener implements EventListener {
+public class DefaultEventListener {
 
-    @Event(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
         damageEvent(e, e.getEntity(), e.getDamager());
     }
 
-    @Event(priority = EventPriority.HIGHEST)
+    @EventHandler
     public void onEntityCombustByEntity(EntityCombustByEntityEvent e) {
         damageEvent(e, e.getEntity(), e.getCombuster());
     }
@@ -33,20 +31,20 @@ public class DefaultEventListener implements EventListener {
             return;
         }
 
-        ShelfPlayer p = Shelf.getPlayer(entity.getUniqueId());
+        ShelfPlayer p = Bookshelf.getPlayer(entity.getUniqueId());
         if ( p == null ) {
             return;
         }
 
         ShelfPlayer d = null;
         if ( damager instanceof Player) {
-            d = Shelf.getPlayer(damager.getUniqueId());
+            d = Bookshelf.getPlayer(damager.getUniqueId());
         }
         else if ( damager instanceof Projectile ) {
             Projectile projectile = (Projectile) damager;
             if ( projectile.getShooter() != null && projectile.getShooter() instanceof Player ) {
                 Player shooter = (Player) projectile.getShooter();
-                d = Shelf.getPlayer(shooter.getUniqueId());
+                d = Bookshelf.getPlayer(shooter.getUniqueId());
             }
         }
 
@@ -54,31 +52,30 @@ public class DefaultEventListener implements EventListener {
             return;
         }
 
-        PlayerAttackByPlayerEvent attackEvent = EventManager.dispatch(new PlayerAttackByPlayerEvent(p, d));
+        PlayerAttackByPlayerEvent attackEvent = Events.call(new PlayerAttackByPlayerEvent(p, d));
         event.setCancelled(attackEvent.isCancelled());
     }
 
-    @Event(priority = EventPriority.LOWEST)
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent event) {
-        ShelfPlayer player = Shelf.getPlayer(event.getEntity().getUniqueId());
+        ShelfPlayer player = Bookshelf.getPlayer(event.getEntity().getUniqueId());
         if ( player == null ) {
             return;
         }
 
         if ( event.getEntity().getKiller() == null ) {
-            PlayerDeathEvent e = EventManager.dispatch(new PlayerDeathEvent(player, event.getDeathMessage()));
+            PlayerDeathEvent e = Events.call(new PlayerDeathEvent(player, event.getDeathMessage()));
             event.setDeathMessage(e.getDeathMessage());
             return;
         }
 
-        ShelfPlayer killer = Shelf.getPlayer(event.getEntity().getKiller().getUniqueId());
+        ShelfPlayer killer = Bookshelf.getPlayer(event.getEntity().getKiller().getUniqueId());
         if ( killer == null ) {
-            PlayerDeathEvent e = EventManager.dispatch(new PlayerDeathEvent(player, event.getDeathMessage()));
+            PlayerDeathEvent e = Events.call(new PlayerDeathEvent(player, event.getDeathMessage()));
             event.setDeathMessage(e.getDeathMessage());
             return;
         }
 
-        PlayerDeathEvent e = EventManager.dispatch(new PlayerDeathEvent(player, killer, event.getDeathMessage()));
+        PlayerDeathEvent e = Events.call(new PlayerDeathEvent(player, killer, event.getDeathMessage()));
         event.setDeathMessage(e.getDeathMessage());
     }
 
