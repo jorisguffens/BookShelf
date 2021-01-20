@@ -1,6 +1,7 @@
 package com.gufli.bookshelf.server;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
+import com.gufli.bookshelf.event.Events;
 import com.gufli.bookshelf.events.PlayerLoginEvent;
 import com.gufli.bookshelf.events.PlayerQuitEvent;
 import com.gufli.bookshelf.scheduler.Scheduler;
@@ -33,12 +34,12 @@ public class AbstractShelfServer {
 
     protected final void login(ShelfPlayer player) {
         players.add(player);
-        //scheduler.async().execute(() -> EventManager.dispatch(new PlayerLoginEvent(player)));
+        scheduler.async().execute(() -> Events.call(new PlayerLoginEvent(player)));
     }
 
     protected final void quit(ShelfPlayer player) {
         players.remove(player);
-        //EventManager.dispatch(new PlayerQuitEvent(player));
+        Events.call(new PlayerQuitEvent(player));
     }
 
 }

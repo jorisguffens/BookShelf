@@ -47,9 +47,7 @@ public abstract class AbstractTeamGame<T extends GameTeam> extends AbstractGame 
     }
 
     @Override
-    public void removePlayer(ShelfPlayer player) {
-        super.removePlayer(player);
-
+    protected void onLeave(ShelfPlayer player) {
         GameTeam team = getTeam(player);
         if ( team != null ) {
             team.removePlayer(player);

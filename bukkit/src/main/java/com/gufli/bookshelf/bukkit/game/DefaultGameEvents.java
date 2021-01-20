@@ -2,29 +2,35 @@ package com.gufli.bookshelf.bukkit.game;
 
 import com.gufli.bookshelf.event.Events;
 import com.gufli.bookshelf.events.PlayerDeathEvent;
-import com.gufli.bookshelf.game.*;
+import com.gufli.bookshelf.game.Game;
+import com.gufli.bookshelf.game.GameTeam;
+import com.gufli.bookshelf.game.TeamGame;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameEvent;
 import com.gufli.bookshelf.game.manager.GameManager;
+import com.gufli.bookshelf.terminable.Terminable;
+import com.gufli.bookshelf.terminable.composite.CompositeTerminable;
 import org.bukkit.ChatColor;
 
-public class GameEventsListener {
+public class DefaultGameEvents {
 
-    public GameEventsListener() {
-        Events.subscribe(PlayerJoinGameEvent.class).handler(this::onJoin);
-        Events.subscribe(PlayerLeaveGameEvent.class).handler(this::onLeave);
-        Events.subscribe(PlayerDeathEvent.class).handler(this::onKill);
+    public static Terminable register(Game game) {
+        return CompositeTerminable.create().withAll(
+                Events.subscribe(PlayerJoinGameEvent.class).filter(e -> e.getGame() == game).handler(DefaultGameEvents::onJoin),
+                Events.subscribe(PlayerLeaveGameEvent.class).filter(e -> e.getGame() == game).handler(DefaultGameEvents::onLeave),
+                Events.subscribe(PlayerDeathEvent.class).filter(e -> game.contains(e.getPlayer())).handler(DefaultGameEvents::onKill)
+            );
     }
 
-    public void onJoin(PlayerJoinGameEvent event) {
+    private static void onJoin(PlayerJoinGameEvent event) {
         event.getGame().broadcast(ChatColor.GOLD + event.getPlayer().getName() + ChatColor.YELLOW + " has joined the game!");
     }
 
-    public void onLeave(PlayerLeaveGameEvent event) {
+    private static void onLeave(PlayerLeaveGameEvent event) {
         event.getGame().broadcast(ChatColor.GOLD + event.getPlayer().getName() + ChatColor.YELLOW + " has left the game!");
     }
 
-    public void onKill(PlayerDeathEvent event) {
+    private static void onKill(PlayerDeathEvent event) {
         Game game = GameManager.getGame(event.getPlayer());
         if ( game == null ) {
             return;

@@ -32,11 +32,11 @@ public abstract class Command<T extends ShelfCommandSender> {
     //
 
     public final void execute(ShelfCommandSender sender, String[] args) {
-        execute((T) sender, args);
+        onExecute((T) sender, args);
     }
 
     public final List<String> autocomplete(ShelfCommandSender sender, String[] args) {
-        return autocomplete((T) sender, args);
+        return onAutocomplete((T) sender, args);
     }
 
     // implementation

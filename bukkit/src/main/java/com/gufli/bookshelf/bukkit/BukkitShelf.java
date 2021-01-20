@@ -1,7 +1,6 @@
 package com.gufli.bookshelf.bukkit;
 
 import com.gufli.bookshelf.bukkit.event.BukkitEventInjector;
-import com.gufli.bookshelf.bukkit.game.GameEventsListener;
 import com.gufli.bookshelf.bukkit.gui.InventoryListener;
 import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
@@ -30,8 +29,6 @@ public class BukkitShelf extends JavaPlugin {
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new ConnectionListener(this), this);
         pm.registerEvents(new InventoryListener(), this);
-
-        new GameEventsListener();
 
         getLogger().info("Enabled " + getDescription().getName() + " v" + getDescription().getVersion() + ".");
     }

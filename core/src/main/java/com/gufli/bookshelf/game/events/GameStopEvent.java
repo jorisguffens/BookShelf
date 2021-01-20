@@ -2,9 +2,9 @@ package com.gufli.bookshelf.game.events;
 
 import com.gufli.bookshelf.game.AbstractGame;
 
-public class GameFinishEvent extends GameEvent {
+public class GameStopEvent extends GameEvent {
 
-    public GameFinishEvent(AbstractGame game) {
+    public GameStopEvent(AbstractGame game) {
         super(game);
     }
 }

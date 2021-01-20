@@ -23,6 +23,7 @@ import com.gufli.bookshelf.gui.InventoryClickType;
 import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -30,11 +31,13 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 public class InventoryListener implements Listener {
 
+    @EventHandler
     public void onQuit(PlayerQuitEvent e) {
         ShelfPlayer player = Bookshelf.getPlayer(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
+    @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
         if ( !(e.getPlayer() instanceof Player) ) {
             return;
@@ -48,6 +51,7 @@ public class InventoryListener implements Listener {
         handleClose(player);
     }
 
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if ( !(e.getWhoClicked() instanceof Player) ) {
             return;

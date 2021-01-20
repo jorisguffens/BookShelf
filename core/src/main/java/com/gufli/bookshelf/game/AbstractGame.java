@@ -2,6 +2,9 @@ package com.gufli.bookshelf.game;
 
 import com.gufli.bookshelf.arenas.Arena;
 import com.gufli.bookshelf.entity.ShelfPlayer;
+import com.gufli.bookshelf.event.Events;
+import com.gufli.bookshelf.game.events.GameStartEvent;
+import com.gufli.bookshelf.game.events.GameStopEvent;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameEvent;
 import com.gufli.bookshelf.game.exceptions.InvalidPlayerGameStatusException;
@@ -29,14 +32,16 @@ public abstract class AbstractGame implements Game {
         return players.containsKey(player);
     }
 
-    public void addPlayer(ShelfPlayer player) {
+    public final void addPlayer(ShelfPlayer player) {
         players.put(player, PlayerGameStatus.WAITING);
-        //EventManager.dispatch(new PlayerJoinGameEvent(this, player));
+        onJoin(player);
+        Events.call(new PlayerJoinGameEvent(this, player));
     }
 
-    public void removePlayer(ShelfPlayer player) {
+    public final void removePlayer(ShelfPlayer player) {
         players.remove(player);
-        //EventManager.dispatch(new PlayerLeaveGameEvent(this, player));
+        onLeave(player);
+        Events.call(new PlayerLeaveGameEvent(this, player));
     }
 
     @Override
@@ -77,5 +82,32 @@ public abstract class AbstractGame implements Game {
         this.arena = arena;
     }
 
-    protected abstract void start();
+    public final void start() {
+        if ( getStatus() == GameStatus.STARTED ) {
+            return;
+        }
+        setStatus(GameStatus.STARTED);
+
+        onStart();
+        Events.call(new GameStartEvent(this));
+    }
+
+    public final void stop() {
+        if ( getStatus() == GameStatus.FINISHED ) {
+            return;
+        }
+        setStatus(GameStatus.FINISHED);
+
+        onStop();
+        Events.call(new GameStopEvent(this));
+    }
+
+    protected void onStart() {}
+
+    protected void onStop() {}
+
+    protected void onJoin(ShelfPlayer player) {}
+
+    protected void onLeave(ShelfPlayer player) {}
+
 }
