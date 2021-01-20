@@ -2,31 +2,14 @@ package com.gufli.bookshelf.nametags;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
-public class NametagManager {
+public interface NametagManager {
 
-    private static NametagHandler nametagHandler;
+    void setNametag(ShelfPlayer player, String prefix, String suffix);
 
-    public static void register(NametagHandler handler) {
-        if (nametagHandler != null) {
-            throw new UnsupportedOperationException("Cannot redefine singleton NametagHandler.");
-        }
+    void setPrefix(ShelfPlayer player, String prefix);
 
-        nametagHandler = handler;
-    }
+    void setSuffix(ShelfPlayer player, String suffix);
 
-    public static void setNametag(ShelfPlayer player, String prefix, String suffix) {
-        nametagHandler.setNametag(player, prefix, suffix);
-    }
+    void removeNametag(ShelfPlayer player);
 
-    public static void setPrefix(ShelfPlayer player, String prefix) {
-        nametagHandler.setPrefix(player, prefix);
-    }
-
-    public static void setSuffix(ShelfPlayer player, String suffix) {
-        nametagHandler.setSuffix(player, suffix);
-    }
-
-    public static void clear(ShelfPlayer player) {
-        nametagHandler.clear(player);
-    }
 }

@@ -3,10 +3,13 @@ package com.gufli.bookshelf.bukkit.nametags;
 import com.comphenix.packetwrapper.AbstractPacket;
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.gufli.bookshelf.bukkit.BukkitShelf;
+import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
 import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.nametags.NametagHandler;
+import com.gufli.bookshelf.event.Events;
+import com.gufli.bookshelf.events.PlayerJoinEvent;
+import com.gufli.bookshelf.events.PlayerQuitEvent;
 import com.gufli.bookshelf.nametags.NametagManager;
+import com.gufli.bookshelf.nametags.Nametags;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -17,16 +20,21 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-public class BukkitNametagHandler implements NametagHandler {
+public class BukkitNametagManager implements NametagManager {
 
     private final String UNIQUEID = RandomStringUtils.randomAlphanumeric(3);
     private long COUNTER = 0;
 
     private final Set<FakeTeam> fakeTeams = new CopyOnWriteArraySet<>();
 
-    public BukkitNametagHandler(BukkitShelf plugin) {
-        plugin.getServer().getPluginManager().registerEvents(new ConnectionListener(plugin, this), plugin);
-        NametagManager.register(this);
+    public BukkitNametagManager() {
+        Nametags.register(this);
+
+        Events.subscribe(PlayerJoinEvent.class)
+                .handler(e -> showAll(e.getPlayer()));
+
+        Events.subscribe(PlayerQuitEvent.class)
+                .handler(e -> removeNametag(e.getPlayer()));
     }
 
     @Override
@@ -38,7 +46,7 @@ public class BukkitNametagHandler implements NametagHandler {
         }
 
         // Remove from old team
-        clear(player);
+        removeNametag(player);
 
         FakeTeam joining = getFakeTeam(prefix, suffix);
 
@@ -80,7 +88,7 @@ public class BukkitNametagHandler implements NametagHandler {
     }
 
     @Override
-    public void clear(ShelfPlayer player) {
+    public void removeNametag(ShelfPlayer player) {
         FakeTeam team = getFakeTeam(player);
         if ( team == null ) {
             return;
@@ -108,9 +116,10 @@ public class BukkitNametagHandler implements NametagHandler {
                 .findFirst().orElse(null);
     }
 
-    void showAll(Player player) {
+    private void showAll(ShelfPlayer player) {
+        Player p = ((BukkitPlayer) player).getPlayer();
         for ( FakeTeam team : fakeTeams ) {
-            showFor(team, player);
+            showFor(team, p);
         }
     }
 
