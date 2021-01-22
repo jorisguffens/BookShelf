@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.event.injector;
+package com.gufli.bookshelf.event.hook;
 
 import com.gufli.bookshelf.event.EventHandler;
 import com.gufli.bookshelf.event.EventPriority;
@@ -8,24 +8,24 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-public class DefaultHandler extends EventHandler<Event> {
+public class ShelfEventHandler extends EventHandler<Event> {
 
     private final Set<Consumer<Event>> listeners = new CopyOnWriteArraySet<>();
 
-    public DefaultHandler(Consumer<Event> handler) {
+    public ShelfEventHandler(Consumer<Event> handler) {
         super(handler);
     }
 
     @Override
     public void register(Class<? extends Event> type, EventPriority priority) {
-        Consumer<Event> consumer = handler::accept;
+        Consumer<Event> consumer = e -> handler.accept(e);
         listeners.add(consumer);
-        DefaultInjector.registerListener(type, priority, consumer);
+        ShelfEventHook.registerListener(type, priority, consumer);
     }
 
     @Override
     public void unregister() {
-        listeners.forEach(DefaultInjector::unregisterListener);
+        listeners.forEach(ShelfEventHook::unregisterListener);
         listeners.clear();
     }
 }

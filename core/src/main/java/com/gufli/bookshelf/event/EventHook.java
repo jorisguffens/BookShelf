@@ -5,22 +5,22 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-public abstract class EventInjector<T> {
+public abstract class EventHook<T> {
 
-    private final static Set<EventInjector<?>> injectors = new CopyOnWriteArraySet<>();
+    private final static Set<EventHook<?>> hooks = new CopyOnWriteArraySet<>();
 
-    public static void register(EventInjector<?> injector) {
-        injectors.add(injector);
+    public static void register(EventHook<?> hook) {
+        hooks.add(hook);
     }
 
-    public static void unregister(EventInjector<?> injector) {
-        injectors.remove(injector);
+    public static void unregister(EventHook<?> hook) {
+        hooks.remove(hook);
     }
 
-    public static <U> EventInjector<?> getInjector(Class<U> type) {
-        return injectors.stream()
+    public static <U> EventHook<?> getHook(Class<U> type) {
+        return hooks.stream()
                 .filter(inj -> inj.getType().isAssignableFrom(type))
-                .max(Comparator.comparing(EventInjector::getPriority))
+                .max(Comparator.comparing(EventHook::getPriority))
                 .orElse(null);
     }
 
@@ -29,12 +29,12 @@ public abstract class EventInjector<T> {
     private final int priority;
     private final Class<T> type;
 
-    protected EventInjector(Class<T> type, int priority) {
+    protected EventHook(Class<T> type, int priority) {
         this.type = type;
         this.priority = priority;
     }
 
-    protected EventInjector(Class<T> type) {
+    protected EventHook(Class<T> type) {
         this(type, 0);
     }
 

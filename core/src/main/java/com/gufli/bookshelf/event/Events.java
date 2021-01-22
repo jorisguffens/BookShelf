@@ -1,13 +1,13 @@
 package com.gufli.bookshelf.event;
 
-import com.gufli.bookshelf.event.injector.DefaultInjector;
+import com.gufli.bookshelf.event.hook.ShelfEventHook;
 import com.gufli.bookshelf.event.subscription.simple.SimpleSubscriptionBuilder;
 
 public class Events {
 
     static {
-        DefaultInjector injector = new DefaultInjector();
-        EventInjector.register(injector);
+        ShelfEventHook injector = new ShelfEventHook();
+        EventHook.register(injector);
     }
 
     /**
@@ -56,9 +56,9 @@ public class Events {
      * @param event the event to call
      */
     public static <T> T call(T event) {
-        EventInjector<? super T> injector = (EventInjector<? super T>) EventInjector.getInjector(event.getClass());
+        EventHook<? super T> injector = (EventHook<? super T>) EventHook.getHook(event.getClass());
         if ( injector == null ) {
-            throw new RuntimeException("Cannot register event of type " + event.getClass().getSimpleName() + " because there is no valid injector.");
+            throw new RuntimeException("Cannot register event of type " + event.getClass().getSimpleName() + " because there is no valid hook.");
         }
         injector.call(event);
         return event;

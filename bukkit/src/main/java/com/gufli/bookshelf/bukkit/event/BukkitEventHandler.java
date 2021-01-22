@@ -29,7 +29,7 @@ public class BukkitEventHandler extends EventHandler<Event> implements EventExec
         Class<? extends Event> registrationType = getRegistrationClass(type);
 
         if ( registeredClasses.containsKey(registrationType) && registeredClasses.get(registrationType) == priority ) {
-            throw new RuntimeException("Cannot regiter event again with different priority.");
+            throw new RuntimeException("Cannot register event again with different priority.");
         }
         registeredClasses.put(registrationType, priority);
 

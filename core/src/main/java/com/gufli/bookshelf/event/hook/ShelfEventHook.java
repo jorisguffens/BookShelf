@@ -1,7 +1,7 @@
-package com.gufli.bookshelf.event.injector;
+package com.gufli.bookshelf.event.hook;
 
 import com.gufli.bookshelf.event.EventHandler;
-import com.gufli.bookshelf.event.EventInjector;
+import com.gufli.bookshelf.event.EventHook;
 import com.gufli.bookshelf.event.EventPriority;
 import com.gufli.bookshelf.events.Event;
 
@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Consumer;
 
-public class DefaultInjector extends EventInjector<Event> {
+public class ShelfEventHook extends EventHook<Event> {
 
     static Map<Class<? extends Event>, Map<Consumer<? extends Event>, EventPriority>> listeners = new ConcurrentHashMap<>();
 
@@ -38,13 +38,13 @@ public class DefaultInjector extends EventInjector<Event> {
 
     //
 
-    public DefaultInjector() {
+    public ShelfEventHook() {
         super(Event.class, 0);
     }
 
     @Override
     public EventHandler<Event> createHandler(Consumer<Event> handler) {
-        return new DefaultHandler(handler);
+        return new ShelfEventHandler(handler);
     }
 
     @Override

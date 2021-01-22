@@ -27,8 +27,7 @@ package com.gufli.bookshelf.event.subscription.simple;
 
 import com.google.common.collect.ImmutableMap;
 import com.gufli.bookshelf.event.EventHandler;
-import com.gufli.bookshelf.event.EventInjector;
-import com.gufli.bookshelf.event.EventPriority;
+import com.gufli.bookshelf.event.EventHook;
 import com.gufli.bookshelf.event.subscription.Subscription;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -56,7 +55,7 @@ public class SimpleSubscription<T> implements Subscription<T> {
     protected final AtomicLong callCount = new AtomicLong(0);
     protected final AtomicBoolean active = new AtomicBoolean(true);
 
-    private final Map<EventInjector<?>, EventHandler<?>> eventHandlers = new HashMap<>();
+    private final Map<EventHook<?>, EventHandler<?>> eventHandlers = new HashMap<>();
 
     @SuppressWarnings("unchecked")
     SimpleSubscription(SimpleSubscriptionBuilder<T> builder, List<BiConsumer<SimpleSubscription<T>, ? super T>> handlers) {
@@ -78,7 +77,7 @@ public class SimpleSubscription<T> implements Subscription<T> {
     }
 
     private <U> void register(Class<U> type) {
-        EventInjector<? super U> injector = (EventInjector<? super U>) EventInjector.getInjector(type);
+        EventHook<? super U> injector = (EventHook<? super U>) EventHook.getHook(type);
         if ( injector == null ) {
             throw new RuntimeException("Cannot register event of type " + type.getSimpleName() + " because there is no valid injector.");
         }

@@ -1,17 +1,17 @@
 package com.gufli.bookshelf.bukkit.event;
 
 import com.gufli.bookshelf.event.EventHandler;
-import com.gufli.bookshelf.event.EventInjector;
+import com.gufli.bookshelf.event.EventHook;
 import org.bukkit.event.Event;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.function.Consumer;
 
-public class BukkitEventInjector extends EventInjector<Event> {
+public class BukkitEventHook extends EventHook<Event> {
 
     private final JavaPlugin plugin;
 
-    public BukkitEventInjector(JavaPlugin plugin) {
+    public BukkitEventHook(JavaPlugin plugin) {
         super(Event.class, 10);
         this.plugin = plugin;
     }

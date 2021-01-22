@@ -1,12 +1,12 @@
 package com.gufli.bookshelf.bukkit;
 
-import com.gufli.bookshelf.bukkit.event.BukkitEventInjector;
+import com.gufli.bookshelf.bukkit.event.BukkitEventHook;
 import com.gufli.bookshelf.bukkit.gui.InventoryListener;
 import com.gufli.bookshelf.bukkit.nametags.BukkitNametagManager;
 import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
 import com.gufli.bookshelf.bukkit.sidebar.BukkitSidebarManager;
-import com.gufli.bookshelf.event.EventInjector;
+import com.gufli.bookshelf.event.EventHook;
 import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -24,8 +24,8 @@ public class BukkitShelf extends JavaPlugin {
     public void onEnable() {
 
         // inject bukkit events
-        BukkitEventInjector injector = new BukkitEventInjector(this);
-        EventInjector.register(injector);
+        BukkitEventHook injector = new BukkitEventHook(this);
+        EventHook.register(injector);
 
         // Register default events
         PluginManager pm = getServer().getPluginManager();
