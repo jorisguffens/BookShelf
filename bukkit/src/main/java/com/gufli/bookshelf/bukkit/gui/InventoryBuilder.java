@@ -5,10 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class InventoryBuilder {
 
@@ -18,7 +15,7 @@ public class InventoryBuilder {
 
     private String title;
 
-    private ItemStack backItem;
+    private ItemStack previousItem;
     private ItemStack nextItem;
 
     private final List<BukkitInventoryItem> items = new ArrayList<>();
@@ -26,7 +23,7 @@ public class InventoryBuilder {
     private final Map<Integer, BukkitInventoryItem> hotbar = new HashMap<>();
 
     private InventoryBuilder() {
-        backItem = ItemStackBuilder.of(Material.ARROW)
+        previousItem = ItemStackBuilder.of(Material.ARROW)
                 .withName(ChatColor.GREEN + "Previous page")
                 .build();
 
@@ -45,6 +42,17 @@ public class InventoryBuilder {
         return this;
     }
 
+    public InventoryBuilder withItems(ItemStack... items) {
+        return withItems(Arrays.asList(items));
+    }
+
+    public InventoryBuilder withItems(Iterable<ItemStack> items) {
+        for ( ItemStack item : items ) {
+            this.items.add(new BukkitInventoryItem(item));
+        }
+        return this;
+    }
+
     public InventoryBuilder withItem(ItemStack item, InventoryItemCallback cb) {
         items.add(new BukkitInventoryItem(item, cb));
         return this;
@@ -55,8 +63,8 @@ public class InventoryBuilder {
         return this;
     }
 
-    public InventoryBuilder withBackItem(ItemStack item) {
-        this.backItem = item;
+    public InventoryBuilder withPreviousItem(ItemStack item) {
+        this.previousItem = item;
         return this;
     }
 
@@ -92,7 +100,7 @@ public class InventoryBuilder {
         BukkitInventory inv = new BukkitInventory(54, title);
 
         // fill with items
-        for ( int i = 0; i < 36; i++ ) {
+        for ( int i = 0; i < Math.max(items.size(), 36); i++ ) {
             inv.setItem(i, items.get(i));
         }
 
@@ -106,7 +114,7 @@ public class InventoryBuilder {
         }
 
         if ( page > 0 ) {
-            inv.setItem(47, new BukkitInventoryItem(backItem, (player, clickType) -> {
+            inv.setItem(47, new BukkitInventoryItem(previousItem, (player, clickType) -> {
                 player.openInventory(page(page + 1));
                 return true;
             }));
