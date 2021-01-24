@@ -19,7 +19,7 @@ package com.gufli.bookshelf.gui;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
-public class AbstractInventoryItem<T> implements InventoryItem<T> {
+public abstract class AbstractInventoryItem<T> implements InventoryItem<T> {
 
     protected T handle;
     protected InventoryItemCallback callback;

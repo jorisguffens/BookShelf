@@ -20,17 +20,18 @@ package com.gufli.bookshelf.gui;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public class AbstractInventory<T, U> implements Inventory<T, U> {
+public abstract class AbstractInventory<T, U> implements Inventory<T, U> {
 
-    protected InventoryCallback callback;
+    protected InventoryCallback<U> callback;
     protected Map<Integer, InventoryItem<U>> items = new HashMap<>();
 
     protected T handle;
 
-    public AbstractInventory(T handle, InventoryCallback callback) {
+    public AbstractInventory(T handle, InventoryCallback<U> callback) {
         this.handle = handle;
         this.callback = callback;
     }
@@ -78,6 +79,10 @@ public class AbstractInventory<T, U> implements Inventory<T, U> {
 
     public void removeItem(int slot) {
         items.remove(slot);
+    }
+
+    public Map<Integer, InventoryItem<U>> getItems() {
+        return items;
     }
 
 }

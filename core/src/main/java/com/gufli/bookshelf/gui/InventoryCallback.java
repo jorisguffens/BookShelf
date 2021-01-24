@@ -19,12 +19,12 @@ package com.gufli.bookshelf.gui;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
-public interface InventoryCallback {
+public interface InventoryCallback<T> {
 
     void onOpen(ShelfPlayer player);
 
     void onClose(ShelfPlayer player);
 
-    void onClick(ShelfPlayer player, InventoryClickType clickType, int slot, InventoryItem item);
+    void onClick(ShelfPlayer player, InventoryClickType clickType, int slot, InventoryItem<T> item);
 
 }

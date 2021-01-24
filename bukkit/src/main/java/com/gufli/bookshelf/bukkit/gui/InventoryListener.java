@@ -68,9 +68,12 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
+        if ( e.getRawSlot() >= e.getView().getTopInventory().getSize() ) {
             return;
         }
+//        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
+//            return;
+//        }
 
         e.setCancelled(true);
 

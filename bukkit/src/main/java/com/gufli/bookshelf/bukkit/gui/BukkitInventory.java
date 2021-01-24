@@ -21,12 +21,21 @@ import com.gufli.bookshelf.gui.AbstractInventory;
 import com.gufli.bookshelf.gui.InventoryCallback;
 import com.gufli.bookshelf.gui.InventoryItem;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
 public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
 
-    public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback callback) {
+    public BukkitInventory(int size, String title, InventoryCallback<ItemStack> callback) {
+        super(Bukkit.createInventory(null, size, title), callback);
+    }
+
+    public BukkitInventory(int size, String title) {
+        super(Bukkit.createInventory(null, size, title));
+    }
+
+    public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback<ItemStack> callback) {
         super(inv, callback);
     }
 
@@ -34,7 +43,7 @@ public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
         super(inv);
     }
 
-    public BukkitInventory(String name, int size, InventoryCallback callback) {
+    public BukkitInventory(String name, int size, InventoryCallback<ItemStack> callback) {
         this(Bukkit.createInventory(null, size, name), callback);
     }
 
