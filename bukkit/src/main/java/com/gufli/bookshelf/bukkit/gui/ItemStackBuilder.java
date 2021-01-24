@@ -1,16 +1,17 @@
 package com.gufli.bookshelf.bukkit.gui;
 
 import com.gufli.bookshelf.bukkit.reflection.Reflection;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
+import org.bukkit.*;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.inventory.meta.*;
+import org.bukkit.potion.PotionData;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -156,7 +157,7 @@ public class ItemStackBuilder {
     private static Class<?> Property;
     private static Method Property_getName;
     private static Method PropertyMap_put;
-    private static Field CraftSkullMeta_profile;
+    private static Field CraftMetaSkull_profile;
 
     static {
         try {
@@ -169,9 +170,9 @@ public class ItemStackBuilder {
             Class<?> PropertyMap = Class.forName("com.mojang.authlib.properties.PropertyMap");
             PropertyMap_put = PropertyMap.getMethod("put", Object.class, Object.class);
 
-            Class<?> CraftSkullMeta = Reflection.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftSkullMeta");
-            CraftSkullMeta_profile = CraftSkullMeta.getDeclaredField("profile");
-            CraftSkullMeta_profile.setAccessible(true);
+            Class<?> CraftMetaSkull = Reflection.PackageType.CRAFTBUKKIT_INVENTORY.getClass("CraftMetaSkull");
+            CraftMetaSkull_profile = CraftMetaSkull.getDeclaredField("profile");
+            CraftMetaSkull_profile.setAccessible(true);
         } catch (NoSuchMethodException | ClassNotFoundException | NoSuchFieldException e) {
             e.printStackTrace();
         }
@@ -205,7 +206,7 @@ public class ItemStackBuilder {
     private ItemStackBuilder withProfile(Object profile) {
         try {
             SkullMeta meta = (SkullMeta) this.itemStack.getItemMeta();
-            CraftSkullMeta_profile.set(meta, profile);
+            CraftMetaSkull_profile.set(meta, profile);
             this.itemStack.setItemMeta(meta);
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -213,5 +214,134 @@ public class ItemStackBuilder {
         return this;
     }
 
+    // BANNER
+
+    public ItemStackBuilder withPattern(Pattern pattern) {
+        return transformMeta(BannerMeta.class, meta ->
+                meta.addPattern(pattern));
+    }
+
+    public ItemStackBuilder withPattern(DyeColor color, PatternType type) {
+        return transformMeta(BannerMeta.class, meta ->
+                meta.addPattern(new Pattern(color, type)));
+    }
+
+    public ItemStackBuilder setPattern(int layer, Pattern pattern) {
+        return transformMeta(BannerMeta.class, meta ->
+                meta.setPattern(layer, pattern));
+    }
+
+    public ItemStackBuilder setPattern(int layer, DyeColor color, PatternType type) {
+        return transformMeta(BannerMeta.class, meta ->
+                meta.setPattern(layer, new Pattern(color, type)));
+    }
+
+    public ItemStackBuilder withPatterns(Pattern... patterns) {
+        return withPatterns(Arrays.asList(patterns));
+    }
+
+    public ItemStackBuilder withPatterns(List<Pattern> patterns) {
+        return transformMeta(BannerMeta.class, meta ->
+                meta.setPatterns(patterns));
+    }
+
+    // BOOK
+
+    public ItemStackBuilder withAuthor(String author) {
+        return transformMeta(BookMeta.class, meta ->
+                meta.setAuthor(author));
+    }
+
+    public ItemStackBuilder withTitle(String title) {
+        return transformMeta(BookMeta.class, meta ->
+                meta.setTitle(title));
+    }
+
+    public ItemStackBuilder withPage(String contents) {
+        return transformMeta(BookMeta.class, meta ->
+                meta.addPage(contents));
+    }
+
+    public ItemStackBuilder withPages(String... contents) {
+        return transformMeta(BookMeta.class, meta ->
+                meta.setPages(contents));
+    }
+
+    public ItemStackBuilder withPages(List<String> contents) {
+        return transformMeta(BookMeta.class, meta ->
+                meta.setPages(contents));
+    }
+
+    // FIREWORK
+
+    public ItemStackBuilder withPower(int power) {
+        return transformMeta(FireworkMeta.class, meta ->
+                meta.setPower(power));
+    }
+
+    public ItemStackBuilder withEffect(FireworkEffect effect) {
+        return transformMeta(FireworkMeta.class, meta ->
+                meta.addEffect(effect));
+    }
+
+    public ItemStackBuilder withEffects(FireworkEffect... effects) {
+        return withEffects(Arrays.asList(effects));
+    }
+
+    public ItemStackBuilder withEffects(List<FireworkEffect> effects) {
+        return transformMeta(FireworkMeta.class, meta -> {
+            meta.clearEffects();
+            meta.addEffects(effects);
+        });
+    }
+
+    // POTION
+
+    public ItemStackBuilder withBasePotion(PotionType type, boolean extended, boolean upgraded) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.setBasePotionData(new PotionData(type, extended, upgraded)));
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffect effect) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(effect, true));
+    }
+
+    public ItemStackBuilder withPotionEffects(PotionEffect... effects) {
+        return withPotionEffects(Arrays.asList(effects));
+    }
+
+    public ItemStackBuilder withPotionEffects(List<PotionEffect> effects) {
+        return transformMeta(PotionMeta.class, meta -> {
+            for ( PotionEffect effect : effects ) {
+                meta.addCustomEffect(effect, true);
+            }
+        });
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffectType type) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(new PotionEffect(type, 1200, 0), true));
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffectType type, int duration) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(new PotionEffect(type, duration, 0), true));
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffectType type, int duration, int amplifier) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(new PotionEffect(type, duration, amplifier), true));
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffectType type, int duration, int amplifier, boolean ambient) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient), true));
+    }
+
+    public ItemStackBuilder withPotionEffect(PotionEffectType type, int duration, int amplifier, boolean ambient, boolean particles) {
+        return transformMeta(PotionMeta.class, meta ->
+                meta.addCustomEffect(new PotionEffect(type, duration, amplifier, ambient, particles), true));
+    }
 
 }
