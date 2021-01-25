@@ -23,6 +23,7 @@ public class BukkitSidebarManager implements SidebarManager {
 
     @Override
     public void setSidebar(ShelfPlayer player, Sidebar sidebar) {
+        removeSidebar(player);
         BukkitSidebar bs = new BukkitSidebar(player, sidebar);
         players.put(player, bs);
         bs.show();

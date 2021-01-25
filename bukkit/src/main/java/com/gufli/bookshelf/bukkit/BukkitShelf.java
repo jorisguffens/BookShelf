@@ -6,6 +6,7 @@ import com.gufli.bookshelf.bukkit.nametags.BukkitNametagManager;
 import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
 import com.gufli.bookshelf.bukkit.sidebar.BukkitSidebarManager;
+import com.gufli.bookshelf.bukkit.titles.BukkitTitleManager;
 import com.gufli.bookshelf.event.EventHook;
 import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.plugin.PluginManager;
@@ -35,6 +36,7 @@ public class BukkitShelf extends JavaPlugin {
         // Load manager imlementations
         new BukkitNametagManager();
         new BukkitSidebarManager();
+        new BukkitTitleManager();
 
         getLogger().info("Enabled " + getDescription().getName() + " v" + getDescription().getVersion() + ".");
     }
