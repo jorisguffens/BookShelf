@@ -100,7 +100,7 @@ public class InventoryBuilder {
         BukkitInventory inv = new BukkitInventory(54, title);
 
         // fill with items
-        for ( int i = 0; i < Math.max(items.size(), 36); i++ ) {
+        for ( int i = 0; i < Math.min(items.size(), 36); i++ ) {
             inv.setItem(i, items.get(i));
         }
 
