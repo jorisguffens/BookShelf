@@ -1,5 +1,5 @@
 rootProject.name = 'Bookshelf'
 
-include 'core'
+include 'common'
 include 'bukkit'
 

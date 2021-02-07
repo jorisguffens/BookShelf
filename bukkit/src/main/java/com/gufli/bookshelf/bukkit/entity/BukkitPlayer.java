@@ -21,6 +21,7 @@ import com.gufli.bookshelf.bukkit.util.LocationConverter;
 import com.gufli.bookshelf.entity.AbstractShelfPlayer;
 import com.gufli.bookshelf.entity.ShelfLocation;
 import com.gufli.bookshelf.menu.AbstractMenu;
+import com.gufli.bookshelf.menu.Menu;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -90,7 +91,7 @@ public class BukkitPlayer extends AbstractShelfPlayer {
     // gui
 
     @Override
-    public void openInventory(AbstractMenu<?, ?> inventory) {
+    public void openInventory(Menu<?, ?> inventory) {
         if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
             player.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
             super.openInventory(inventory);

@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    compile project(':core')
+    compile project(':common')
 
     //compileOnly 'me.lucko:helper:5.6.2'
 
