@@ -15,11 +15,11 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.bukkit.gui;
+package com.gufli.bookshelf.bukkit.menu;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.gui.Inventory;
-import com.gufli.bookshelf.gui.InventoryClickType;
+import com.gufli.bookshelf.menu.AbstractMenu;
+import com.gufli.bookshelf.menu.MenuClickType;
 import com.gufli.bookshelf.server.Bookshelf;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -29,7 +29,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class InventoryListener implements Listener {
+public class MenuListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
@@ -62,7 +62,11 @@ public class InventoryListener implements Listener {
             return;
         }
 
-        Inventory<?, ?> inv = player.getInventory();
+        if ( !(player.getInventory() instanceof AbstractMenu) ) {
+            return;
+        }
+
+        AbstractMenu<?, ?> inv = (AbstractMenu<?, ?>) player.getInventory();
 
         if ( inv == null || inv.getHandle() == null ) {
             return;
@@ -77,19 +81,19 @@ public class InventoryListener implements Listener {
 
         e.setCancelled(true);
 
-        InventoryClickType type = null;
+        MenuClickType type = null;
         switch (e.getClick()) {
             case DOUBLE_CLICK:
             case SHIFT_LEFT:
             case LEFT:
-                type = InventoryClickType.LEFT;
+                type = MenuClickType.LEFT;
                 break;
             case SHIFT_RIGHT:
             case RIGHT:
-                type = InventoryClickType.RIGHT;
+                type = MenuClickType.RIGHT;
                 break;
             case MIDDLE:
-                type = InventoryClickType.MIDDLE;
+                type = MenuClickType.MIDDLE;
         }
 
         if ( type == null ) {
@@ -121,10 +125,14 @@ public class InventoryListener implements Listener {
     }
 
     private void handleClose(ShelfPlayer player) {
-        Inventory<?, ?> inv = player.getInventory();
+        if ( !(player.getInventory() instanceof AbstractMenu) ) {
+            return;
+        }
+
+        AbstractMenu<?, ?> inv = (AbstractMenu<?, ?>) player.getInventory();
         if ( inv != null ) {
             inv.dispatchClose(player);
-            player.set(ShelfPlayer.CUSTOM_GUI_KEY, null);
+            player.remove(ShelfPlayer.CUSTOM_GUI_KEY);
         }
     }
 

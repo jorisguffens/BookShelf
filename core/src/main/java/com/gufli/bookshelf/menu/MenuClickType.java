@@ -15,8 +15,8 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.gui;
+package com.gufli.bookshelf.menu;
 
-public enum InventoryClickType {
+public enum MenuClickType {
     LEFT, MIDDLE, RIGHT;
 }

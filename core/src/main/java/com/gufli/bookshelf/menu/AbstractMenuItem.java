@@ -15,16 +15,32 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.gui;
+package com.gufli.bookshelf.menu;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
-public interface InventoryCallback<T> {
+public abstract class AbstractMenuItem<T> implements MenuItem<T> {
 
-    void onOpen(ShelfPlayer player);
+    protected T handle;
+    protected MenuItemCallback callback;
 
-    void onClose(ShelfPlayer player);
+    public AbstractMenuItem(T handle, MenuItemCallback callback) {
+        this.handle = handle;
+        this.callback = callback;
+    }
 
-    void onClick(ShelfPlayer player, InventoryClickType clickType, int slot, InventoryItem<T> item);
+    public AbstractMenuItem(T handle) {
+        this(handle, null);
+    }
 
+    public boolean dispatchClick(ShelfPlayer player, MenuClickType type) {
+        if ( callback == null ) {
+            return false;
+        }
+        return callback.onClick(player, type);
+    }
+
+    public T getHandle() {
+        return handle;
+    }
 }

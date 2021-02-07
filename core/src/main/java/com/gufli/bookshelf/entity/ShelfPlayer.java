@@ -18,7 +18,7 @@
 package com.gufli.bookshelf.entity;
 
 
-import com.gufli.bookshelf.gui.AbstractInventory;
+import com.gufli.bookshelf.menu.Menu;
 
 import java.util.UUID;
 
@@ -39,11 +39,11 @@ public interface ShelfPlayer extends ShelfCommandSender {
 
     String CUSTOM_GUI_KEY = "CUSTOM_GUI";
 
-    default AbstractInventory<?, ?> getInventory() {
-        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, AbstractInventory.class) : null;
+    default Menu<?, ?> getInventory() {
+        return has(CUSTOM_GUI_KEY) ? get(CUSTOM_GUI_KEY, Menu.class) : null;
     }
 
-    default void openInventory(AbstractInventory<?, ?> inventory) {
+    default void openInventory(Menu<?, ?> inventory) {
         set(CUSTOM_GUI_KEY, inventory);
     }
 

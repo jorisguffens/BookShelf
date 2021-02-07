@@ -15,40 +15,39 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.gui;
+package com.gufli.bookshelf.menu;
 
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class AbstractInventory<T, U> implements Inventory<T, U> {
+public abstract class AbstractMenu<T, U> implements Menu<T, U> {
 
-    protected InventoryCallback<U> callback;
-    protected Map<Integer, InventoryItem<U>> items = new HashMap<>();
+    protected MenuCallback<U> callback;
+    protected Map<Integer, MenuItem<U>> items = new HashMap<>();
 
     protected T handle;
 
-    public AbstractInventory(T handle, InventoryCallback<U> callback) {
+    public AbstractMenu(T handle, MenuCallback<U> callback) {
         this.handle = handle;
         this.callback = callback;
     }
 
-    public AbstractInventory(T handle) {
+    public AbstractMenu(T handle) {
         this(handle, null);
     }
 
-    public boolean dispatchClick(ShelfPlayer player, InventoryClickType clickType, int slot) {
-        InventoryItem<U> item = items.get(slot);
+    public boolean dispatchClick(ShelfPlayer player, MenuClickType clickType, int slot) {
+        MenuItem<U> item = items.get(slot);
 
         if ( callback != null ) {
             callback.onClick(player, clickType, slot, item);
         }
 
-        if ( item != null ) {
-            return item.dispatchClick(player, clickType);
+        if ( item instanceof AbstractMenuItem<?>) {
+            return ((AbstractMenuItem<?>) item).dispatchClick(player, clickType);
         }
         return false;
     }
@@ -69,11 +68,11 @@ public abstract class AbstractInventory<T, U> implements Inventory<T, U> {
         return handle;
     }
 
-    public InventoryItem<U> getItem(int slot) {
+    public MenuItem<U> getItem(int slot) {
         return items.get(slot);
     }
 
-    public <V extends InventoryItem<U>> void setItem(int slot, V item) {
+    public <V extends MenuItem<U>> void setItem(int slot, V item) {
         items.put(slot, item);
     }
 
@@ -81,7 +80,7 @@ public abstract class AbstractInventory<T, U> implements Inventory<T, U> {
         items.remove(slot);
     }
 
-    public Map<Integer, InventoryItem<U>> getItems() {
+    public Map<Integer, MenuItem<U>> getItems() {
         return items;
     }
 

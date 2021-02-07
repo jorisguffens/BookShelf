@@ -7,9 +7,9 @@ public class Color {
 
     private static final int BIT_MASK = 0xff;
 
-    public static final Color WHITE = fromRGB(0xFFFFFF);
-    public static final Color SILVER = fromRGB(0xC0C0C0);
-    public static final Color GRAY = fromRGB(0x808080);
+    public static final Color WHITE = new Color("WHITE", 0xFFFFFF);
+    public static final Color SILVER = new Color("SILVER", 0xC0C0C0);
+    public static final Color GRAY = new Color("GRAY", 0x808080);
     public static final Color BLACK = fromRGB(0x000000);
     public static final Color RED = fromRGB(0xFF0000);
     public static final Color MAROON = fromRGB(0x800000);
@@ -55,11 +55,23 @@ public class Color {
     }
 
     public static Color fromRGB(int rgb) {
-        return fromRGB(rgb >> 16 & BIT_MASK, rgb >> 8 & BIT_MASK, rgb >> 0 & BIT_MASK);
+        return new Color(rgb);
     }
 
     public static Color fromHSV(float hue, float saturation, float value) {
         return fromRGB(java.awt.Color.HSBtoRGB(hue, saturation, value));
+    }
+
+    // For internal use only
+    private Color(String name, int rgb) {
+        this(rgb);
+        colors.put(name, this);
+    }
+
+    public Color(int rgb) {
+        this.red = rgb >> 16 & BIT_MASK;
+        this.green = rgb >> 8 & BIT_MASK;
+        this.blue = rgb & BIT_MASK;
     }
 
     public Color(int red, int green, int blue) {

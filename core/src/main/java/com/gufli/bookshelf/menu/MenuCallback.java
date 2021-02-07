@@ -15,20 +15,16 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.bukkit.gui;
+package com.gufli.bookshelf.menu;
 
-import com.gufli.bookshelf.gui.AbstractInventoryItem;
-import com.gufli.bookshelf.gui.InventoryItemCallback;
-import org.bukkit.inventory.ItemStack;
+import com.gufli.bookshelf.entity.ShelfPlayer;
 
-public class BukkitInventoryItem extends AbstractInventoryItem<ItemStack> {
+public interface MenuCallback<T> {
 
-    public BukkitInventoryItem(ItemStack itemStack, InventoryItemCallback callback) {
-        super(itemStack, callback);
-    }
+    void onOpen(ShelfPlayer player);
 
-    public BukkitInventoryItem(ItemStack itemStack) {
-        this(itemStack, null);
-    }
+    void onClose(ShelfPlayer player);
+
+    void onClick(ShelfPlayer player, MenuClickType clickType, int slot, MenuItem<T> item);
 
 }

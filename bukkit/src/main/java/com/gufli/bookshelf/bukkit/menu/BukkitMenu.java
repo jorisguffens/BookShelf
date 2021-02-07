@@ -15,39 +15,38 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.bukkit.gui;
+package com.gufli.bookshelf.bukkit.menu;
 
-import com.gufli.bookshelf.gui.AbstractInventory;
-import com.gufli.bookshelf.gui.InventoryCallback;
-import com.gufli.bookshelf.gui.InventoryItem;
+import com.gufli.bookshelf.menu.AbstractMenu;
+import com.gufli.bookshelf.menu.MenuCallback;
+import com.gufli.bookshelf.menu.MenuItem;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
-public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
+public class BukkitMenu extends AbstractMenu<Inventory, ItemStack> {
 
-    public BukkitInventory(int size, String title, InventoryCallback<ItemStack> callback) {
+    public BukkitMenu(int size, String title, MenuCallback<ItemStack> callback) {
         super(Bukkit.createInventory(null, size, title), callback);
     }
 
-    public BukkitInventory(int size, String title) {
+    public BukkitMenu(int size, String title) {
         super(Bukkit.createInventory(null, size, title));
     }
 
-    public BukkitInventory(org.bukkit.inventory.Inventory inv, InventoryCallback<ItemStack> callback) {
+    public BukkitMenu(org.bukkit.inventory.Inventory inv, MenuCallback<ItemStack> callback) {
         super(inv, callback);
     }
 
-    public BukkitInventory(org.bukkit.inventory.Inventory inv) {
+    public BukkitMenu(org.bukkit.inventory.Inventory inv) {
         super(inv);
     }
 
-    public BukkitInventory(String name, int size, InventoryCallback<ItemStack> callback) {
+    public BukkitMenu(String name, int size, MenuCallback<ItemStack> callback) {
         this(Bukkit.createInventory(null, size, name), callback);
     }
 
-    public BukkitInventory(String name, int size) {
+    public BukkitMenu(String name, int size) {
         this(name, size, null);
     }
 
@@ -58,7 +57,7 @@ public class BukkitInventory extends AbstractInventory<Inventory, ItemStack> {
     }
 
     @Override
-    public <V extends InventoryItem<ItemStack>> void setItem(int slot, V item) {
+    public <V extends MenuItem<ItemStack>> void setItem(int slot, V item) {
         super.setItem(slot, item);
         handle.setItem(slot, item.getHandle());
     }

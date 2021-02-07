@@ -15,11 +15,11 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.gui;
+package com.gufli.bookshelf.menu;
 
 import com.gufli.bookshelf.entity.ShelfPlayer;
 
 @FunctionalInterface
-public interface InventoryItemCallback {
-    boolean onClick(ShelfPlayer player, InventoryClickType clickType);
+public interface MenuItemCallback {
+    boolean onClick(ShelfPlayer player, MenuClickType clickType);
 }
