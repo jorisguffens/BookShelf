@@ -4,7 +4,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.sidebar.SidebarManager;
 import com.gufli.bookshelf.api.sidebar.SidebarTemplate;
 import com.gufli.bookshelf.api.sidebar.Sidebars;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.PlayerQuitEvent;
 

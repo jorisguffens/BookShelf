@@ -1,9 +1,8 @@
 package com.gufli.bookshelf.event;
 
-import com.gufli.bookshelf.api.event.hook.EventHook;
 import com.gufli.bookshelf.api.event.EventManager;
 import com.gufli.bookshelf.api.event.EventPriority;
-import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.event.hook.EventHook;
 import com.gufli.bookshelf.event.hook.ShelfEventHook;
 import com.gufli.bookshelf.event.subscription.SimpleSubscriptionBuilder;
 
@@ -16,8 +15,6 @@ public class SimpleEventManager implements EventManager {
     private final Set<EventHook<?>> hooks = new CopyOnWriteArraySet<>();
 
     public SimpleEventManager() {
-        Events.register(this);
-
         ShelfEventHook injector = new ShelfEventHook();
         registerEventHook(injector);
     }

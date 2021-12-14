@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.commands;
+package com.gufli.bookshelf.command;
 
 import com.gufli.bookshelf.api.command.Command;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
@@ -6,6 +6,7 @@ import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -32,19 +33,19 @@ public class RootCommand extends Command<ShelfCommandSender> {
             return;
         }
 
+        String[] parsedArgs = parseArgs(args);
         Command<?> invalidSubCommand = null;
 
         for ( Command<? extends ShelfCommandSender> subCmd : commands ) {
             for ( String alias : subCmd.info().commands() ) {
-                if ( !(String.join(" ", args).toLowerCase() + " ").startsWith(alias.toLowerCase() + " ") ) {
+                if ( !(String.join(" ", parsedArgs).toLowerCase() + " ").startsWith(alias.toLowerCase() + " ") ) {
                     continue;
                 }
 
                 int cmdLength = alias.split(Pattern.quote(" ")).length;
-                String[] cmdArgs = convertArgs(Arrays.copyOfRange(args, cmdLength, args.length),
-                        subCmd.info().argumentsLength());
+                String[] cmdArgs = Arrays.copyOfRange(parsedArgs, cmdLength, parsedArgs.length);
 
-                if ( subCmd.info().argumentsLength() != -1 && cmdArgs.length != subCmd.info().argumentsLength() ) {
+                if ( subCmd.info().minArguments() != -1 && cmdArgs.length != subCmd.info().minArguments() ) {
                     invalidSubCommand = subCmd;
                     continue;
                 }
@@ -67,6 +68,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
         if ( invalidSubCommand != null ) {
             messages.sendInvalidUsage(sender, invalidSubCommand.info().commands()[0] + " "
                     + invalidSubCommand.info().argumentsHint());
+            System.out.println(getClass().getSimpleName());
             return;
         }
 
@@ -93,7 +95,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
             }
 
             List<Command<?>> equal = filter.keySet().stream()
-                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(args[index]))
+                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(parsedArgs[index]))
                     .collect(Collectors.toList());
 
             if ( !equal.isEmpty() ) {
@@ -103,7 +105,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
 
             Command<?> closest = filter.keySet().stream()
                     .min(Comparator.comparingInt(cb -> {
-                        int res = ld.apply(filter.get(cb)[index], args[index]);
+                        int res = ld.apply(filter.get(cb)[index], parsedArgs[index]);
                         return res == -1 ? Integer.MAX_VALUE : res;
                     }))
                     .orElse(null);
@@ -130,12 +132,11 @@ public class RootCommand extends Command<ShelfCommandSender> {
                 .min(Comparator.comparingInt(cb -> {
                     int baseLength = candidates.get(cb).length;
                     int argsLength = cb.info().argumentsHint().split(Pattern.quote(" ")).length;
-                    return Math.abs((baseLength + argsLength) - args.length);
+                    return Math.abs((baseLength + argsLength) - parsedArgs.length);
                 })).orElse(null);
 
         messages.sendSuggestion(sender, bestCommand.info().commands()[0] + ""
                 + bestCommand.info().argumentsHint());
-
     }
 
     @Override
@@ -190,26 +191,55 @@ public class RootCommand extends Command<ShelfCommandSender> {
         return result.stream().distinct().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
     }
 
-    private String[] convertArgs(String[] args, int expectedArgs) {
-        if ( expectedArgs <= 0 ) {
-            return args;
+//    private String[] convertArgs(String[] args, int expectedArgs) {
+//        if ( expectedArgs <= 0 ) {
+//            return args;
+//        }
+//        if ( args.length < expectedArgs ) {
+//            return args;
+//        }
+//
+//        List<String> currentArgs = Arrays.asList(args);
+//
+//        String lastArgument = String.join(" ", currentArgs.subList(expectedArgs - 1, currentArgs.size()));
+//        if ( (lastArgument.startsWith("\"") && lastArgument.endsWith("\"")) || (lastArgument.startsWith("'") && lastArgument.endsWith("'")) ) {
+//            lastArgument = lastArgument.substring(1, lastArgument.length() - 1);
+//
+//            List<String> newArgs = new ArrayList<>(currentArgs.subList(0, expectedArgs - 1));
+//            newArgs.add(lastArgument);
+//            return newArgs.toArray(new String[0]);
+//        }
+//
+//        return args;
+//    }
+
+    private String[] parseArgs(String[] args) {
+        boolean opened = false;
+
+        StringBuilder sb = new StringBuilder();
+        List<String> result = new ArrayList<>();
+        for(int i = 0; i < args.length; i++) {
+            char start = args[i].charAt(0);
+            if ( start == '\'' || start == '\"' ) {
+                opened = true;
+                args[i] = args[i].substring(1);
+            }
+            if ( !opened ) {
+                result.add(args[i]);
+                continue;
+            }
+
+            sb.append(" ").append(args[i]);
+
+            char end = args[i].charAt(args.length - 1);
+            if ( end == '\'' || end == '\"' ) {
+                opened = false;
+                result.add(sb.substring(0, sb.length() - 1));
+                sb = new StringBuilder();
+            }
         }
-        if ( args.length < expectedArgs ) {
-            return args;
-        }
 
-        List<String> currentArgs = Arrays.asList(args);
-
-        String lastArgument = String.join(" ", currentArgs.subList(expectedArgs - 1, currentArgs.size()));
-        if ( (lastArgument.startsWith("\"") && lastArgument.endsWith("\"")) || (lastArgument.startsWith("'") && lastArgument.endsWith("'")) ) {
-            lastArgument = lastArgument.substring(1, lastArgument.length() - 1);
-
-            List<String> newArgs = new ArrayList<>(currentArgs.subList(0, expectedArgs - 1));
-            newArgs.add(lastArgument);
-            return newArgs.toArray(new String[0]);
-        }
-
-        return args;
+        return result.toArray(new String[0]);
     }
 
 }

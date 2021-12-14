@@ -1,8 +1,12 @@
 package com.gufli.bookshelf.bukkit;
 
 import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.bossbar.BukkitBossbarManager;
 import com.gufli.bookshelf.bukkit.color.TextColorMapper;
+import com.gufli.bookshelf.bukkit.command.BukkitCommandExecutor;
+import com.gufli.bookshelf.bukkit.commands.debug.DebugBossbarCommand;
+import com.gufli.bookshelf.bukkit.commands.debug.DebugMenuCommand;
 import com.gufli.bookshelf.bukkit.event.BukkitEventHook;
 import com.gufli.bookshelf.bukkit.events.MenuListener;
 import com.gufli.bookshelf.bukkit.events.PlayerAttackEventListener;
@@ -12,8 +16,10 @@ import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
 import com.gufli.bookshelf.bukkit.sidebar.BukkitSidebarManager;
 import com.gufli.bookshelf.bukkit.titles.BukkitTitleManager;
-import com.gufli.bookshelf.api.server.Bookshelf;
+import com.gufli.bookshelf.commands.BookshelfCommand;
+import com.gufli.bookshelf.commands.debug.DebugCommand;
 import com.gufli.bookshelf.event.SimpleEventManager;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -43,13 +49,21 @@ public class BukkitShelf extends JavaPlugin {
         pm.registerEvents(new PlayerDeathEventListener(), this);
 
         // Load manager imlementations
-        new BukkitNametagManager();
-        new BukkitSidebarManager();
-        new BukkitTitleManager();
-        new BukkitBossbarManager();
+        if ( getServer().getPluginManager().isPluginEnabled("ProtocolLib") ) {
+            new BukkitNametagManager();
+            new BukkitSidebarManager();
+            new BukkitTitleManager();
+            new BukkitBossbarManager();
+        }
 
         // other implementations
         new TextColorMapper();
+
+        // commands
+        PluginCommand rootcmd = getCommand("bookshelf");
+        rootcmd.setExecutor(new BukkitCommandExecutor(BookshelfCommand.INSTANCE));
+        DebugCommand.INSTANCE.register(new DebugBossbarCommand());
+        DebugCommand.INSTANCE.register(new DebugMenuCommand());
 
         getLogger().info("Enabled " + getDescription().getName() + " v" + getDescription().getVersion() + ".");
     }

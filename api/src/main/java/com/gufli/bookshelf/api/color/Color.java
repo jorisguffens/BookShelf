@@ -60,15 +60,15 @@ public class Color {
         this.blue = blue;
     }
 
-    public int getRed() {
+    public int red() {
         return red;
     }
 
-    public int getGreen() {
+    public int green() {
         return green;
     }
 
-    public int getBlue() {
+    public int blue() {
         return blue;
     }
 
@@ -84,31 +84,36 @@ public class Color {
         this.blue = blue;
     }
 
-    public int getRGB() {
-        return getRed() << 16 | getGreen() << 8 | getBlue() << 0;
+    public int rgb() {
+        return red() << 16 | green() << 8 | blue() << 0;
     }
 
-    public float[] getHSV() {
+    public float[] hsv() {
         return java.awt.Color.RGBtoHSB(red, green, blue, null);
     }
 
-    public int getMSE(int pixR, int pixG, int pixB) {
+    public int mse(int pixR, int pixG, int pixB) {
         return ((pixR - red) * (pixR - red)
                 + (pixG - green) * (pixG - green)
                 + (pixB - blue) * (pixB - blue)) / 3;
     }
 
-    public int getMSE(Color color) {
-        return getMSE(color.getRed(), color.getGreen(), color.getBlue());
+    public int mse(Color color) {
+        return mse(color.red(), color.green(), color.blue());
     }
 
-    public String getName() {
+    public String name() {
+        if ( colors.containsValue(this) ) {
+            return colors.keySet().stream().filter(name -> colors.get(name).equals(this))
+                    .findFirst().orElse(null);
+        }
+
         String closestMatch = null;
         int minMSE = Integer.MAX_VALUE;
 
         for ( String name : colors.keySet() ) {
             Color c = colors.get(name);
-            int mse = c.getMSE(this);
+            int mse = c.mse(this);
             if (mse < minMSE) {
                 minMSE = mse;
                 closestMatch = name;
@@ -116,6 +121,10 @@ public class Color {
         }
 
         return closestMatch;
+    }
+
+    public static Color findColor(String name) {
+        return colors.get(name);
     }
 
 }

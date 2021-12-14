@@ -4,7 +4,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.PlayerPostLoginEvent;
 import com.gufli.bookshelf.bukkit.BukkitShelf;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;

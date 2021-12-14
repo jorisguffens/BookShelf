@@ -4,6 +4,6 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public interface TitleManager {
 
-    void showTitle(ShelfPlayer player, String text, TitleType type, float seconds);
+    void sendTitle(ShelfPlayer player, String text, TitleType type, float seconds);
 
 }

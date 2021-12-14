@@ -4,7 +4,7 @@ import com.comphenix.packetwrapper.AbstractPacket;
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
 import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam_v1_17;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.bukkit.api.reflection.Reflection;
 import com.gufli.bookshelf.api.event.Events;
@@ -120,7 +120,7 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     private void showAll(ShelfPlayer player) {
-        Player p = ((BukkitPlayer) player).getPlayer();
+        Player p = ((BukkitPlayer) player).getHandle();
         for ( FakeTeam team : fakeTeams ) {
             showFor(team, p);
         }

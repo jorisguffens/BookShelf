@@ -1,0 +1,15 @@
+
+cmd.error.player-only=This command is player only.
+cmd.error.no-permission=You don't have permission for this command.
+cmd.error.suggestion=Invalid command, try: {0}
+cmd.error.invalid-usage=Invalid command, try: {0}
+
+cmd.error.args={0} is not a valid value.
+cmd.error.args.number={0} is not a valid number.
+cmd.error.args.color={0} is not a valid color.
+
+cmd.debug.sidebar=Your sidebar has been updated
+cmd.debug.bossbar=Your bossbar has been updated
+cmd.debug.title=You have been sent a title
+cmd.debug.nametag=Your nametag has been updated
+cmd.debug.menu=You have opened a menu

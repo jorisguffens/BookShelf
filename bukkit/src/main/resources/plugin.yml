@@ -4,4 +4,7 @@ version: ${pluginVersion}
 api-version: 1.16
 description: 'The complete library for building minecraft plugins quickly and efficient'
 main: com.gufli.bookshelf.bukkit.BukkitShelf
-depend: [ProtocolLib]
+softdepend: [ProtocolLib]
+commands:
+  bookshelf:
+    description: "for debugging only"

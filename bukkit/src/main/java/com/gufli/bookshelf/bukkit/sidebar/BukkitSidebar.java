@@ -7,7 +7,7 @@ import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.sidebar.SidebarTemplate;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
@@ -165,11 +165,11 @@ public class BukkitSidebar {
     }
 
     private void sendPacket(PacketContainer packet) {
-        if ( !player.getPlayer().isOnline() ) {
+        if ( !player.getHandle().isOnline() ) {
             return;
         }
         try {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player.getPlayer(), packet);
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player.getHandle(), packet);
         } catch (InvocationTargetException ignore) {}
     }
 

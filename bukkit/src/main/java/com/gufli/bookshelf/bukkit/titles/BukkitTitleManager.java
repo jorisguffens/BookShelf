@@ -7,7 +7,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.titles.TitleManager;
 import com.gufli.bookshelf.api.titles.TitleType;
 import com.gufli.bookshelf.api.titles.Titles;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import org.bukkit.entity.Player;
 
 public class BukkitTitleManager implements TitleManager {
@@ -17,8 +17,8 @@ public class BukkitTitleManager implements TitleManager {
     }
 
     @Override
-    public void showTitle(ShelfPlayer player, String text, TitleType type, float seconds) {
-        Player p = ((BukkitPlayer) player).getPlayer();
+    public void sendTitle(ShelfPlayer player, String text, TitleType type, float seconds) {
+        Player p = ((BukkitPlayer) player).getHandle();
 
         if (type == TitleType.BIG) {
             p.sendTitle(text, null, 10, (int) (seconds * 20), 10);

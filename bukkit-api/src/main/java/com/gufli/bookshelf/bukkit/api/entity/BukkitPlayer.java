@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.bukkit.entity;
+package com.gufli.bookshelf.bukkit.api.entity;
 
 import com.gufli.bookshelf.api.location.ShelfLocation;
 import com.gufli.bookshelf.api.menu.Menu;
@@ -28,31 +28,31 @@ import java.util.UUID;
 
 public class BukkitPlayer extends AbstractShelfPlayer {
 
-    private final Player player;
+    private final Player handle;
 
-    public BukkitPlayer(Player player) {
-        this.player = player;
+    public BukkitPlayer(Player handle) {
+        this.handle = handle;
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player getHandle() {
+        return handle;
     }
 
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).player == player;
+        return obj instanceof BukkitPlayer && ((BukkitPlayer) obj).handle == handle;
     }
 
     //
 
     @Override
     public UUID getUniqueId() {
-        return this.player.getUniqueId();
+        return this.handle.getUniqueId();
     }
 
     @Override
     public String getName() {
-        return this.player.getName();
+        return this.handle.getName();
     }
 
     @Override
@@ -62,43 +62,42 @@ public class BukkitPlayer extends AbstractShelfPlayer {
             return;
         }
 
-        player.teleport(loc);
+        handle.teleport(loc);
     }
 
     @Override
     public ShelfLocation getLocation() {
-        return LocationConverter.convert(player.getLocation());
+        return LocationConverter.convert(handle.getLocation());
     }
 
     @Override
     public boolean hasPermission(String permission) {
-        return player.hasPermission(permission);
+        return handle.hasPermission(permission);
     }
 
     @Override
     public void sendMessage(String msg) {
-        player.sendMessage(msg);
+        handle.sendMessage(msg);
     }
 
     @Override
     public boolean isOnline() {
-        return player.isOnline();
+        return handle.isOnline();
     }
-
 
     // gui
 
     @Override
     public void openMenu(Menu<?, ?> inventory) {
         if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
-            player.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
+            handle.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
             set(CUSTOM_MENU_KEY, inventory);
         }
     }
 
     @Override
     public void closeMenu() {
-        player.closeInventory();
+        handle.closeInventory();
     }
 
 }

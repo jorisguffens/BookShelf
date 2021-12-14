@@ -6,13 +6,13 @@ import java.lang.annotation.RetentionPolicy;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface CommandInfo {
 
-    String[] commands() default {};
+    String[] commands();
 
     boolean playerOnly() default false;
 
     String[] permissions() default {};
 
-    int argumentsLength() default -1;
+    int minArguments() default 0;
 
     String argumentsHint() default "";
 

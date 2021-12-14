@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.api.command;
+package com.gufli.bookshelf.command;
 
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 

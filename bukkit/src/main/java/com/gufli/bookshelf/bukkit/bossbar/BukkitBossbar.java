@@ -5,7 +5,7 @@ import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.gufli.bookshelf.api.color.Color;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.bukkit.api.bossbar.Bossbar;
-import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import org.bukkit.boss.BarColor;
 import org.bukkit.entity.Player;
 
@@ -41,18 +41,18 @@ public class BukkitBossbar {
         packet.setTitle(WrappedChatComponent.fromText(bossbar.getText()));
         packet.setHealth(bossbar.getPercent());
         packet.setColor(fromColor(bossbar.getColor()));
-        packet.sendPacket(((BukkitPlayer) player).getPlayer());
+        packet.sendPacket(((BukkitPlayer) player).getHandle());
     }
 
     void destroy() {
         WrapperPlayServerBoss packet = new WrapperPlayServerBoss();
         packet.setAction(WrapperPlayServerBoss.Action.REMOVE);
         packet.setUniqueId(uuid);
-        packet.sendPacket(((BukkitPlayer) player).getPlayer());
+        packet.sendPacket(((BukkitPlayer) player).getHandle());
     }
 
     void update() {
-        Player p = ((BukkitPlayer) player).getPlayer();
+        Player p = ((BukkitPlayer) player).getHandle();
 
         WrapperPlayServerBoss packet = new WrapperPlayServerBoss();
         packet.setAction(WrapperPlayServerBoss.Action.UPDATE_NAME);
@@ -75,7 +75,7 @@ public class BukkitBossbar {
 
     private BarColor fromColor(Color color) {
         try {
-            return BarColor.valueOf(color.getName());
+            return BarColor.valueOf(color.name());
         } catch (Exception ex) {
             return BarColor.PINK;
         }

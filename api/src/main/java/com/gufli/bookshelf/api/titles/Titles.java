@@ -16,8 +16,8 @@ public class Titles {
         titleManager = manager;
     }
 
-    public static void showTitle(ShelfPlayer player, String text, TitleType type, int seconds) {
-        titleManager.showTitle(player, text, type, seconds);
+    public static void sendTitle(ShelfPlayer player, String text, TitleType type, int seconds) {
+        titleManager.sendTitle(player, text, type, seconds);
     }
 
 }

@@ -311,7 +311,7 @@ public class ItemStackBuilder {
     }
 
     public ItemStackBuilder withArmorColor(com.gufli.bookshelf.api.color.Color color) {
-        return withArmorColor(Color.fromRGB(color.getRGB()));
+        return withArmorColor(Color.fromRGB(color.rgb()));
     }
 
     // BANNER
