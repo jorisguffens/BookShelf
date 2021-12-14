@@ -1,24 +1,17 @@
-plugins {
-    id 'java'
+buildscript {
+    repositories {
+        maven { url 'https://plugins.gradle.org/m2' }
+    }
 }
 
 group 'com.gufli.bookshelf'
 version '1.0-SNAPSHOT'
 
-repositories {
-    mavenCentral()
-}
-
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
-}
-
 subprojects {
     apply plugin: 'java'
-    apply plugin: 'maven'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 1.11
+    targetCompatibility = 1.11
 
     group = parent.group;
     version = parent.version;
@@ -29,6 +22,5 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
     }
 }

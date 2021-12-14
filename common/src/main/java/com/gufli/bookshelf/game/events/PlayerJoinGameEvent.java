@@ -1,7 +1,7 @@
 package com.gufli.bookshelf.game.events;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.events.PlayerEvent;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.events.PlayerEvent;
 import com.gufli.bookshelf.game.AbstractGame;
 
 public class PlayerJoinGameEvent extends GameEvent implements PlayerEvent {

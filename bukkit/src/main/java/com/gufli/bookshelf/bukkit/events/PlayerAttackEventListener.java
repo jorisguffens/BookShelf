@@ -1,19 +1,20 @@
 package com.gufli.bookshelf.bukkit.events;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.event.Events;
-import com.gufli.bookshelf.events.PlayerAttackByPlayerEvent;
-import com.gufli.bookshelf.server.Bookshelf;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.events.PlayerAttackedByPlayerEvent;
+import com.gufli.bookshelf.api.server.Bookshelf;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 
-public class PlayerAttackEventListener {
+public class PlayerAttackEventListener implements Listener {
 
     @EventHandler
     public void onPlayerDamage(EntityDamageByEntityEvent e) {
@@ -51,7 +52,7 @@ public class PlayerAttackEventListener {
             return;
         }
 
-        PlayerAttackByPlayerEvent attackEvent = Events.call(new PlayerAttackByPlayerEvent(p, d));
+        PlayerAttackedByPlayerEvent attackEvent = Events.call(new PlayerAttackedByPlayerEvent(p, d));
         event.setCancelled(attackEvent.isCancelled());
     }
 

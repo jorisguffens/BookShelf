@@ -1,9 +1,10 @@
 package com.gufli.bookshelf.bukkit.server;
 
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.events.PlayerPostLoginEvent;
 import com.gufli.bookshelf.bukkit.BukkitShelf;
 import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.events.PlayerPostLoginEvent;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -17,12 +18,15 @@ public class ConnectionListener implements Listener {
 
     public ConnectionListener(BukkitShelf shelf) {
         this.shelf = shelf;
+
+        Events.subscribe(com.gufli.bookshelf.api.events.PlayerLoginEvent.class)
+                .handler(this::onLoginInternal);
     }
 
     // LOAD PLAYER
     @EventHandler(priority = EventPriority.MONITOR)
     public void onLogin(PlayerLoginEvent e) {
-        if ( e.getResult() != PlayerLoginEvent.Result.ALLOWED ) {
+        if (e.getResult() != PlayerLoginEvent.Result.ALLOWED) {
             return;
         }
 
@@ -40,24 +44,23 @@ public class ConnectionListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
         ShelfPlayer player = shelf.server.getPlayer(e.getPlayer().getUniqueId());
-        //EventManager.dispatch(new com.gufli.bookshelf.events.PlayerJoinEvent(player));
 
-        if ( !player.has("LOGIN_SUCCESS") ) {
+        if (!player.has("LOGIN_SUCCESS")) {
             player.set("JOIN_SUCCESS", true);
             return;
         }
 
-        //EventManager.dispatch(new PlayerPostLoginEvent(player));
+        Events.call(new PlayerPostLoginEvent(player));
     }
 
     // LOGIN FINISHED -> POST LOGIN (sync)
-    public void onLoginInternal(com.gufli.bookshelf.events.PlayerLoginEvent e) {
-        if ( !e.getPlayer().has("JOIN_SUCCESS") ) {
+    public void onLoginInternal(com.gufli.bookshelf.api.events.PlayerLoginEvent e) {
+        if (!e.getPlayer().has("JOIN_SUCCESS")) {
             e.getPlayer().set("LOGIN_SUCCESS", true);
             return;
         }
 
-        //shelf.server.getScheduler().sync().execute(() -> EventManager.dispatch(new PlayerPostLoginEvent(e.getPlayer())));
+        Events.call(new PlayerPostLoginEvent(e.getPlayer()));
     }
 
 }

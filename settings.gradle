@@ -1,5 +1,10 @@
 rootProject.name = 'Bookshelf'
 
-include 'common'
-include 'bukkit'
+include(
+	'api',
+	'common',
+	
+	'bukkit-api',
+    'bukkit',
+)
 

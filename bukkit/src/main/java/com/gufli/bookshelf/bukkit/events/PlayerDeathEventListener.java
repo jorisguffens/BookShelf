@@ -1,12 +1,13 @@
 package com.gufli.bookshelf.bukkit.events;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.event.Events;
-import com.gufli.bookshelf.events.PlayerDeathEvent;
-import com.gufli.bookshelf.server.Bookshelf;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.events.PlayerDeathEvent;
+import com.gufli.bookshelf.api.server.Bookshelf;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 
-public class PlayerDeathEventListener {
+public class PlayerDeathEventListener implements Listener {
 
     @EventHandler
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent event) {

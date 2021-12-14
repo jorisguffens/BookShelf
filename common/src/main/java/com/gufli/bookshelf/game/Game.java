@@ -1,7 +1,7 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.arenas.Arena;
-import com.gufli.bookshelf.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.location.arena.Arena;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 import java.util.Set;
 

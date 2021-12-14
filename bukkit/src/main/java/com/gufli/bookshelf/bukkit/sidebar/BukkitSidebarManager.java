@@ -1,11 +1,12 @@
 package com.gufli.bookshelf.bukkit.sidebar;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.event.Events;
-import com.gufli.bookshelf.events.PlayerQuitEvent;
-import com.gufli.bookshelf.sidebar.Sidebar;
-import com.gufli.bookshelf.sidebar.SidebarManager;
-import com.gufli.bookshelf.sidebar.Sidebars;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.sidebar.SidebarManager;
+import com.gufli.bookshelf.api.sidebar.SidebarTemplate;
+import com.gufli.bookshelf.api.sidebar.Sidebars;
+import com.gufli.bookshelf.bukkit.entity.BukkitPlayer;
+import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.events.PlayerQuitEvent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,35 +23,48 @@ public class BukkitSidebarManager implements SidebarManager {
     }
 
     @Override
-    public void setSidebar(ShelfPlayer player, Sidebar sidebar) {
-        removeSidebar(player);
-        BukkitSidebar bs = new BukkitSidebar(player, sidebar);
-        players.put(player, bs);
-        bs.show();
-    }
+    public void setSidebar(ShelfPlayer player, SidebarTemplate sidebar) {
+        BukkitPlayer bp = (BukkitPlayer) player;
 
-    @Override
-    public Sidebar getSidebar(ShelfPlayer player) {
-        return players.containsKey(player) ? players.get(player).getSidebar() : null;
+        removeSidebar(bp);
+        BukkitSidebar bs = new BukkitSidebar(bp, sidebar);
+        bs.show();
+
+        players.put(bp, bs);
     }
 
     @Override
     public void removeSidebar(ShelfPlayer player) {
-        if ( !players.containsKey(player) ) {
+        if (!players.containsKey(player)) {
+            return;
+        }
+
+        BukkitSidebar bs = players.remove(player);
+        bs.destroy();
+    }
+
+    @Override
+    public void updateSidebar(ShelfPlayer player) {
+        if (!players.containsKey(player)) {
+            return;
+        }
+
+        players.get(player).update();
+    }
+
+    @Override
+    public void refresh(ShelfPlayer player) {
+        if (!players.containsKey(player)) {
             return;
         }
 
         BukkitSidebar bs = players.get(player);
         bs.destroy();
-        players.remove(player);
+        bs.show();
     }
 
     @Override
-    public void updateSidebar(ShelfPlayer player) {
-        if ( !players.containsKey(player) ) {
-            return;
-        }
-
-        players.get(player).update();
+    public void refresh() {
+        players.keySet().forEach(this::refresh);
     }
 }

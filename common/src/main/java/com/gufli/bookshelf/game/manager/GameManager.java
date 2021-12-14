@@ -1,8 +1,8 @@
 package com.gufli.bookshelf.game.manager;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.game.Game;
-import com.gufli.bookshelf.scheduler.Scheduler;
+import com.gufli.bookshelf.api.scheduler.Scheduler;
 
 import java.util.Collections;
 import java.util.Set;

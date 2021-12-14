@@ -1,7 +1,8 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.entity.ShelfCommandSender;
+import com.gufli.bookshelf.api.command.Command;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 import org.apache.commons.text.similarity.LevenshteinDistance;
 
 import java.util.*;
@@ -34,21 +35,21 @@ public class RootCommand extends Command<ShelfCommandSender> {
         Command<?> invalidSubCommand = null;
 
         for ( Command<? extends ShelfCommandSender> subCmd : commands ) {
-            for ( String alias : subCmd.getInfo().commands() ) {
+            for ( String alias : subCmd.info().commands() ) {
                 if ( !(String.join(" ", args).toLowerCase() + " ").startsWith(alias.toLowerCase() + " ") ) {
                     continue;
                 }
 
                 int cmdLength = alias.split(Pattern.quote(" ")).length;
                 String[] cmdArgs = convertArgs(Arrays.copyOfRange(args, cmdLength, args.length),
-                        subCmd.getInfo().argumentsLength());
+                        subCmd.info().argumentsLength());
 
-                if ( subCmd.getInfo().argumentsLength() != -1 && cmdArgs.length != subCmd.getInfo().argumentsLength() ) {
+                if ( subCmd.info().argumentsLength() != -1 && cmdArgs.length != subCmd.info().argumentsLength() ) {
                     invalidSubCommand = subCmd;
                     continue;
                 }
 
-                if ( subCmd.getInfo().playerOnly() && !(sender instanceof ShelfPlayer) ) {
+                if ( subCmd.info().playerOnly() && !(sender instanceof ShelfPlayer) ) {
                     messages.sendPlayerOnly(sender);
                     return;
                 }
@@ -64,8 +65,8 @@ public class RootCommand extends Command<ShelfCommandSender> {
         }
 
         if ( invalidSubCommand != null ) {
-            messages.sendInvalidUsage(sender, invalidSubCommand.getInfo().commands()[0] + " "
-                    + invalidSubCommand.getInfo().argumentsHint());
+            messages.sendInvalidUsage(sender, invalidSubCommand.info().commands()[0] + " "
+                    + invalidSubCommand.info().argumentsHint());
             return;
         }
 
@@ -74,7 +75,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
 
         Map<Command<?>, String[]> candidates = new HashMap<>();
         for ( Command<?> cb : commands ) {
-            candidates.put(cb, cb.getInfo().commands()[0].split(Pattern.quote(" ")));
+            candidates.put(cb, cb.info().commands()[0].split(Pattern.quote(" ")));
         }
 
         for ( int i = 0; i < args.length; i++ ) {
@@ -128,12 +129,12 @@ public class RootCommand extends Command<ShelfCommandSender> {
         Command<?> bestCommand = candidates.keySet().stream()
                 .min(Comparator.comparingInt(cb -> {
                     int baseLength = candidates.get(cb).length;
-                    int argsLength = cb.getInfo().argumentsHint().split(Pattern.quote(" ")).length;
+                    int argsLength = cb.info().argumentsHint().split(Pattern.quote(" ")).length;
                     return Math.abs((baseLength + argsLength) - args.length);
                 })).orElse(null);
 
-        messages.sendSuggestion(sender, bestCommand.getInfo().commands()[0] + ""
-                + bestCommand.getInfo().argumentsHint());
+        messages.sendSuggestion(sender, bestCommand.info().commands()[0] + ""
+                + bestCommand.info().argumentsHint());
 
     }
 
@@ -149,7 +150,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
                     continue;
                 }
 
-                result.addAll(Arrays.stream(subCmd.getInfo().commands())
+                result.addAll(Arrays.stream(subCmd.info().commands())
                         .map(c -> c.split(Pattern.quote(" "))[0])
                         .filter(s -> s.toLowerCase().startsWith(arg0))
                         .collect(Collectors.toList()));
@@ -166,7 +167,7 @@ public class RootCommand extends Command<ShelfCommandSender> {
                 continue;
             }
 
-            for ( String cmd : subCmd.getInfo().commands() ) {
+            for ( String cmd : subCmd.info().commands() ) {
 
                 // check full command match
                 if ( (input + " ").startsWith(cmd.toLowerCase() + " ") ) {

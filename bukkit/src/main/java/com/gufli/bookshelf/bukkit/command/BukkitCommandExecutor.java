@@ -1,10 +1,10 @@
 package com.gufli.bookshelf.bukkit.command;
 
 import com.gufli.bookshelf.bukkit.entity.BukkitCommandSender;
-import com.gufli.bookshelf.commands.Command;
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.entity.ShelfCommandSender;
-import com.gufli.bookshelf.server.Bookshelf;
+import com.gufli.bookshelf.api.command.Command;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.entity.ShelfCommandSender;
+import com.gufli.bookshelf.api.server.Bookshelf;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;

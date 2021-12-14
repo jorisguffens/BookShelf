@@ -1,15 +1,15 @@
 package com.gufli.bookshelf.bukkit.game;
 
-import com.gufli.bookshelf.event.Events;
-import com.gufli.bookshelf.events.PlayerDeathEvent;
+import com.gufli.bookshelf.api.event.Events;
+import com.gufli.bookshelf.api.events.PlayerDeathEvent;
 import com.gufli.bookshelf.game.Game;
 import com.gufli.bookshelf.game.GameTeam;
 import com.gufli.bookshelf.game.TeamGame;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;
 import com.gufli.bookshelf.game.events.PlayerLeaveGameEvent;
 import com.gufli.bookshelf.game.manager.GameManager;
-import com.gufli.bookshelf.terminable.Terminable;
-import com.gufli.bookshelf.terminable.composite.CompositeTerminable;
+import com.gufli.bookshelf.api.util.terminable.Terminable;
+import com.gufli.bookshelf.api.util.terminable.composite.CompositeTerminable;
 import org.bukkit.ChatColor;
 
 public class DefaultGameEvents {

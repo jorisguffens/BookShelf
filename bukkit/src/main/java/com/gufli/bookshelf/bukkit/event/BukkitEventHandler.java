@@ -1,7 +1,7 @@
 package com.gufli.bookshelf.bukkit.event;
 
-import com.gufli.bookshelf.event.EventHandler;
-import com.gufli.bookshelf.event.EventPriority;
+import com.gufli.bookshelf.api.event.hook.EventHandler;
+import com.gufli.bookshelf.api.event.EventPriority;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;

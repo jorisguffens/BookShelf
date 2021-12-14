@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.game.events;
 
-import com.gufli.bookshelf.events.Event;
+import com.gufli.bookshelf.api.events.Event;
 import com.gufli.bookshelf.game.AbstractGame;
 
 public class GameEvent implements Event {

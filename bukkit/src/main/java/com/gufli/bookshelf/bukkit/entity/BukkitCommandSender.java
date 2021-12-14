@@ -17,7 +17,7 @@
 
 package com.gufli.bookshelf.bukkit.entity;
 
-import com.gufli.bookshelf.entity.ShelfCommandSender;
+import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 import org.bukkit.command.CommandSender;
 
 public class BukkitCommandSender implements ShelfCommandSender {

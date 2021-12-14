@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.commands;
 
-import com.gufli.bookshelf.entity.ShelfCommandSender;
+import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 
 public interface RootCommandMessages {
 

@@ -18,6 +18,8 @@
 package com.gufli.bookshelf.scheduler;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
+import com.gufli.bookshelf.api.scheduler.Scheduler;
+import com.gufli.bookshelf.api.scheduler.SchedulerTask;
 
 import java.util.concurrent.*;
 

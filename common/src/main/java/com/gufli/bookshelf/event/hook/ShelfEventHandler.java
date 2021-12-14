@@ -1,8 +1,8 @@
 package com.gufli.bookshelf.event.hook;
 
-import com.gufli.bookshelf.event.EventHandler;
-import com.gufli.bookshelf.event.EventPriority;
-import com.gufli.bookshelf.events.Event;
+import com.gufli.bookshelf.api.event.hook.EventHandler;
+import com.gufli.bookshelf.api.event.EventPriority;
+import com.gufli.bookshelf.api.events.Event;
 
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;

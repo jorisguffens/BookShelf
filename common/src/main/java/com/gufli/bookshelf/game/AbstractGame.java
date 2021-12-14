@@ -1,8 +1,8 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.arenas.Arena;
-import com.gufli.bookshelf.entity.ShelfPlayer;
-import com.gufli.bookshelf.event.Events;
+import com.gufli.bookshelf.api.location.arena.Arena;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.game.events.GameStartEvent;
 import com.gufli.bookshelf.game.events.GameStopEvent;
 import com.gufli.bookshelf.game.events.PlayerJoinGameEvent;

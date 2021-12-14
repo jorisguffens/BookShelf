@@ -17,6 +17,8 @@
 
 package com.gufli.bookshelf.entity;
 
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
+
 import java.util.HashMap;
 import java.util.Map;
 

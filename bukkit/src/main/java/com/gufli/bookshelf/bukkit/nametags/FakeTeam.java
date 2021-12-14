@@ -6,7 +6,7 @@ import java.util.Set;
 
 public class FakeTeam {
 
-    private final Set<String> players = new HashSet<>();
+    private final Set<String> members = new HashSet<>();
 
     private final String id;
     private final String prefix;
@@ -18,25 +18,25 @@ public class FakeTeam {
         this.suffix = suffix == null ? "" : suffix;
     }
 
-    public void addPlayer(String player) {
-        players.add(player);
+    public void addMember(String player) {
+        members.add(player);
     }
 
-    public void removePlayer(String player) {
-        players.remove(player);
+    public void removeMember(String player) {
+        members.remove(player);
     }
 
-    public Set<String> getPlayers() {
-        return Collections.unmodifiableSet(players);
+    public Set<String> members() {
+        return Collections.unmodifiableSet(members);
     }
 
-    public String getId() { return id; }
+    public String id() { return id; }
 
-    public String getPrefix() {
+    public String prefix() {
         return prefix;
     }
 
-    public String getSuffix() {
+    public String suffix() {
         return suffix;
     }
 
