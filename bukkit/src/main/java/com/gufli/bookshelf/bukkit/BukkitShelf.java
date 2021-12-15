@@ -1,5 +1,6 @@
 package com.gufli.bookshelf.bukkit;
 
+import com.gufli.bookshelf.animation.AnimationTest;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.bossbar.BukkitBossbarManager;
@@ -63,6 +64,8 @@ public class BukkitShelf extends JavaPlugin {
         rootcmd.setExecutor(new BukkitCommandExecutor(BookshelfCommandGroup.INSTANCE));
         BookshelfCommandGroup.INSTANCE.add(new BookshelfBossbarCommand());
         BookshelfCommandGroup.INSTANCE.add(new BookshelfMenuCommand());
+
+        AnimationTest.test();
 
         getLogger().info("Enabled " + getDescription().getName() + " v" + getDescription().getVersion() + ".");
     }
