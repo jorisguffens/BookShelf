@@ -1,12 +1,13 @@
 package com.gufli.bookshelf.bukkit.nametags;
 
-import com.comphenix.packetwrapper.AbstractPacket;
-import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam;
-import com.comphenix.packetwrapper.WrapperPlayServerScoreboardTeam_v1_17;
+import com.gufli.bookshelf.bukkit.packets.AbstractPacket;
+import com.gufli.bookshelf.bukkit.packets.WrapperPlayServerScoreboardTeam;
+import com.comphenix.protocol.PacketType;
+import com.comphenix.protocol.ProtocolLibrary;
+import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
 import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.bukkit.api.reflection.Reflection;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.PlayerJoinEvent;
 import com.gufli.bookshelf.api.events.PlayerQuitEvent;
@@ -15,10 +16,7 @@ import com.gufli.bookshelf.api.nametags.Nametags;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 public class BukkitNametagManager implements NametagManager {
@@ -40,6 +38,13 @@ public class BukkitNametagManager implements NametagManager {
 
     @Override
     public void setNametag(ShelfPlayer player, String prefix, String suffix) {
+        if ( prefix != null ) {
+            prefix = ChatColor.translateAlternateColorCodes('&', prefix);
+        }
+        if ( suffix != null ) {
+            suffix = ChatColor.translateAlternateColorCodes('&', suffix);
+        }
+
         // If player is already in the team -> ignore
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null && previous.isSimilar(prefix, suffix) ) {
@@ -129,10 +134,11 @@ public class BukkitNametagManager implements NametagManager {
     // packets
 
     private void hide(FakeTeam team) {
-        WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam();
-        packet.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_REMOVED);
-        packet.setName(team.id());
-        packet.broadcastPacket();
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
+        packet.getModifier().writeDefaults();
+        packet.getStrings().write(0, team.id());
+        packet.getIntegers().write(0, 1); // 1 = TEAM REMOVED
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
     }
 
     private void showFor(FakeTeam team, Player player) {
@@ -145,11 +151,12 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     private void removePlayer(FakeTeam team, String playerName) {
-        WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam();
-        packet.setMode(WrapperPlayServerScoreboardTeam.Mode.PLAYERS_REMOVED);
-        packet.setName(team.id());
-        packet.setPlayers(Collections.singletonList(playerName));
-        packet.broadcastPacket();
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
+        packet.getModifier().writeDefaults();
+        packet.getStrings().write(0, team.id());
+        packet.getIntegers().write(0, 4); // 1 = PLAYERS REMOVED
+        packet.getSpecificModifier(Collection.class).write(0, Collections.singletonList(playerName));
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
     }
 
     private void addPlayer(FakeTeam team, String playerName) {
@@ -157,25 +164,15 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     private void addPlayers(FakeTeam team, List<String> players) {
-        WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam();
-        packet.setMode(WrapperPlayServerScoreboardTeam.Mode.PLAYERS_ADDED);
-        packet.setName(team.id());
-        packet.setPlayers(players);
-        packet.broadcastPacket();
+        PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_TEAM);
+        packet.getModifier().writeDefaults();
+        packet.getStrings().write(0, team.id());
+        packet.getIntegers().write(0, 3); // 1 = PLAYERS ADDED
+        packet.getSpecificModifier(Collection.class).write(0, players);
+        ProtocolLibrary.getProtocolManager().broadcastServerPacket(packet);
     }
 
     private AbstractPacket showPacket(FakeTeam team) {
-        WrapperPlayServerScoreboardTeam packet;
-
-        if ( Reflection.isMcGreaterOrEqualTo("1.17") ) {
-            packet = new WrapperPlayServerScoreboardTeam_v1_17(team.id());
-        } else {
-            packet = new WrapperPlayServerScoreboardTeam();
-        }
-
-        packet.setMode(WrapperPlayServerScoreboardTeam.Mode.TEAM_CREATED);
-        packet.setName(team.id());
-
         // find last color
         String lastColors = ChatColor.getLastColors(team.prefix());
         ChatColor color = ChatColor.WHITE;
@@ -188,11 +185,11 @@ public class BukkitNametagManager implements NametagManager {
             }
         }
 
+        WrapperPlayServerScoreboardTeam packet = new WrapperPlayServerScoreboardTeam(team.id());
         packet.setColor(color);
         packet.setDisplayName(WrappedChatComponent.fromText(team.id()));
         packet.setPrefix(WrappedChatComponent.fromText(team.prefix()));
         packet.setSuffix(WrappedChatComponent.fromText(color + team.suffix()));
-
         return packet;
     }
 }

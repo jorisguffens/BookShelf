@@ -26,12 +26,12 @@ import org.bukkit.inventory.ItemStack;
 
 public class BukkitMenu extends Menu<Inventory, ItemStack> {
 
-    public BukkitMenu(int size, String title, MenuCallback<ItemStack> callback) {
-        super(Bukkit.createInventory(null, size, title), callback);
+    public BukkitMenu(int rows, String title, MenuCallback<ItemStack> callback) {
+        super(Bukkit.createInventory(null, rows * 9, title), callback);
     }
 
-    public BukkitMenu(int size, String title) {
-        super(Bukkit.createInventory(null, size, title));
+    public BukkitMenu(int rows, String title) {
+        super(Bukkit.createInventory(null, rows * 9, title));
     }
 
     public BukkitMenu(org.bukkit.inventory.Inventory inv, MenuCallback<ItemStack> callback) {

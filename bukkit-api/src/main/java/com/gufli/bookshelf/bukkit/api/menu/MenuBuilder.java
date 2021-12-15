@@ -93,7 +93,7 @@ public class MenuBuilder {
             throw new UnsupportedOperationException("More than 10 items is not supported.");
         }
 
-        MenuScheme scheme = SCHEMES[items.size()];
+        MenuScheme scheme = SCHEMES[items.size() - 1];
         int size = scheme.getRows() + 1;
 
         if ( !hotbar.isEmpty() ) {

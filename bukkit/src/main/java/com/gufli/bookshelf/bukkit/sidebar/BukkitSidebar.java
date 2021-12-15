@@ -13,10 +13,7 @@ import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 
@@ -54,6 +51,7 @@ public class BukkitSidebar {
             String line = template.get(i);
             line = ChatColor.translateAlternateColorCodes('&', line);
             line = StringEscapeUtils.unescapeJava(line);
+            line = String.format("%-10s", line); // min width of sidebar = 10
             template.set(i, line);
         }
     }

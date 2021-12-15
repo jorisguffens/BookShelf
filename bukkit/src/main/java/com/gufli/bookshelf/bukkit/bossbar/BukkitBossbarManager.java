@@ -31,12 +31,12 @@ public class BukkitBossbarManager implements BossbarManager {
 
     @Override
     public Bossbar getBossbar(ShelfPlayer player) {
-        return players.containsKey(player) ? players.get(player).getBossbar() : null;
+        return players.containsKey(player) ? players.get(player).bossbar() : null;
     }
 
     @Override
     public void removeBossbar(ShelfPlayer player) {
-        if ( !players.containsKey(player) ) {
+        if (!players.containsKey(player)) {
             return;
         }
 
@@ -47,7 +47,7 @@ public class BukkitBossbarManager implements BossbarManager {
 
     @Override
     public void updateBossbar(ShelfPlayer player) {
-        if ( !players.containsKey(player) ) {
+        if (!players.containsKey(player)) {
             return;
         }
 

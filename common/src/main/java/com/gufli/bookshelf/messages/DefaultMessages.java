@@ -6,38 +6,49 @@ import com.gufli.bookshelf.api.messages.Messages;
 import com.gufli.bookshelf.config.TextConfiguration;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.util.stream.Collectors;
 
 public class DefaultMessages {
 
-    private static Messages messages;
+    private final static Messages messages = load();
 
-    static {
-        URL url = DefaultMessages.class.getClassLoader().getResource("default.language.txt");
-        if ( url != null ) {
-            try (
-                    InputStream is = url.openStream();
-                    InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-                    BufferedReader br = new BufferedReader(isr);
-            ) {
-                Configuration config = new TextConfiguration(br.lines().collect(Collectors.joining("\n")));
-                register(new SimpleMessages(config));
-            } catch (Exception ex) {
-                ex.printStackTrace();
+    private static Messages load() {
+        InputStream is;
+        try {
+            URL url = DefaultMessages.class.getClassLoader().getResource("default.language.txt");
+
+            if (url == null) {
+                return null;
             }
-        }
-    }
 
-    private static void register(Messages messages) {
-        if (DefaultMessages.messages != null) {
-            throw new UnsupportedOperationException("Cannot redefine singleton messages.");
+            URLConnection connection = url.openConnection();
+            connection.setUseCaches(false);
+            is = connection.getInputStream();
+        } catch (IOException ex) {
+            return null;
         }
 
-        DefaultMessages.messages = messages;
+        if (is == null) {
+            return null;
+        }
+
+        try (
+                is;
+                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader br = new BufferedReader(isr);
+        ) {
+            Configuration config = new TextConfiguration(br.lines().collect(Collectors.joining("\n")));
+            return new SimpleMessages(config);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     //
@@ -57,7 +68,6 @@ public class DefaultMessages {
     public static void send(ShelfCommandSender sender, String name, String... placeholders) {
         messages.send(sender, name, placeholders);
     }
-
 
 
 }

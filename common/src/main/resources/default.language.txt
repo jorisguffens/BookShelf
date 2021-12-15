@@ -8,8 +8,8 @@ cmd.error.args={0} is not a valid value.
 cmd.error.args.number={0} is not a valid number.
 cmd.error.args.color={0} is not a valid color.
 
-cmd.debug.sidebar=Your sidebar has been updated
-cmd.debug.bossbar=Your bossbar has been updated
-cmd.debug.title=You have been sent a title
-cmd.debug.nametag=Your nametag has been updated
-cmd.debug.menu=You have opened a menu
+cmd.bookshelf.sidebar=Your sidebar has been updated
+cmd.bookshelf.bossbar=Your bossbar has been updated
+cmd.bookshelf.title=You have been sent a title
+cmd.bookshelf.nametag=Your nametag has been updated
+cmd.bookshelf.menu=You have opened a menu

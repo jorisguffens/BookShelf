@@ -127,4 +127,8 @@ public class Color {
         return colors.get(name);
     }
 
+    public static String[] names() {
+        return colors.keySet().toArray(new String[0]);
+    }
+
 }

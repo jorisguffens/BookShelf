@@ -1,19 +1,16 @@
 package com.gufli.bookshelf.bukkit.bossbar;
 
-import com.comphenix.packetwrapper.WrapperPlayServerBoss;
-import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.gufli.bookshelf.api.color.Color;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.bukkit.api.bossbar.Bossbar;
 import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
-import org.bukkit.boss.BarColor;
+import com.gufli.bookshelf.bukkit.packets.BossbarPacketBuilder;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
 public class BukkitBossbar {
 
-    private final UUID uuid = UUID.randomUUID();
+    private final UUID id = UUID.randomUUID();
     private final Bossbar bossbar;
     private final ShelfPlayer player;
 
@@ -22,63 +19,47 @@ public class BukkitBossbar {
         this.bossbar = bossbar;
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public UUID id() {
+        return id;
     }
 
-    public Bossbar getBossbar() {
+    public Bossbar bossbar() {
         return bossbar;
     }
 
-    public ShelfPlayer getPlayer() {
+    public ShelfPlayer player() {
         return player;
     }
 
     void show() {
-        WrapperPlayServerBoss packet = new WrapperPlayServerBoss();
-        packet.setAction(WrapperPlayServerBoss.Action.ADD);
-        packet.setUniqueId(uuid);
-        packet.setTitle(WrappedChatComponent.fromText(bossbar.getText()));
-        packet.setHealth(bossbar.getPercent());
-        packet.setColor(fromColor(bossbar.getColor()));
-        packet.sendPacket(((BukkitPlayer) player).getHandle());
+        BossbarPacketBuilder.create(id, bossbar).sendPacket(((BukkitPlayer) player).getHandle());
     }
 
     void destroy() {
-        WrapperPlayServerBoss packet = new WrapperPlayServerBoss();
-        packet.setAction(WrapperPlayServerBoss.Action.REMOVE);
-        packet.setUniqueId(uuid);
-        packet.sendPacket(((BukkitPlayer) player).getHandle());
+        BossbarPacketBuilder.remove(id).sendPacket(((BukkitPlayer) player).getHandle());
     }
 
     void update() {
         Player p = ((BukkitPlayer) player).getHandle();
 
-        WrapperPlayServerBoss packet = new WrapperPlayServerBoss();
-        packet.setAction(WrapperPlayServerBoss.Action.UPDATE_NAME);
-        packet.setUniqueId(uuid);
-        packet.setTitle(WrappedChatComponent.fromText(bossbar.getText()));
-        packet.sendPacket(p);
-
-        packet = new WrapperPlayServerBoss();
-        packet.setAction(WrapperPlayServerBoss.Action.UPDATE_PCT);
-        packet.setUniqueId(uuid);
-        packet.setHealth(bossbar.getPercent());
-        packet.sendPacket(p);
-
-        packet = new WrapperPlayServerBoss();
-        packet.setAction(WrapperPlayServerBoss.Action.UPDATE_STYLE);
-        packet.setUniqueId(uuid);
-        packet.setColor(fromColor(bossbar.getColor()));
-        packet.sendPacket(p);
-    }
-
-    private BarColor fromColor(Color color) {
-        try {
-            return BarColor.valueOf(color.name());
-        } catch (Exception ex) {
-            return BarColor.PINK;
-        }
+        // TODO
+//        BossbarPacketBuilder packet = new BossbarPacketBuilder();
+//        packet.setAction(BossbarPacketBuilder.Action.UPDATE_NAME);
+//        packet.setUniqueId(id);
+//        packet.setTitle(WrappedChatComponent.fromText(bossbar.getText()));
+//        packet.sendPacket(p);
+//
+//        packet = new BossbarPacketBuilder();
+//        packet.setAction(BossbarPacketBuilder.Action.UPDATE_PCT);
+//        packet.setUniqueId(id);
+//        packet.setHealth(bossbar.getPercent());
+//        packet.sendPacket(p);
+//
+//        packet = new BossbarPacketBuilder();
+//        packet.setAction(BossbarPacketBuilder.Action.UPDATE_STYLE);
+//        packet.setUniqueId(id);
+//        packet.setColor(fromColor(bossbar.getColor()));
+//        packet.sendPacket(p);
     }
 
 }

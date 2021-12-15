@@ -5,6 +5,7 @@ import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.PlayerPostLoginEvent;
 import com.gufli.bookshelf.bukkit.BukkitShelf;
 import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,6 +19,10 @@ public class ConnectionListener implements Listener {
 
     public ConnectionListener(BukkitShelf shelf) {
         this.shelf = shelf;
+
+        for ( Player player : shelf.getServer().getOnlinePlayers() ) {
+            shelf.server.onLogin(new BukkitPlayer(player));
+        }
 
         Events.subscribe(com.gufli.bookshelf.api.events.PlayerLoginEvent.class)
                 .handler(this::onLoginInternal);
