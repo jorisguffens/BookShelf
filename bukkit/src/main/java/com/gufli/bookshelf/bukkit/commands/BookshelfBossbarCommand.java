@@ -23,7 +23,7 @@ public class BookshelfBossbarCommand extends Command<ShelfPlayer> {
             return Arrays.stream(BarColor.values()).map(Enum::name).collect(Collectors.toList());
         }
         if (args.length == 2) {
-            return Arrays.asList("0", "25", "50", "75", "100");
+            return Arrays.asList("0", ".25", ".5", ".75", "1");
         }
         return null;
     }

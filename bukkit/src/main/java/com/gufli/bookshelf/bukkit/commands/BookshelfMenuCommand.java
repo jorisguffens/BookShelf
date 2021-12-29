@@ -21,7 +21,7 @@ public class BookshelfMenuCommand extends Command<ShelfPlayer> {
 
         ItemStack item = ItemStackBuilder.skull()
                 .withSkullOwner(bp.getHandle())
-                .withName(TextColor.AQUA + player.getName())
+                .withName(TextColor.AQUA + player.name())
                 .withLore("Click for something fancy")
                 .build();
 

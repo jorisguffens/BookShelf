@@ -4,6 +4,8 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public class Sidebars {
 
+    private Sidebars() {}
+
     private static SidebarManager sidebarManager;
 
     public static void register(SidebarManager manager) {

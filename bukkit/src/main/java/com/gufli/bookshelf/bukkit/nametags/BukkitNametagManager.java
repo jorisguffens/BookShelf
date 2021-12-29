@@ -60,16 +60,16 @@ public class BukkitNametagManager implements NametagManager {
         FakeTeam joining = getFakeTeam(prefix, suffix);
         // Team already exists
         if (joining != null) {
-            joining.addMember(player.getName());
-            addPlayer(joining, player.getName());
+            joining.addMember(player.name());
+            addPlayer(joining, player.name());
         }
         // Team doesn't exist
         else {
             joining = new FakeTeam(UNIQUEID + (COUNTER++), prefix, suffix);
             showAll(joining);
 
-            joining.addMember(player.getName());
-            addPlayer(joining, player.getName());
+            joining.addMember(player.name());
+            addPlayer(joining, player.name());
 
             fakeTeams.add(joining);
         }
@@ -102,8 +102,8 @@ public class BukkitNametagManager implements NametagManager {
             return;
         }
 
-        team.removeMember(player.getName());
-        removePlayer(team, player.getName());
+        team.removeMember(player.name());
+        removePlayer(team, player.name());
 
         // team is empty -> delete
         if ( team.members().size() == 0 ) {
@@ -120,7 +120,7 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     private FakeTeam getFakeTeam(ShelfPlayer player) {
-        return fakeTeams.stream().filter(t -> t.members().contains(player.getName()))
+        return fakeTeams.stream().filter(t -> t.members().contains(player.name()))
                 .findFirst().orElse(null);
     }
 

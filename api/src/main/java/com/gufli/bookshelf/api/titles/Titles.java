@@ -4,9 +4,9 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public class Titles {
 
-    private static TitleManager titleManager;
-
     private Titles() {}
+
+    private static TitleManager titleManager;
 
     public static void register(TitleManager manager) {
         if (titleManager != null) {

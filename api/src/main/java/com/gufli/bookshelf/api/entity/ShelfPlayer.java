@@ -26,13 +26,13 @@ import java.util.UUID;
 
 public interface ShelfPlayer extends ShelfCommandSender {
 
-    UUID getUniqueId();
+    UUID id();
 
-    String getName();
+    String name();
 
     void teleport(ShelfLocation location);
 
-    ShelfLocation getLocation();
+    ShelfLocation location();
 
     boolean isOnline();
 

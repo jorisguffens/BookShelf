@@ -28,12 +28,12 @@ public class AbstractShelfServer implements ShelfServer {
 
     @Override
     public final ShelfPlayer getPlayer(UUID uuid) {
-        return players.stream().filter(p -> p.getUniqueId().equals(uuid)).findFirst().orElse(null);
+        return players.stream().filter(p -> p.id().equals(uuid)).findFirst().orElse(null);
     }
 
     @Override
     public final ShelfPlayer getPlayer(String name) {
-        return players.stream().filter(p -> p.getName().equalsIgnoreCase(name)).findFirst().orElse(null);
+        return players.stream().filter(p -> p.name().equalsIgnoreCase(name)).findFirst().orElse(null);
     }
 
     protected final void login(ShelfPlayer player) {

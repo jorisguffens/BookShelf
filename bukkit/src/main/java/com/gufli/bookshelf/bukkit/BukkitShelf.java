@@ -19,6 +19,7 @@ import com.gufli.bookshelf.bukkit.sidebar.BukkitSidebarManager;
 import com.gufli.bookshelf.bukkit.titles.BukkitTitleManager;
 import com.gufli.bookshelf.commands.BookshelfCommandGroup;
 import com.gufli.bookshelf.event.SimpleEventManager;
+import com.gufli.bookshelf.placeholders.SimplePlaceholderManager;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,6 +50,8 @@ public class BukkitShelf extends JavaPlugin {
         pm.registerEvents(new PlayerDeathEventListener(), this);
 
         // Load manager imlementations
+        new SimplePlaceholderManager();
+
         if ( getServer().getPluginManager().isPluginEnabled("ProtocolLib") ) {
             new BukkitNametagManager();
             new BukkitSidebarManager();

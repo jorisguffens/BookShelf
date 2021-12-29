@@ -46,12 +46,12 @@ public class BukkitPlayer extends AbstractShelfPlayer {
     //
 
     @Override
-    public UUID getUniqueId() {
+    public UUID id() {
         return this.handle.getUniqueId();
     }
 
     @Override
-    public String getName() {
+    public String name() {
         return this.handle.getName();
     }
 
@@ -66,7 +66,7 @@ public class BukkitPlayer extends AbstractShelfPlayer {
     }
 
     @Override
-    public ShelfLocation getLocation() {
+    public ShelfLocation location() {
         return LocationConverter.convert(handle.getLocation());
     }
 

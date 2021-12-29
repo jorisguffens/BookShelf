@@ -26,7 +26,6 @@ public class BukkitBossbarManager implements BossbarManager {
         removeBossbar(player);
         BukkitBossbar bb = new BukkitBossbar(player, bossbar);
         players.put(player, bb);
-        bb.show();
     }
 
     @Override
@@ -47,11 +46,7 @@ public class BukkitBossbarManager implements BossbarManager {
 
     @Override
     public void updateBossbar(ShelfPlayer player) {
-        if (!players.containsKey(player)) {
-            return;
-        }
-
-        players.get(player).update();
+        // nothing
     }
 
 }
