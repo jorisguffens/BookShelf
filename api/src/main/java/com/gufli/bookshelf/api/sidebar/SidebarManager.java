@@ -4,7 +4,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public interface SidebarManager {
 
-    void setSidebar(ShelfPlayer player, SidebarTemplate sidebar);
+    void changeSidebar(ShelfPlayer player, Sidebar sidebar);
 
     void removeSidebar(ShelfPlayer player);
 

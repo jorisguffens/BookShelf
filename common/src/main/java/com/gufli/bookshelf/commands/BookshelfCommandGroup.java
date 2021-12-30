@@ -7,10 +7,9 @@ import com.gufli.bookshelf.command.CommandGroup;
 @CommandInfo(commands = "bookshelf")
 public class BookshelfCommandGroup extends CommandGroup {
 
-    public final static BookshelfCommandGroup INSTANCE = new BookshelfCommandGroup();
-
-    private BookshelfCommandGroup() {
+    public BookshelfCommandGroup() {
         super(DefaultCommandMessages.INSTANCE);
+
         add(new BookshelfNametagCommand());
         add(new BookshelfSidebarCommand());
         add(new BookshelfTitleCommand());

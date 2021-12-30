@@ -41,14 +41,14 @@ public class ConnectionListener implements Listener {
     // QUIT PLAYER
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        ShelfPlayer player = shelf.server.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = shelf.server.playerById(e.getPlayer().getUniqueId());
         shelf.server.onQuit(player);
     }
 
     // JOIN PLAYER
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
-        ShelfPlayer player = shelf.server.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = shelf.server.playerById(e.getPlayer().getUniqueId());
 
         if (!player.has("LOGIN_SUCCESS")) {
             player.set("JOIN_SUCCESS", true);

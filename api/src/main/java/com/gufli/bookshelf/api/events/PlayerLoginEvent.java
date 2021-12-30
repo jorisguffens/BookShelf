@@ -5,7 +5,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 public class PlayerLoginEvent extends AbstractPlayerEvent {
 
     public PlayerLoginEvent(ShelfPlayer player) {
-        super(player);
+        super(true, player);
     }
     
 }

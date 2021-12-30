@@ -20,11 +20,12 @@ package com.gufli.bookshelf.api.location;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
+import java.util.UUID;
 import java.util.regex.Pattern;
 
 public class ShelfLocation {
 
-    private final String worldId;
+    private final UUID worldId;
 
     private double x;
     private double y;
@@ -33,20 +34,20 @@ public class ShelfLocation {
     private float yaw;
     private float pitch;
 
-    public ShelfLocation(String worldId, double x, double y, double z) {
+    public ShelfLocation(UUID worldId, double x, double y, double z) {
         this.worldId = worldId;
         this.x = x;
         this.y = y;
         this.z = z;
     }
 
-    public ShelfLocation(String worldId, double x, double y, double z, float yaw, float pitch) {
+    public ShelfLocation(UUID worldId, double x, double y, double z, float yaw, float pitch) {
         this(worldId, x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
-    public String worldId() {
+    public UUID worldId() {
         return worldId;
     }
 
@@ -120,7 +121,7 @@ public class ShelfLocation {
         }
 
         ShelfLocation loc = new ShelfLocation(
-                parts[0],
+                UUID.fromString(parts[0]),
                 Double.parseDouble(parts[1]),
                 Double.parseDouble(parts[2]),
                 Double.parseDouble(parts[3]));

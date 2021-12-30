@@ -4,14 +4,14 @@ import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 
 public interface Messages {
 
-    String getPrefix();
+    String prefix();
 
-    void setPrefix(String prefix);
+    void changePrefix(String prefix);
 
-    String getMessage(String name);
+    String get(String key);
 
-    String getMessage(String name, String... placeholders);
+    String get(String key, String... placeholders);
 
-    void send(ShelfCommandSender sender, String name, String... placeholders);
+    void send(ShelfCommandSender sender, String key, String... placeholders);
 
 }

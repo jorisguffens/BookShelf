@@ -3,6 +3,7 @@ package com.gufli.bookshelf.api.server;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.scheduler.Scheduler;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public class Bookshelf {
@@ -17,15 +18,19 @@ public class Bookshelf {
         shelfServer = server;
     }
 
-    public static Scheduler getScheduler() {
-        return shelfServer.getScheduler();
+    public static Scheduler scheduler() {
+        return shelfServer.scheduler();
     }
 
-    public static ShelfPlayer getPlayer(UUID uuid) {
-        return shelfServer.getPlayer(uuid);
+    public static ShelfPlayer playerById(UUID uuid) {
+        return shelfServer.playerById(uuid);
     }
 
-    public static ShelfPlayer getPlayer(String name) {
-        return shelfServer.getPlayer(name);
+    public static ShelfPlayer playerByName(String name) {
+        return shelfServer.playerByName(name);
+    }
+
+    public static Collection<ShelfPlayer> players() {
+        return shelfServer.players();
     }
 }

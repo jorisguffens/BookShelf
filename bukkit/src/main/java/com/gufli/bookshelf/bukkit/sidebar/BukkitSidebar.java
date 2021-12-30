@@ -5,17 +5,19 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.comphenix.protocol.wrappers.WrappedChatComponent;
-import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.sidebar.SidebarTemplate;
+import com.gufli.bookshelf.api.placeholders.Placeholders;
+import com.gufli.bookshelf.api.sidebar.Sidebar;
 import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import org.apache.commons.lang.RandomStringUtils;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.ChatColor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
-import java.util.function.BiConsumer;
 
 public class BukkitSidebar {
 
@@ -26,51 +28,53 @@ public class BukkitSidebar {
 
     private final String objectiveId;
 
-    private final String title;
-    private final List<String> template;
-    private final BiConsumer<ShelfPlayer, List<String>> updater;
+    private final Sidebar template;
+    private String previousTitle;
+    private List<String> previousContents;
 
     // these things change
     private final List<String> contents = new CopyOnWriteArrayList<>();
     private final Map<String, Integer> scores = new HashMap<>();
 
-    public BukkitSidebar(BukkitPlayer player, SidebarTemplate template) {
+    public BukkitSidebar(BukkitPlayer player, Sidebar template) {
         this.player = player;
         this.objectiveId = RandomStringUtils.randomAlphabetic(15);
+        this.template = template;
 
-        this.title = ChatColor.translateAlternateColorCodes('&', template.title());
-        this.template = new ArrayList<>(template.contents());
-        this.updater = template.updater();
-
+        update();
         show();
-        updateLines();
-    }
-
-    private void updateLines() {
-        for ( int i = 0; i < template.size(); i++ ) {
-            String line = template.get(i);
-            line = ChatColor.translateAlternateColorCodes('&', line);
-            line = StringEscapeUtils.unescapeJava(line);
-            line = String.format("%-10s", line); // min width of sidebar = 10
-            template.set(i, line);
-        }
     }
 
     public void update() {
-        List<String> contents = new ArrayList<>(template);
+        String title = ChatColor.translateAlternateColorCodes('&', template.title());
+        if (!title.equals(previousTitle)) {
+            this.previousTitle = title;
+            sendObjectivePacket(PacketState.UPDATE_DISPLAY_NAME);
+        }
 
-        // update lines (with variables)
-        if ( updater != null ) {
-            updater.accept(player, contents);
+        // only reformat when the contents changed
+        if (!template.contents().equals(previousContents)) {
+            this.previousContents = new ArrayList<>(template.contents());
+            for (int i = 0; i < previousContents.size(); i++) {
+                String line = template.contents().get(i);
+                line = ChatColor.translateAlternateColorCodes('&', line);
+                line = StringEscapeUtils.unescapeJava(line);
+                line = String.format("%-10s", line); // min width of sidebar = 10
+                previousContents.set(i, line);
+            }
+        }
+
+        List<String> contents = new ArrayList<>(previousContents);
+
+        // update placeholders
+        for (int i = 0; i < contents.size(); i++) {
+            contents.set(i, Placeholders.replace(player, contents.get(i)));
         }
 
         // also show duplicate lines
         List<String> checked = new ArrayList<>();
-        for ( String line : contents ) {
-            if ( line.length() > 40 ) {
-                line = line.substring(0, 40);
-            }
-            while ( checked.contains(line) ) {
+        for (String line : contents) {
+            while (checked.contains(line)) {
                 line += " ";
             }
             checked.add(line);
@@ -78,8 +82,8 @@ public class BukkitSidebar {
         contents = checked;
 
         // remove lines that no longer exist
-        for ( String line : this.contents ) {
-            if ( !contents.contains(line) ) {
+        for (String line : this.contents) {
+            if (!contents.contains(line)) {
                 removeScore(line);
             }
         }
@@ -87,7 +91,7 @@ public class BukkitSidebar {
         // set & update lines with the new score order
         this.contents.clear();
         int i = contents.size() - 1;
-        for ( String s : contents) {
+        for (String s : contents) {
             this.contents.add(s);
             setScore(s, i);
             i--;
@@ -145,11 +149,12 @@ public class BukkitSidebar {
     private void sendObjectivePacket(PacketState state) {
         PacketContainer packet = new PacketContainer(PacketType.Play.Server.SCOREBOARD_OBJECTIVE);
         packet.getStrings().write(0, objectiveId);
+        packet.getChatComponents().write(0, WrappedChatComponent.fromText(previousTitle));
         packet.getIntegers().write(0, state.ordinal());
         packet.getEnumModifier(EnumScoreboardHealthDisplay.class, 2).write(0, EnumScoreboardHealthDisplay.INTEGER);
 
         if (state != PacketState.REMOVE) {
-            packet.getChatComponents().write(0, WrappedChatComponent.fromText(title));
+            packet.getChatComponents().write(0, WrappedChatComponent.fromText(previousTitle));
         }
 
         sendPacket(packet);
@@ -163,12 +168,13 @@ public class BukkitSidebar {
     }
 
     private void sendPacket(PacketContainer packet) {
-        if ( !player.getHandle().isOnline() ) {
+        if (!player.handle().isOnline()) {
             return;
         }
         try {
-            ProtocolLibrary.getProtocolManager().sendServerPacket(player.getHandle(), packet);
-        } catch (InvocationTargetException ignore) {}
+            ProtocolLibrary.getProtocolManager().sendServerPacket(player.handle(), packet);
+        } catch (InvocationTargetException ignore) {
+        }
     }
 
     private enum EnumScoreboardHealthDisplay {

@@ -25,27 +25,27 @@ import org.bukkit.ChatColor;
 public class BukkitMessages extends SimpleMessages {
 
     @Override
-    public void setPrefix(String prefix) {
-        super.setPrefix(colorify(prefix));
+    public void changePrefix(String prefix) {
+        super.changePrefix(colorify(prefix));
     }
 
     @Override
-    public String getMessage(String name) {
-        return colorify(super.getMessage(name));
+    public String get(String name) {
+        return colorify(super.get(name));
     }
 
-    public String getMessage(String name, boolean colorify, String... placeholders) {
+    public String get(String name, boolean colorify, String... placeholders) {
         if (colorify) {
-            String msg = getMessage(name, placeholders);
+            String msg = get(name, placeholders);
             if (msg == null) return null;
             return colorify(msg);
         }
-        return getMessage(name, placeholders);
+        return get(name, placeholders);
     }
 
     public void send(ShelfCommandSender sender, String name, boolean colorify, String... placeholders) {
         if (isEmpty(name)) return;
-        sender.sendMessage(colorify(getPrefix()) + getMessage(name, colorify, placeholders));
+        sender.sendMessage(colorify(prefix()) + get(name, colorify, placeholders));
     }
 
     private String colorify(String str) {

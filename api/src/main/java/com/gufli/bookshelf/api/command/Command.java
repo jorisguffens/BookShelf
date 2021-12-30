@@ -3,6 +3,7 @@ package com.gufli.bookshelf.api.command;
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public abstract class Command<T extends ShelfCommandSender> {
@@ -36,7 +37,11 @@ public abstract class Command<T extends ShelfCommandSender> {
     }
 
     public final List<String> autocomplete(ShelfCommandSender sender, String[] args) {
-        return onAutocomplete((T) sender, args);
+        List<String> result = onAutocomplete((T) sender, args);
+        if ( result == null ) {
+            return Collections.emptyList();
+        }
+        return result;
     }
 
     // implementation

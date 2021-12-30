@@ -1,10 +1,11 @@
 package com.gufli.bookshelf.bukkit.api.menu;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.menu.MenuClickType;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.bukkit.api.item.ItemStackBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
@@ -30,9 +31,9 @@ public class InfiniteMenuBuilder {
     private ItemStack nextItem;
 
     private int itemAmount;
-    private Function<Integer, BukkitMenuItem> supplier;
+    private Function<Integer, InventoryMenuItem> supplier;
 
-    protected final Map<Integer, BukkitMenuItem> hotbar = new HashMap<>();
+    protected final Map<Integer, InventoryMenuItem> hotbar = new HashMap<>();
 
     private InfiniteMenuBuilder() {
         previousItem = ItemStackBuilder.of(Material.ARROW)
@@ -66,22 +67,22 @@ public class InfiniteMenuBuilder {
         return this;
     }
 
-    public InfiniteMenuBuilder withItemSupplier(Function<Integer, BukkitMenuItem> supplier) {
+    public InfiniteMenuBuilder withItemSupplier(Function<Integer, InventoryMenuItem> supplier) {
         this.supplier = supplier;
         return this;
     }
 
     public final InfiniteMenuBuilder withHotbarItem(int slot, ItemStack item) {
-        hotbar.put(slot, new BukkitMenuItem(item));
+        hotbar.put(slot, new InventoryMenuItem(item));
         return this;
     }
 
-    public final InfiniteMenuBuilder withHotbarItem(int slot, ItemStack item, BiFunction<ShelfPlayer, MenuClickType, Boolean> cb) {
-        hotbar.put(slot, new BukkitMenuItem(item, cb));
+    public final InfiniteMenuBuilder withHotbarItem(int slot, ItemStack item, BiFunction<BukkitPlayer, ClickType, Boolean> cb) {
+        hotbar.put(slot, new InventoryMenuItem(item, cb));
         return this;
     }
 
-    public BukkitMenu build() {
+    public InventoryMenu build() {
         if ( supplier == null ) {
             throw new IllegalStateException("Supplier may not be null.");
         }
@@ -94,7 +95,7 @@ public class InfiniteMenuBuilder {
 
         // no need for pagination
         if ( size <= 6 ) {
-            BukkitMenu menu = new BukkitMenu(size * 9, title);
+            InventoryMenu menu = new InventoryMenu(size * 9, title);
             for ( int i = 0; i < itemAmount; i++ ) {
                 menu.setItem(i, supplier.apply(i));
             }
@@ -114,11 +115,11 @@ public class InfiniteMenuBuilder {
         return page(0);
     }
 
-    private BukkitMenu page(int page) {
+    private InventoryMenu page(int page) {
         int rows = (itemAmount / 9) + (itemAmount % 9 > 0 ? 1 : 0);
         int pages = (rows / 4) + (rows % 4 > 0 ? 1 : 0);
 
-        BukkitMenu menu = new BukkitMenu(54, title);
+        InventoryMenu menu = new InventoryMenu(54, title);
 
         // fill with items
         int offset = page * 36;
@@ -136,14 +137,14 @@ public class InfiniteMenuBuilder {
         }
 
         if ( page > 0 ) {
-            menu.setItem(47, new BukkitMenuItem(previousItem, (player, clickType) -> {
+            menu.setItem(47, new InventoryMenuItem(previousItem, (player, clickType) -> {
                 player.openMenu(page(page - 1));
                 return true;
             }));
         }
 
         if ( page < pages - 1 ) {
-            menu.setItem(51, new BukkitMenuItem(nextItem, (player, clickType) -> {
+            menu.setItem(51, new InventoryMenuItem(nextItem, (player, clickType) -> {
                 player.openMenu(page(page + 1));
                 return true;
             }));

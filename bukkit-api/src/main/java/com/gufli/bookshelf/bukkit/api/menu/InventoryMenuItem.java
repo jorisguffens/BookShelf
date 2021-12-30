@@ -18,20 +18,37 @@
 package com.gufli.bookshelf.bukkit.api.menu;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.menu.MenuClickType;
-import com.gufli.bookshelf.api.menu.MenuItem;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.BiFunction;
 
-public class BukkitMenuItem extends MenuItem<ItemStack> {
+public class InventoryMenuItem  {
 
-    public BukkitMenuItem(ItemStack itemStack, BiFunction<ShelfPlayer, MenuClickType, Boolean> callback) {
-        super(itemStack, callback);
+    private final ItemStack handle;
+    private final BiFunction<BukkitPlayer, ClickType, Boolean> callback;
+
+    public InventoryMenuItem(ItemStack itemStack, BiFunction<BukkitPlayer, ClickType, Boolean> callback) {
+        this.handle = itemStack;
+        this.callback = callback;
     }
 
-    public BukkitMenuItem(ItemStack itemStack) {
+    public InventoryMenuItem(ItemStack itemStack) {
         this(itemStack, null);
+    }
+
+    public ItemStack handle() {
+        return handle;
+    }
+
+    // --- EVENTS ---
+
+    public boolean dispatchClick(BukkitPlayer player, ClickType type) {
+        if ( callback == null ) {
+            return false;
+        }
+        return callback.apply(player, type);
     }
 
 }

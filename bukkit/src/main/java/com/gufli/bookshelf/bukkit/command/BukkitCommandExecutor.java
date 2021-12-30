@@ -26,7 +26,7 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
             return null;
         }
 
-        ShelfPlayer psender = Bookshelf.getPlayer(((Player) sender).getUniqueId());
+        ShelfPlayer psender = Bookshelf.playerById(((Player) sender).getUniqueId());
         return this.command.autocomplete(psender, args);
     }
 
@@ -34,7 +34,7 @@ public class BukkitCommandExecutor implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, org.bukkit.command.Command command, String label, String[] args) {
         ShelfCommandSender psender;
         if ( sender instanceof Player ) {
-            psender = Bookshelf.getPlayer(((Player) sender).getUniqueId());
+            psender = Bookshelf.playerById(((Player) sender).getUniqueId());
         } else {
             psender = new BukkitCommandSender(sender);
         }

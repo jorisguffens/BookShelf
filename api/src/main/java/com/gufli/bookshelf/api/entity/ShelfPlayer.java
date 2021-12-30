@@ -18,9 +18,7 @@
 package com.gufli.bookshelf.api.entity;
 
 
-
 import com.gufli.bookshelf.api.location.ShelfLocation;
-import com.gufli.bookshelf.api.menu.Menu;
 
 import java.util.UUID;
 
@@ -30,24 +28,11 @@ public interface ShelfPlayer extends ShelfCommandSender {
 
     String name();
 
+    String displayName();
+
     void teleport(ShelfLocation location);
 
     ShelfLocation location();
-
-    boolean isOnline();
-
-
-    // gui
-
-    String CUSTOM_MENU_KEY = "CUSTOM_MENU";
-
-    default Menu<?, ?> getCurrentMenu() {
-        return has(CUSTOM_MENU_KEY) ? get(CUSTOM_MENU_KEY, Menu.class) : null;
-    }
-
-    void openMenu(Menu<?, ?> inventory);
-
-    void closeMenu();
 
     // cache
 

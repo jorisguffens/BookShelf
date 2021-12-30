@@ -3,14 +3,17 @@ package com.gufli.bookshelf.api.server;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.scheduler.Scheduler;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface ShelfServer {
 
-    Scheduler getScheduler();
+    Scheduler scheduler();
 
-    ShelfPlayer getPlayer(UUID uuid);
+    ShelfPlayer playerById(UUID uuid);
 
-    ShelfPlayer getPlayer(String name);
+    ShelfPlayer playerByName(String name);
+
+    Collection<ShelfPlayer> players();
 
 }

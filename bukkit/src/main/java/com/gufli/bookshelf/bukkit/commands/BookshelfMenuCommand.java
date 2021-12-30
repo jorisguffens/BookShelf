@@ -7,8 +7,8 @@ import com.gufli.bookshelf.api.command.CommandInfo;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.bukkit.api.item.ItemStackBuilder;
-import com.gufli.bookshelf.bukkit.api.menu.BukkitMenu;
-import com.gufli.bookshelf.bukkit.api.menu.MenuBuilder;
+import com.gufli.bookshelf.bukkit.api.menu.InventoryMenu;
+import com.gufli.bookshelf.bukkit.api.menu.InventoryMenuBuilder;
 import com.gufli.bookshelf.messages.DefaultMessages;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,12 +20,12 @@ public class BookshelfMenuCommand extends Command<ShelfPlayer> {
         BukkitPlayer bp = (BukkitPlayer) player;
 
         ItemStack item = ItemStackBuilder.skull()
-                .withSkullOwner(bp.getHandle())
+                .withSkullOwner(bp.handle())
                 .withName(TextColor.AQUA + player.name())
                 .withLore("Click for something fancy")
                 .build();
 
-        BukkitMenu menu = MenuBuilder.create(TextColor.DARK_RED + "Fancy menu")
+        InventoryMenu menu = InventoryMenuBuilder.create(TextColor.DARK_RED + "Fancy menu")
                 .withItem(item, (p, type) -> {
                     p.sendMessage("poggers");
                 })

@@ -9,7 +9,7 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-public class CommandGroup extends Command<ShelfCommandSender> {
+public abstract class CommandGroup extends Command<ShelfCommandSender> {
 
     private CommandGroup parent;
 
@@ -55,42 +55,154 @@ public class CommandGroup extends Command<ShelfCommandSender> {
         }
 
         String[] parsedArgs = parseArgs(args);
-        Command<?> invalidSubCommand = null;
+        String input = String.join(" ", parsedArgs).toLowerCase();
 
+        int largestlength = 0;
+        Command<?> bestcommand = null;
         for (Command<? extends ShelfCommandSender> subCmd : commands) {
             for (String alias : subCmd.info().commands()) {
-                if (!(String.join(" ", parsedArgs).toLowerCase() + " ").startsWith(alias.toLowerCase() + " ")) {
+                if (!input.startsWith(alias.toLowerCase())) {
                     continue;
                 }
 
-                int cmdLength = alias.split(Pattern.quote(" ")).length;
-                String[] cmdArgs = Arrays.copyOfRange(parsedArgs, cmdLength, parsedArgs.length);
-
-                if (cmdArgs.length < subCmd.info().minArguments()) {
-                    invalidSubCommand = subCmd;
-                    continue;
+                int length = (int) alias.chars().filter(ch -> ch == ' ').count() + 1;
+                if (length > largestlength) {
+                    largestlength = length;
+                    bestcommand = subCmd;
                 }
-
-                if (subCmd.info().playerOnly() && !(sender instanceof ShelfPlayer)) {
-                    messages.sendPlayerOnly(sender);
-                    return;
-                }
-
-                if (!subCmd.hasAnyPermission(sender)) {
-                    messages.sendNoPermission(sender);
-                    return;
-                }
-
-                subCmd.execute(sender, cmdArgs);
-                return;
             }
         }
 
-        if (invalidSubCommand != null) {
-            messages.sendInvalidUsage(sender, invalidUsageHint(invalidSubCommand));
+        if (bestcommand == null) {
+            suggestCommand(sender, parsedArgs);
             return;
         }
 
+        String[] cmdArgs = Arrays.copyOfRange(parsedArgs, largestlength, parsedArgs.length);
+        if (cmdArgs.length < bestcommand.info().minArguments()) {
+            messages.sendInvalidUsage(sender, invalidUsageHint(bestcommand));
+            return;
+        }
+
+        if (bestcommand.info().playerOnly() && !(sender instanceof ShelfPlayer)) {
+            messages.sendPlayerOnly(sender);
+            return;
+        }
+
+        if (!bestcommand.hasAnyPermission(sender)) {
+            messages.sendNoPermission(sender);
+            return;
+        }
+
+        bestcommand.execute(sender, cmdArgs);
+    }
+
+    @Override
+    public List<String> onAutocomplete(ShelfCommandSender sender, String[] args) {
+
+        Set<Command<?>> commands = this.commands.stream()
+                .filter(c -> c.hasAnyPermission(sender))
+                .collect(Collectors.toSet());
+
+        // autocomplete command
+        if (args.length <= 1) {
+            String arg0 = args[0].toLowerCase();
+            List<String> result = new ArrayList<>();
+            for (Command<?> subCmd : commands) {
+                result.addAll(Arrays.stream(subCmd.info().commands())
+                        .map(c -> c.split(Pattern.quote(" "))[0])
+                        .filter(s -> s.toLowerCase().startsWith(arg0))
+                        .collect(Collectors.toList()));
+            }
+
+            return result.stream().distinct().collect(Collectors.toList());
+        }
+
+
+        String input = String.join(" ", args).toLowerCase();
+        List<String> result = new ArrayList<>();
+
+        // partial commands
+        outer:
+        for (Command<?> subCmd : commands) {
+            for (String cmd : subCmd.info().commands()) {
+                if (!cmd.toLowerCase().startsWith(input)) {
+                    continue;
+                }
+
+                result.add(cmd.split(Pattern.quote(" "))[args.length - 1]);
+                continue outer;
+            }
+        }
+
+        // full commands
+        int largestlength = 0;
+        List<String> tempOptions = new ArrayList<>();
+        outer:
+        for (Command<?> subCmd : commands) {
+            for (String cmd : subCmd.info().commands()) {
+                if (!input.startsWith(cmd.toLowerCase())) {
+                    continue;
+                }
+
+                int length = (int) cmd.chars().filter(ch -> ch == ' ').count() + 1;
+                String[] cmdArgs = Arrays.copyOfRange(args, length, args.length);
+
+                if (length > largestlength) {
+                    largestlength = length;
+                    tempOptions = subCmd.autocomplete(sender, cmdArgs);
+                    continue outer;
+                }
+            }
+        }
+
+        result.addAll(tempOptions);
+        return result.stream().distinct()
+                .filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    private String[] parseArgs(String[] args) {
+        char opened = 0;
+
+        StringBuilder sb = new StringBuilder();
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < args.length; i++) {
+            char start = args[i].charAt(0);
+            if (opened == 0 && (start == '\'' || start == '\"')) {
+                opened = start;
+                args[i] = args[i].substring(1);
+            }
+
+            if (opened == 0) {
+                result.add(args[i]);
+                continue;
+            }
+
+            if (sb.length() > 0) {
+                sb.append(" ");
+            }
+
+            char end = args[i].charAt(args[i].length() - 1);
+            if (end == opened) {
+                opened = 0;
+                sb.append(args[i], 0, args[i].length() - 1);
+                result.add(sb.toString());
+                sb = new StringBuilder();
+            } else {
+                sb.append(args[i]);
+            }
+        }
+
+        // add remaining
+        if (sb.length() > 0) {
+            result.add(sb.toString());
+        }
+
+        return result.toArray(new String[0]);
+    }
+
+    private void suggestCommand(ShelfCommandSender sender, String[] args) {
         // suggest a command if the command doesn't exist
         LevenshteinDistance ld = new LevenshteinDistance(5);
 
@@ -114,7 +226,7 @@ public class CommandGroup extends Command<ShelfCommandSender> {
             }
 
             List<Command<?>> equal = filter.keySet().stream()
-                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(parsedArgs[index]))
+                    .filter(cb -> filter.get(cb)[index].equalsIgnoreCase(args[index]))
                     .collect(Collectors.toList());
 
             if (!equal.isEmpty()) {
@@ -124,7 +236,7 @@ public class CommandGroup extends Command<ShelfCommandSender> {
 
             Command<?> closest = filter.keySet().stream()
                     .min(Comparator.comparingInt(cb -> {
-                        int res = ld.apply(filter.get(cb)[index], parsedArgs[index]);
+                        int res = ld.apply(filter.get(cb)[index], args[index]);
                         return res == -1 ? Integer.MAX_VALUE : res;
                     }))
                     .orElse(null);
@@ -151,93 +263,13 @@ public class CommandGroup extends Command<ShelfCommandSender> {
                 .min(Comparator.comparingInt(cb -> {
                     int baseLength = candidates.get(cb).length;
                     int argsLength = cb.info().argumentsHint().split(Pattern.quote(" ")).length;
-                    return Math.abs((baseLength + argsLength) - parsedArgs.length);
+                    return Math.abs((baseLength + argsLength) - args.length);
                 })).orElse(null);
 
-        messages.sendSuggestion(sender, bestCommand.info().commands()[0] + ""
-                + bestCommand.info().argumentsHint());
-    }
-
-    @Override
-    public List<String> onAutocomplete(ShelfCommandSender sender, String[] args) {
-
-        // autocomplete command
-        if (args.length <= 1) {
-            String arg0 = args[0].toLowerCase();
-            List<String> result = new ArrayList<>();
-            for (Command<?> subCmd : commands) {
-                if (!subCmd.hasAnyPermission(sender)) {
-                    continue;
-                }
-
-                result.addAll(Arrays.stream(subCmd.info().commands())
-                        .map(c -> c.split(Pattern.quote(" "))[0])
-                        .filter(s -> s.toLowerCase().startsWith(arg0))
-                        .collect(Collectors.toList()));
-            }
-
-            return result.stream().distinct().collect(Collectors.toList());
-        }
-
-        // autocomplete arguments
-        String input = String.join(" ", args).toLowerCase();
-        List<String> result = new ArrayList<>();
-        outer:
-        for (Command<?> subCmd : commands) {
-            if (!subCmd.hasAnyPermission(sender)) {
-                continue;
-            }
-
-            for (String cmd : subCmd.info().commands()) {
-
-                // check full command match
-                if ((input + " ").startsWith(cmd.toLowerCase() + " ")) {
-                    String[] cmdArgs = Arrays.copyOfRange(args, cmd.split(Pattern.quote(" ")).length, args.length);
-                    List<String> options = subCmd.autocomplete(sender, cmdArgs);
-                    if (options != null) {
-                        result.addAll(options);
-                    }
-                    continue outer;
-                }
-
-                // check partial command match
-                if (cmd.toLowerCase().startsWith(input)) {
-                    result.add(cmd.split(Pattern.quote(" "))[args.length - 1]);
-                    continue outer;
-                }
-            }
-        }
-
-        return result.stream().distinct().filter(s -> s.toLowerCase().startsWith(args[args.length - 1].toLowerCase())).collect(Collectors.toList());
-    }
-
-    private String[] parseArgs(String[] args) {
-        boolean opened = false;
-
-        StringBuilder sb = new StringBuilder();
-        List<String> result = new ArrayList<>();
-        for (int i = 0; i < args.length; i++) {
-            char start = args[i].charAt(0);
-            if (start == '\'' || start == '\"') {
-                opened = true;
-                args[i] = args[i].substring(1);
-            }
-            if (!opened) {
-                result.add(args[i]);
-                continue;
-            }
-
-            sb.append(" ").append(args[i]);
-
-            char end = args[i].charAt(args[i].length() - 1);
-            if (end == '\'' || end == '\"') {
-                opened = false;
-                result.add(sb.substring(1, sb.length() - 1));
-                sb = new StringBuilder();
-            }
-        }
-
-        return result.toArray(new String[0]);
+        messages.sendSuggestion(sender,
+                "/" + info().commands()[0] + " " +
+                        bestCommand.info().commands()[0] + " " +
+                        bestCommand.info().argumentsHint());
     }
 
 }

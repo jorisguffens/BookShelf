@@ -22,7 +22,7 @@ public class BukkitTitleManager implements TitleManager {
 
     @Override
     public void sendTitle(ShelfPlayer player, String text, TitleType type, float seconds) {
-        Player p = ((BukkitPlayer) player).getHandle();
+        Player p = ((BukkitPlayer) player).handle();
         text = ChatColor.translateAlternateColorCodes('&', text);
 
         if (type == TitleType.BIG) {

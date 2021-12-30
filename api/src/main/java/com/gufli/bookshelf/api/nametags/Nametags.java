@@ -15,15 +15,15 @@ public class Nametags {
     }
 
     public static void setNametag(ShelfPlayer player, String prefix, String suffix) {
-        nametagManager.setNametag(player, prefix, suffix);
+        nametagManager.changeNametag(player, prefix, suffix);
     }
 
     public static void setPrefix(ShelfPlayer player, String prefix) {
-        nametagManager.setPrefix(player, prefix);
+        nametagManager.changePrefix(player, prefix);
     }
 
     public static void setSuffix(ShelfPlayer player, String suffix) {
-        nametagManager.setSuffix(player, suffix);
+        nametagManager.changeSuffix(player, suffix);
     }
 
     public static void clear(ShelfPlayer player) {

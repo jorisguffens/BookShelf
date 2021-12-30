@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.bukkit.events;
+package com.gufli.bookshelf.bukkit.listeners;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.event.Events;
@@ -31,20 +31,20 @@ public class PlayerAttackEventListener implements Listener {
             return;
         }
 
-        ShelfPlayer p = Bookshelf.getPlayer(entity.getUniqueId());
+        ShelfPlayer p = Bookshelf.playerById(entity.getUniqueId());
         if ( p == null ) {
             return;
         }
 
         ShelfPlayer d = null;
         if ( damager instanceof Player) {
-            d = Bookshelf.getPlayer(damager.getUniqueId());
+            d = Bookshelf.playerById(damager.getUniqueId());
         }
         else if ( damager instanceof Projectile ) {
             Projectile projectile = (Projectile) damager;
             if ( projectile.getShooter() != null && projectile.getShooter() instanceof Player ) {
                 Player shooter = (Player) projectile.getShooter();
-                d = Bookshelf.getPlayer(shooter.getUniqueId());
+                d = Bookshelf.playerById(shooter.getUniqueId());
             }
         }
 

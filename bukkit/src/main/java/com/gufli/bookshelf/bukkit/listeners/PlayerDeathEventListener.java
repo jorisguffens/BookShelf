@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.bukkit.events;
+package com.gufli.bookshelf.bukkit.listeners;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.event.Events;
@@ -11,7 +11,7 @@ public class PlayerDeathEventListener implements Listener {
 
     @EventHandler
     public void onDeath(org.bukkit.event.entity.PlayerDeathEvent event) {
-        ShelfPlayer player = Bookshelf.getPlayer(event.getEntity().getUniqueId());
+        ShelfPlayer player = Bookshelf.playerById(event.getEntity().getUniqueId());
         if ( player == null ) {
             return;
         }
@@ -22,7 +22,7 @@ public class PlayerDeathEventListener implements Listener {
             return;
         }
 
-        ShelfPlayer killer = Bookshelf.getPlayer(event.getEntity().getKiller().getUniqueId());
+        ShelfPlayer killer = Bookshelf.playerById(event.getEntity().getKiller().getUniqueId());
         if ( killer == null ) {
             PlayerDeathEvent e = Events.call(new PlayerDeathEvent(player, event.getDeathMessage()));
             event.setDeathMessage(e.getDeathMessage());

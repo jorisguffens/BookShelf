@@ -3,19 +3,19 @@ package com.gufli.bookshelf.bukkit.api.menu;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuScheme {
+public class InventoryMenuScheme {
 
     private final int[] mask;
 
-    private MenuScheme(int... rows) {
+    private InventoryMenuScheme(int... rows) {
         mask = rows;
     }
 
-    public static MenuScheme of(int... rows) {
-        return new MenuScheme(rows);
+    public static InventoryMenuScheme of(int... rows) {
+        return new InventoryMenuScheme(rows);
     }
 
-    public static MenuScheme of(String... rows) {
+    public static InventoryMenuScheme of(String... rows) {
         int[] result = new int[rows.length];
         for (int i = 0; i < rows.length; i++) {
             result[i] = 0;
@@ -25,7 +25,7 @@ public class MenuScheme {
                 }
             }
         }
-        return new MenuScheme(result);
+        return new InventoryMenuScheme(result);
     }
 
 

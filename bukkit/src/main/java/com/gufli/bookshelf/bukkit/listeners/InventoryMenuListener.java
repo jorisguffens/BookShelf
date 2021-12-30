@@ -15,12 +15,12 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.bukkit.events;
+package com.gufli.bookshelf.bukkit.listeners;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.menu.MenuClickType;
 import com.gufli.bookshelf.api.server.Bookshelf;
-import com.gufli.bookshelf.bukkit.api.menu.BukkitMenu;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
+import com.gufli.bookshelf.bukkit.api.menu.InventoryMenu;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -29,22 +29,22 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class MenuListener implements Listener {
+public class InventoryMenuListener implements Listener {
 
     @EventHandler
     public void onQuit(PlayerQuitEvent e) {
-        ShelfPlayer player = Bookshelf.getPlayer(e.getPlayer().getUniqueId());
+        ShelfPlayer player = Bookshelf.playerById(e.getPlayer().getUniqueId());
         handleClose(player);
     }
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if ( !(e.getPlayer() instanceof Player) ) {
+        if (!(e.getPlayer() instanceof Player)) {
             return;
         }
 
-        ShelfPlayer player = Bookshelf.getPlayer(e.getPlayer().getUniqueId());
-        if ( player == null ) {
+        ShelfPlayer player = Bookshelf.playerById(e.getPlayer().getUniqueId());
+        if (player == null) {
             return;
         }
 
@@ -53,25 +53,22 @@ public class MenuListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if ( !(e.getWhoClicked() instanceof Player) ) {
+        if (!(e.getWhoClicked() instanceof Player)) {
             return;
         }
 
-        ShelfPlayer player = Bookshelf.getPlayer(e.getWhoClicked().getUniqueId());
-        if ( player == null ) {
+        ShelfPlayer player = Bookshelf.playerById(e.getWhoClicked().getUniqueId());
+        if (player == null) {
             return;
         }
 
-        if ( !(player.getCurrentMenu() instanceof BukkitMenu) ) {
+        BukkitPlayer bp = (BukkitPlayer) player;
+        InventoryMenu inv = bp.openedMenu();
+        if (inv == null || inv.handle() == null) {
             return;
         }
 
-        BukkitMenu inv = (BukkitMenu) player.getCurrentMenu();
-        if ( inv == null || inv.getHandle() == null ) {
-            return;
-        }
-
-        if ( e.getRawSlot() >= e.getView().getTopInventory().getSize() ) {
+        if (e.getRawSlot() >= e.getView().getTopInventory().getSize()) {
             return;
         }
 //        if ( !inv.getHandle().equals(e.getView().getTopInventory()) ) {
@@ -80,34 +77,15 @@ public class MenuListener implements Listener {
 
         e.setCancelled(true);
 
-        MenuClickType type = null;
-        switch (e.getClick()) {
-            case DOUBLE_CLICK:
-            case SHIFT_LEFT:
-            case LEFT:
-                type = MenuClickType.LEFT;
-                break;
-            case SHIFT_RIGHT:
-            case RIGHT:
-                type = MenuClickType.RIGHT;
-                break;
-            case MIDDLE:
-                type = MenuClickType.MIDDLE;
-        }
-
-        if ( type == null ) {
-            return;
-        }
-
         boolean playSound = false;
 
         try {
-            playSound = inv.dispatchClick(player, type, e.getRawSlot());
+            playSound = inv.dispatchClick(bp, e.getClick(), e.getRawSlot());
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
-        if ( !playSound ) {
+        if (!playSound) {
             return;
         }
 
@@ -124,15 +102,14 @@ public class MenuListener implements Listener {
     }
 
     private void handleClose(ShelfPlayer player) {
-        if ( !(player.getCurrentMenu() instanceof BukkitMenu) ) {
+        BukkitPlayer bp = (BukkitPlayer) player;
+        InventoryMenu inv = bp.openedMenu();
+        if (inv == null) {
             return;
         }
 
-        BukkitMenu inv = (BukkitMenu) player.getCurrentMenu();
-        if ( inv != null ) {
-            inv.dispatchClose(player);
-            player.remove(ShelfPlayer.CUSTOM_MENU_KEY);
-        }
+        inv.dispatchClose(bp);
+        bp.closeMenu();
     }
 
 }

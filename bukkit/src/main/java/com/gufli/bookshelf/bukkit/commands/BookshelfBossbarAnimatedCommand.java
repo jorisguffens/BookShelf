@@ -1,6 +1,7 @@
 package com.gufli.bookshelf.bukkit.commands;
 
 
+import com.gufli.bookshelf.api.animation.AnimationBuilder;
 import com.gufli.bookshelf.api.command.Command;
 import com.gufli.bookshelf.api.command.CommandInfo;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
@@ -10,12 +11,13 @@ import com.gufli.bookshelf.messages.DefaultMessages;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CommandInfo(commands = "bossbar", argumentsHint = "<color> <style> <progress> <text>", minArguments = 4)
-public class BookshelfBossbarCommand extends Command<ShelfPlayer> {
+@CommandInfo(commands = "bossbar animated", argumentsHint = "<color> <style> <text>", minArguments = 3)
+public class BookshelfBossbarAnimatedCommand extends Command<ShelfPlayer> {
 
     @Override
     protected List<String> onAutocomplete(ShelfPlayer sender, String[] args) {
@@ -26,15 +28,11 @@ public class BookshelfBossbarCommand extends Command<ShelfPlayer> {
             return Arrays.stream(BarStyle.values()).map(Enum::name)
                     .collect(Collectors.toList());
         }
-        if (args.length == 3) {
-            return Arrays.asList("0", ".25", ".5", ".75", "1");
-        }
         return null;
     }
 
     @Override
     protected void onExecute(ShelfPlayer player, String[] args) {
-
         BarColor color;
         try {
             color = BarColor.valueOf(args[0]);
@@ -51,19 +49,25 @@ public class BookshelfBossbarCommand extends Command<ShelfPlayer> {
             return;
         }
 
-        if (!args[2].matches("[0-9]?[.]?[0-9]+")) {
-            DefaultMessages.send(player, "cmd.error.args.number", args[2]);
-            return;
-        }
-
-        float progress = Float.parseFloat(args[2]);
-        if (progress < 0 || progress > 1) {
-            DefaultMessages.send(player, "cmd.error.args.number", args[2]);
-            return;
-        }
-
-        Bossbar bossbar = new Bossbar(args[3], color, style, progress);
+        Bossbar bossbar = new Bossbar(args[2], color, style, 0);
         Bossbars.changeBossbar(player, bossbar);
+
+        AnimationBuilder.get()
+                .repeatUntil(() -> {
+                    bossbar.changeProgress(Math.min(1, bossbar.progress() + .05f));
+                    Bossbars.updateBossbar(player);
+                    return bossbar.progress() >= 1;
+                }, 50, ChronoUnit.MILLIS)
+                .repeatTimes((i) ->
+                        bossbar.changeColor(BarColor.values()[i]),
+                        BarColor.values().length, 250, ChronoUnit.MILLIS)
+                .repeatUntil(() -> {
+                    bossbar.changeProgress(Math.max(0, bossbar.progress() - .05f));
+                    Bossbars.updateBossbar(player);
+                    return bossbar.progress() <= 0;
+                }, 50, ChronoUnit.MILLIS)
+                .execute(() -> Bossbars.removeBossbar(player))
+                .build().start();
 
         DefaultMessages.send(player, "cmd.bookshelf.bossbar");
     }

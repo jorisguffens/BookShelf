@@ -1,13 +1,13 @@
-package com.gufli.bookshelf.animation;
+package com.gufli.bookshelf.api.animation;
 
 import com.gufli.bookshelf.api.scheduler.SchedulerTask;
 import com.gufli.bookshelf.api.server.Bookshelf;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -33,7 +33,7 @@ public class AnimationBuilder {
     public AnimationBuilder wait(long value, TemporalUnit temporalUnit) {
         animation.addStep(() -> {
             CompletableFuture<?> cf = new CompletableFuture<>();
-            Bookshelf.getScheduler().syncLater(() -> cf.complete(null),
+            Bookshelf.scheduler().syncLater(() -> cf.complete(null),
                     nanos(value,temporalUnit), TimeUnit.NANOSECONDS);
             return cf;
         });
@@ -43,7 +43,7 @@ public class AnimationBuilder {
     public AnimationBuilder waitUntil(Instant instant) {
         animation.addStep(() -> {
             CompletableFuture<?> cf = new CompletableFuture<>();
-            Bookshelf.getScheduler().syncLater(() -> cf.complete(null),
+            Bookshelf.scheduler().syncLater(() -> cf.complete(null),
                     Instant.now().getEpochSecond() - instant.getEpochSecond(), TimeUnit.SECONDS);
             return cf;
         });
@@ -65,7 +65,7 @@ public class AnimationBuilder {
                         cf.complete(null);
                         return;
                     }
-                    task = Bookshelf.getScheduler().syncLater(this,
+                    task = Bookshelf.scheduler().syncLater(this,
                             nanos(value, temporalUnit), TimeUnit.NANOSECONDS);
                 }
             }.run();
@@ -90,7 +90,7 @@ public class AnimationBuilder {
     }
 
     public AnimationBuilder executeAsync(Runnable runnable) {
-        animation.addStep(() -> Bookshelf.getScheduler().runAsync(runnable));
+        animation.addStep(() -> Bookshelf.scheduler().runAsync(runnable));
         return this;
     }
 
@@ -107,7 +107,7 @@ public class AnimationBuilder {
     }
 
     public AnimationBuilder executeAsyncIf(Supplier<Boolean> test, Runnable runnable) {
-        animation.addStep(() -> Bookshelf.getScheduler().runAsync(() -> {
+        animation.addStep(() -> Bookshelf.scheduler().runAsync(() -> {
             if (test.get()) {
                 runnable.run();
             }
@@ -136,6 +136,61 @@ public class AnimationBuilder {
      */
     public AnimationBuilder repeatUntil(Supplier<Boolean> runnableAndTest, long value, TemporalUnit temporalUnit) {
         waitUntil(runnableAndTest, value, temporalUnit);
+        return this;
+    }
+
+    /**
+     * Repeat a given amount of times every given timeunit
+     */
+    public AnimationBuilder repeatTimes(Consumer<Integer> consumer, int times, long value, TemporalUnit temporalUnit) {
+        repeatUntil(new Supplier<>() {
+            int counter = 0;
+
+            @Override
+            public Boolean get() {
+                consumer.accept(counter);
+                return ++counter >= times;
+            }
+        }, value, temporalUnit);
+        return this;
+    }
+
+    /**
+     * Repeat a given amount of times every given timeunit
+     */
+    public AnimationBuilder repeatTimes(Runnable runnable, int times, long value, TemporalUnit temporalUnit) {
+        return repeatTimes((i) -> runnable.run(), times, value, temporalUnit);
+    }
+
+    /**
+     * Repeat a given amount of times every given timeunit
+     */
+    public AnimationBuilder repeatUntilCounter(Consumer<Integer> consumer, int start, int step, int end, long value, TemporalUnit temporalUnit) {
+        repeatUntil(new Supplier<>() {
+            int counter = start;
+
+            @Override
+            public Boolean get() {
+                consumer.accept(counter);
+                return (counter += step) >= end;
+            }
+        }, value, temporalUnit);
+        return this;
+    }
+
+    /**
+     * Repeat a given amount of times every given timeunit
+     */
+    public AnimationBuilder repeatUntilCounter(Consumer<Double> consumer, double start, double step, double end, long value, TemporalUnit temporalUnit) {
+        repeatUntil(new Supplier<>() {
+            double counter = start;
+
+            @Override
+            public Boolean get() {
+                consumer.accept(counter);
+                return (counter += step) >= end;
+            }
+        }, value, temporalUnit);
         return this;
     }
 

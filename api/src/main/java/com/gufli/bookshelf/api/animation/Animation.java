@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.animation;
+package com.gufli.bookshelf.api.animation;
 
 import com.gufli.bookshelf.api.scheduler.SchedulerTask;
 import com.gufli.bookshelf.api.server.Bookshelf;
@@ -48,18 +48,21 @@ public class Animation {
     private Instant startedAt;
     private boolean finished = false;
     private SchedulerTask cancelTask;
+    private CompletableFuture<Void> initFuture;
     private CompletableFuture<?> cf;
 
-    public void start() {
+    public CompletableFuture<Void> start() {
         this.startedAt = Instant.now();
         Animation clone = this.copy();
         clone.next();
 
-        cancelTask = Bookshelf.getScheduler().syncRepeating(() -> {
-            if ( shouldCancel() ) {
+        initFuture = new CompletableFuture<>();
+        cancelTask = Bookshelf.scheduler().syncRepeating(() -> {
+            if ( shouldCancel() || initFuture.isCancelled() ) {
                 finish();
             }
         }, 1, TimeUnit.SECONDS);
+        return initFuture;
     }
 
     private void finish() {
@@ -70,6 +73,7 @@ public class Animation {
         }
 
         cancelTask.cancel();
+        initFuture.complete(null);
     }
 
     private void next() {

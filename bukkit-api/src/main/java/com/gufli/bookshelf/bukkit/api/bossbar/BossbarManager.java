@@ -4,9 +4,7 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public interface BossbarManager {
 
-    void setBossbar(ShelfPlayer player, Bossbar bossbar);
-
-    Bossbar getBossbar(ShelfPlayer player);
+    void changeBossbar(ShelfPlayer player, Bossbar bossbar);
 
     void removeBossbar(ShelfPlayer player);
 

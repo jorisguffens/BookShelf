@@ -16,8 +16,8 @@ public class Sidebars {
         sidebarManager = manager;
     }
 
-    public static void setSidebar(ShelfPlayer player, SidebarTemplate sidebar) {
-        sidebarManager.setSidebar(player, sidebar);
+    public static void changeSidebar(ShelfPlayer player, Sidebar sidebar) {
+        sidebarManager.changeSidebar(player, sidebar);
     }
 
     public static void removeSidebar(ShelfPlayer player) {

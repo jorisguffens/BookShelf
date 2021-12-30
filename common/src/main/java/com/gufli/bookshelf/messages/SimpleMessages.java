@@ -44,16 +44,16 @@ public class SimpleMessages implements Messages {
 				messages.put(key, config.getString(key));
 			}
 		}
-		setPrefix(messages.getOrDefault("prefix", ""));
+		changePrefix(messages.getOrDefault("prefix", ""));
 	}
 
 	@Override
-	public final String getPrefix() {
+	public final String prefix() {
 		return prefix;
 	}
 
 	@Override
-	public void setPrefix(String prefix) {
+	public void changePrefix(String prefix) {
 		this.prefix = prefix;
 	}
 
@@ -62,7 +62,7 @@ public class SimpleMessages implements Messages {
 	}
 
 	@Override
-	public String getMessage(String name) {
+	public String get(String name) {
 		if ( name == null ) {
 			return null;
 		}
@@ -74,8 +74,8 @@ public class SimpleMessages implements Messages {
 	}
 
 	@Override
-	public String getMessage(String name, String... placeholders) {
-		String message = getMessage(name);
+	public String get(String name, String... placeholders) {
+		String message = get(name);
 		if ( message == null ) return null;
 
 		for ( int i = 0; i < placeholders.length; i++ ) {
@@ -89,7 +89,7 @@ public class SimpleMessages implements Messages {
 	@Override
 	public void send(ShelfCommandSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
-		sender.sendMessage(prefix + getMessage(name, placeholders));
+		sender.sendMessage(prefix + get(name, placeholders));
 	}
 
 }

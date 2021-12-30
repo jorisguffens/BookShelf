@@ -4,11 +4,11 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public interface NametagManager {
 
-    void setNametag(ShelfPlayer player, String prefix, String suffix);
+    void changeNametag(ShelfPlayer player, String prefix, String suffix);
 
-    void setPrefix(ShelfPlayer player, String prefix);
+    void changePrefix(ShelfPlayer player, String prefix);
 
-    void setSuffix(ShelfPlayer player, String suffix);
+    void changeSuffix(ShelfPlayer player, String suffix);
 
     void removeNametag(ShelfPlayer player);
 

@@ -14,12 +14,16 @@ public class Bossbars {
         bossbarManager = manager;
     }
 
-    public static void setBossbar(ShelfPlayer player, Bossbar bossbar) {
-        bossbarManager.setBossbar(player, bossbar);
+    public static void changeBossbar(ShelfPlayer player, Bossbar bossbar) {
+        bossbarManager.changeBossbar(player, bossbar);
     }
 
-    public static Bossbar getBossbar(ShelfPlayer player) {
-        return bossbarManager.getBossbar(player);
+    public static void removeBossbar(ShelfPlayer player) {
+        bossbarManager.removeBossbar(player);
+    }
+
+    public static void updateBossbar(ShelfPlayer player) {
+        bossbarManager.updateBossbar(player);
     }
 
 }

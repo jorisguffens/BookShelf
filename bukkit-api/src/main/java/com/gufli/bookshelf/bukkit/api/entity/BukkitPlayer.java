@@ -18,8 +18,8 @@
 package com.gufli.bookshelf.bukkit.api.entity;
 
 import com.gufli.bookshelf.api.location.ShelfLocation;
-import com.gufli.bookshelf.api.menu.Menu;
 import com.gufli.bookshelf.bukkit.api.location.LocationConverter;
+import com.gufli.bookshelf.bukkit.api.menu.InventoryMenu;
 import com.gufli.bookshelf.entity.AbstractShelfPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -34,7 +34,7 @@ public class BukkitPlayer extends AbstractShelfPlayer {
         this.handle = handle;
     }
 
-    public Player getHandle() {
+    public Player handle() {
         return handle;
     }
 
@@ -56,9 +56,14 @@ public class BukkitPlayer extends AbstractShelfPlayer {
     }
 
     @Override
+    public String displayName() {
+        return this.handle.getDisplayName();
+    }
+
+    @Override
     public void teleport(ShelfLocation location) {
         Location loc = LocationConverter.convert(location);
-        if ( loc == null ) {
+        if (loc == null) {
             return;
         }
 
@@ -80,24 +85,26 @@ public class BukkitPlayer extends AbstractShelfPlayer {
         handle.sendMessage(msg);
     }
 
-    @Override
-    public boolean isOnline() {
-        return handle.isOnline();
-    }
-
     // gui
 
-    @Override
-    public void openMenu(Menu<?, ?> inventory) {
-        if ( inventory.getHandle() instanceof org.bukkit.inventory.Inventory) {
-            handle.openInventory((org.bukkit.inventory.Inventory) inventory.getHandle());
-            set(CUSTOM_MENU_KEY, inventory);
-        }
+    private final String CUSTOM_MENU_KEY = "BUKKIT_INVENTORY_MENU";
+
+    public void openMenu(InventoryMenu inventoryMenu) {
+        handle.openInventory(inventoryMenu.handle());
+        set(CUSTOM_MENU_KEY, inventoryMenu);
+        inventoryMenu.dispatchOpen(this);
     }
 
-    @Override
+    public InventoryMenu openedMenu() {
+        if (has(CUSTOM_MENU_KEY)) {
+            return get(CUSTOM_MENU_KEY, InventoryMenu.class);
+        }
+        return null;
+    }
+
     public void closeMenu() {
         handle.closeInventory();
+        remove(CUSTOM_MENU_KEY);
     }
 
 }

@@ -1,24 +1,24 @@
 package com.gufli.bookshelf.bukkit.sidebar;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.scheduler.Scheduler;
-import com.gufli.bookshelf.api.scheduler.SchedulerTask;
-import com.gufli.bookshelf.api.server.Bookshelf;
-import com.gufli.bookshelf.api.sidebar.SidebarManager;
-import com.gufli.bookshelf.api.sidebar.SidebarTemplate;
-import com.gufli.bookshelf.api.sidebar.Sidebars;
-import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.PlayerQuitEvent;
+import com.gufli.bookshelf.api.events.ShelfShutdownEvent;
+import com.gufli.bookshelf.api.scheduler.SchedulerTask;
+import com.gufli.bookshelf.api.server.Bookshelf;
+import com.gufli.bookshelf.api.sidebar.Sidebar;
+import com.gufli.bookshelf.api.sidebar.SidebarManager;
+import com.gufli.bookshelf.api.sidebar.Sidebars;
+import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class BukkitSidebarManager implements SidebarManager {
 
     private final Map<ShelfPlayer, BukkitSidebar> players = new HashMap<>();
-    private final SchedulerTask schedulerTask;
 
     public BukkitSidebarManager() {
         Sidebars.register(this);
@@ -26,11 +26,22 @@ public class BukkitSidebarManager implements SidebarManager {
         Events.subscribe(PlayerQuitEvent.class)
                 .handler(e -> removeSidebar(e.getPlayer()));
 
-        schedulerTask = Bookshelf.getScheduler().asyncRepeating(this::refresh, 50, TimeUnit.SECONDS);
+        SchedulerTask task = Bookshelf.scheduler()
+                .asyncRepeating(this::update, 50, TimeUnit.MILLISECONDS);
+
+        Events.subscribe(ShelfShutdownEvent.class)
+                .handler(e -> {
+                    task.cancel();
+                    new HashSet<>(players.keySet()).forEach(this::removeSidebar);
+                });
+    }
+
+    private void update() {
+        players.keySet().forEach(this::updateSidebar);
     }
 
     @Override
-    public void setSidebar(ShelfPlayer player, SidebarTemplate sidebar) {
+    public void changeSidebar(ShelfPlayer player, Sidebar sidebar) {
         BukkitPlayer bp = (BukkitPlayer) player;
 
         removeSidebar(bp);

@@ -1,5 +1,7 @@
 package com.gufli.bookshelf.bukkit.nametags;
 
+import com.gufli.bookshelf.api.events.ShelfShutdownEvent;
+import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.packets.AbstractPacket;
 import com.gufli.bookshelf.bukkit.packets.WrapperPlayServerScoreboardTeam;
 import com.comphenix.protocol.PacketType;
@@ -34,10 +36,13 @@ public class BukkitNametagManager implements NametagManager {
 
         Events.subscribe(PlayerQuitEvent.class)
                 .handler(e -> removeNametag(e.getPlayer()));
+
+        Events.subscribe(ShelfShutdownEvent.class)
+                .handler(e -> Bookshelf.players().forEach(this::removeNametag));
     }
 
     @Override
-    public void setNametag(ShelfPlayer player, String prefix, String suffix) {
+    public void changeNametag(ShelfPlayer player, String prefix, String suffix) {
         if ( prefix != null ) {
             prefix = ChatColor.translateAlternateColorCodes('&', prefix);
         }
@@ -76,23 +81,23 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     @Override
-    public void setPrefix(ShelfPlayer player, String prefix) {
+    public void changePrefix(ShelfPlayer player, String prefix) {
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null ) {
-            setNametag(player, prefix, previous.suffix());
+            changeNametag(player, prefix, previous.suffix());
             return;
         }
-        setNametag(player, prefix, "");
+        changeNametag(player, prefix, "");
     }
 
     @Override
-    public void setSuffix(ShelfPlayer player, String suffix) {
+    public void changeSuffix(ShelfPlayer player, String suffix) {
         FakeTeam previous = getFakeTeam(player);
         if ( previous != null ) {
-            setNametag(player, previous.prefix(), suffix);
+            changeNametag(player, previous.prefix(), suffix);
             return;
         }
-        setNametag(player, "", suffix);
+        changeNametag(player, "", suffix);
     }
 
     @Override
@@ -125,7 +130,7 @@ public class BukkitNametagManager implements NametagManager {
     }
 
     private void showAll(ShelfPlayer player) {
-        Player p = ((BukkitPlayer) player).getHandle();
+        Player p = ((BukkitPlayer) player).handle();
         for ( FakeTeam team : fakeTeams ) {
             showFor(team, p);
         }

@@ -54,15 +54,15 @@ public class DefaultMessages {
     //
 
     public static String getPrefix() {
-        return messages.getPrefix();
+        return messages.prefix();
     }
 
     public static String getMessage(String name) {
-        return messages.getMessage(name);
+        return messages.get(name);
     }
 
     public static String getMessage(String name, String... placeholders) {
-        return messages.getMessage(name, placeholders);
+        return messages.get(name, placeholders);
     }
 
     public static void send(ShelfCommandSender sender, String name, String... placeholders) {

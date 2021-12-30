@@ -1,6 +1,7 @@
 package com.gufli.bookshelf.placeholders;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
+import com.gufli.bookshelf.api.location.ShelfLocation;
 import com.gufli.bookshelf.api.placeholders.PlaceholderManager;
 import com.gufli.bookshelf.api.placeholders.Placeholders;
 
@@ -16,6 +17,16 @@ public class SimplePlaceholderManager implements PlaceholderManager {
 
     public SimplePlaceholderManager() {
         Placeholders.register(this);
+
+        registerReplacer("username", ShelfPlayer::name);
+
+        registerReplacer("displayname", ShelfPlayer::displayName);
+        registerReplacer("player", ShelfPlayer::displayName);
+
+        registerReplacer("location", p -> {
+            ShelfLocation loc = p.location();
+            return (int) loc.x() + ", " + (int) loc.y() + ", " + (int) loc.z();
+        });
     }
 
     @Override

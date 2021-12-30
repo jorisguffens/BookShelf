@@ -41,8 +41,11 @@ public class LocationConverter {
             return null;
         }
 
-        return new ShelfLocation(loc.getWorld().getName(),
-                loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+        return new ShelfLocation(
+                loc.getWorld().getUID(),
+                loc.getX(), loc.getY(), loc.getZ(),
+                loc.getYaw(), loc.getPitch()
+        );
     }
 
 }
