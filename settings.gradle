@@ -3,7 +3,6 @@ rootProject.name = 'Bookshelf'
 include(
 	'api',
 	'common',
-	
 	'bukkit-api',
     'bukkit',
 )

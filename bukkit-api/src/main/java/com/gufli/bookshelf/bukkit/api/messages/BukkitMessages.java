@@ -18,7 +18,7 @@
 package com.gufli.bookshelf.bukkit.api.messages;
 
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
-import com.gufli.bookshelf.messages.SimpleMessages;
+import com.gufli.bookshelf.api.messages.SimpleMessages;
 import org.bukkit.ChatColor;
 
 

@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.config;
+package com.gufli.bookshelf.api.config;
 
 import com.gufli.bookshelf.api.config.Configuration;
 

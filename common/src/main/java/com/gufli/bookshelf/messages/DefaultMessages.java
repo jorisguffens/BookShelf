@@ -3,7 +3,9 @@ package com.gufli.bookshelf.messages;
 import com.gufli.bookshelf.api.config.Configuration;
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 import com.gufli.bookshelf.api.messages.Messages;
-import com.gufli.bookshelf.config.TextConfiguration;
+import com.gufli.bookshelf.api.config.TextConfiguration;
+import com.gufli.bookshelf.api.messages.SimpleMessages;
+import com.gufli.bookshelf.api.util.JarUtil;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,31 +21,10 @@ public class DefaultMessages {
     private final static Messages messages = load();
 
     private static Messages load() {
-        InputStream is;
         try {
-            URL url = DefaultMessages.class.getClassLoader().getResource("default.language.txt");
-
-            if (url == null) {
-                return null;
-            }
-
-            URLConnection connection = url.openConnection();
-            connection.setUseCaches(false);
-            is = connection.getInputStream();
-        } catch (IOException ex) {
-            return null;
-        }
-
-        if (is == null) {
-            return null;
-        }
-
-        try (
-                is;
-                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
-                BufferedReader br = new BufferedReader(isr);
-        ) {
-            Configuration config = new TextConfiguration(br.lines().collect(Collectors.joining("\n")));
+            String contents = JarUtil.findAndReadResource(DefaultMessages.class, "default.language.txt");
+            if ( contents == null ) return null;
+            Configuration config = new TextConfiguration(contents);
             return new SimpleMessages(config);
         } catch (IOException e) {
             e.printStackTrace();
@@ -53,15 +34,15 @@ public class DefaultMessages {
 
     //
 
-    public static String getPrefix() {
+    public static String prefix() {
         return messages.prefix();
     }
 
-    public static String getMessage(String name) {
+    public static String get(String name) {
         return messages.get(name);
     }
 
-    public static String getMessage(String name, String... placeholders) {
+    public static String get(String name, String... placeholders) {
         return messages.get(name, placeholders);
     }
 

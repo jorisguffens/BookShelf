@@ -136,11 +136,11 @@ public class ItemStackBuilder {
         return applyMeta(ItemMeta.class, meta);
     }
 
-    public <T> ItemStackBuilder applyMeta(Class<T> type, Consumer<T> meta) {
-        T m = (T) this.itemStack.getItemMeta();
+    public <T extends ItemMeta> ItemStackBuilder applyMeta(Class<T> type, Consumer<T> meta) {
+        T m = type.cast(this.itemStack.getItemMeta());
         if (m != null) {
             meta.accept(m);
-            this.itemStack.setItemMeta((ItemMeta) m);
+            this.itemStack.setItemMeta(m);
         }
         return this;
     }

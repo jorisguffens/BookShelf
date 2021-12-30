@@ -1,5 +1,6 @@
 package com.gufli.bookshelf.command;
 
+import com.gufli.bookshelf.api.command.CommandMessages;
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
 import com.gufli.bookshelf.messages.DefaultMessages;
 

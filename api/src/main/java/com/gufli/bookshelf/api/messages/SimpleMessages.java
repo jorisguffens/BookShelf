@@ -15,7 +15,7 @@
  * along with KingdomCraft. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package com.gufli.bookshelf.messages;
+package com.gufli.bookshelf.api.messages;
 
 import com.gufli.bookshelf.api.config.Configuration;
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;

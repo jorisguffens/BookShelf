@@ -23,11 +23,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import java.util.List;
 import java.util.Set;
 
-public class BukkitConfig implements Configuration {
+public class BukkitConfiguration implements Configuration {
 
     private final ConfigurationSection configurationSection;
 
-    public BukkitConfig(ConfigurationSection configurationSection) {
+    public BukkitConfiguration(ConfigurationSection configurationSection) {
         this.configurationSection = configurationSection;
     }
 
@@ -69,7 +69,7 @@ public class BukkitConfig implements Configuration {
     @Override
     public Configuration getSection(String path) {
         ConfigurationSection cs = configurationSection.getConfigurationSection(path);
-        return cs == null ? null : new BukkitConfig(cs);
+        return cs == null ? null : new BukkitConfiguration(cs);
     }
 
     @Override

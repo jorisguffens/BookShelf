@@ -25,6 +25,7 @@ dependencies {
 }
 
 processResources {
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
     from(sourceSets.main.resources.srcDirs) {
         expand 'pluginVersion': project.version
         include 'plugin.yml'

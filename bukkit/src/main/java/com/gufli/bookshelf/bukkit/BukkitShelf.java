@@ -5,11 +5,12 @@ import com.gufli.bookshelf.api.events.ShelfShutdownEvent;
 import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.bossbar.BukkitBossbarManager;
 import com.gufli.bookshelf.bukkit.color.TextColorMapper;
-import com.gufli.bookshelf.bukkit.command.BukkitCommandExecutor;
+import com.gufli.bookshelf.bukkit.api.command.BukkitCommandExecutor;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarAnimatedCommand;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarCommand;
 import com.gufli.bookshelf.bukkit.commands.BookshelfMenuCommand;
 import com.gufli.bookshelf.bukkit.event.BukkitEventHook;
+import com.gufli.bookshelf.bukkit.item.BukkitItemSerializer;
 import com.gufli.bookshelf.bukkit.listeners.InventoryMenuListener;
 import com.gufli.bookshelf.bukkit.listeners.PlayerAttackEventListener;
 import com.gufli.bookshelf.bukkit.listeners.PlayerDeathEventListener;
@@ -56,6 +57,7 @@ public class BukkitShelf extends JavaPlugin {
 
         // Bukkit manager imlementations
         new TextColorMapper();
+        new BukkitItemSerializer();
 
         // Protocollib required
         if ( getServer().getPluginManager().isPluginEnabled("ProtocolLib") ) {

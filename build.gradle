@@ -10,8 +10,8 @@ version '1.0-SNAPSHOT'
 subprojects {
     apply plugin: 'java'
 
-    sourceCompatibility = 1.11
-    targetCompatibility = 1.11
+    sourceCompatibility = 1.17
+    targetCompatibility = 1.17
 
     group = parent.group;
     version = parent.version;

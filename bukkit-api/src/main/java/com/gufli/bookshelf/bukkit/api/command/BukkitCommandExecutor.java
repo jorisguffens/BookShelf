@@ -1,4 +1,4 @@
-package com.gufli.bookshelf.bukkit.command;
+package com.gufli.bookshelf.bukkit.api.command;
 
 import com.gufli.bookshelf.api.command.Command;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;

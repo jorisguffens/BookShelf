@@ -2,7 +2,7 @@ package com.gufli.bookshelf.commands;
 
 import com.gufli.bookshelf.api.command.CommandInfo;
 import com.gufli.bookshelf.command.DefaultCommandMessages;
-import com.gufli.bookshelf.command.CommandGroup;
+import com.gufli.bookshelf.api.command.CommandGroup;
 
 @CommandInfo(commands = "bookshelf")
 public class BookshelfCommandGroup extends CommandGroup {
