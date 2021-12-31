@@ -4,6 +4,7 @@ import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.ShelfShutdownEvent;
 import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.bossbar.BukkitBossbarManager;
+import com.gufli.bookshelf.bukkit.chat.ChatListener;
 import com.gufli.bookshelf.bukkit.color.BukkitTextColorMapper;
 import com.gufli.bookshelf.bukkit.api.command.BukkitCommandExecutor;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarAnimatedCommand;
@@ -19,6 +20,7 @@ import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
 import com.gufli.bookshelf.bukkit.sidebar.BukkitSidebarManager;
 import com.gufli.bookshelf.bukkit.titles.BukkitTitleManager;
+import com.gufli.bookshelf.chat.SimpleChatManager;
 import com.gufli.bookshelf.commands.BookshelfCommandGroup;
 import com.gufli.bookshelf.event.SimpleEventManager;
 import com.gufli.bookshelf.placeholders.SimplePlaceholderManager;
@@ -49,6 +51,7 @@ public class BukkitShelf extends JavaPlugin {
 
         // Common stuff
         new SimplePlaceholderManager();
+        new SimpleChatManager();
 
         // Register default events
         PluginManager pm = getServer().getPluginManager();
@@ -56,6 +59,7 @@ public class BukkitShelf extends JavaPlugin {
         pm.registerEvents(new InventoryMenuListener(), this);
         pm.registerEvents(new PlayerAttackEventListener(), this);
         pm.registerEvents(new PlayerDeathEventListener(), this);
+        pm.registerEvents(new ChatListener(), this);
 
         // Bukkit manager imlementations
         new BukkitTextColorMapper();
