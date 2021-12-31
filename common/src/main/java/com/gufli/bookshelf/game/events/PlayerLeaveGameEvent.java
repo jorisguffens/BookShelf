@@ -13,7 +13,7 @@ public class PlayerLeaveGameEvent extends GameEvent implements PlayerEvent {
         this.player = player;
     }
 
-    public ShelfPlayer getPlayer() {
+    public ShelfPlayer player() {
         return player;
     }
 }

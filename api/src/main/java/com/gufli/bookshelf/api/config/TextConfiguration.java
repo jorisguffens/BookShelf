@@ -18,7 +18,7 @@ public class TextConfiguration implements Configuration {
     private void parseLine(String line) {
         line = line.trim();
 
-        if ( line.equals("") ) {
+        if ( line.equals("") || line.startsWith("#") ) {
             return;
         }
 

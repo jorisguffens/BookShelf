@@ -14,6 +14,11 @@ public class BukkitScheduler extends AbstractScheduler {
         this.sync = r -> plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, r);
     }
 
+    public void shutdown() {
+        scheduler.shutdown();
+        worker.shutdown();
+    }
+
     @Override
     public Executor sync() {
         return this.sync;

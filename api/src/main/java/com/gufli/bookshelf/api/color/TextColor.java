@@ -1,7 +1,5 @@
 package com.gufli.bookshelf.api.color;
 
-import java.util.function.Function;
-
 public enum TextColor {
     BLACK,
     DARK_BLUE,
@@ -20,10 +18,10 @@ public enum TextColor {
     YELLOW,
     WHITE;
 
-    private static Function<TextColor, String> colorMapper;
+    private static TextColorMapper colorMapper;
 
-    public static void register(Function<TextColor, String> mapper) {
-        if ( colorMapper != null ) {
+    public static void register(TextColorMapper mapper) {
+        if (colorMapper != null) {
             throw new UnsupportedOperationException("Cannot redefine singleton colorMapper.");
         }
         colorMapper = mapper;
@@ -31,7 +29,15 @@ public enum TextColor {
 
     @Override
     public String toString() {
-        return colorMapper.apply(this);
+        return colorMapper.map(this);
+    }
+
+    public static String translate(String str) {
+        return colorMapper.translate(str);
+    }
+
+    public static String strip(String str) {
+        return colorMapper.strip(str);
     }
 
 }

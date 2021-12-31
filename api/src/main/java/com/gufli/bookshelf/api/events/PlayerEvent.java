@@ -4,6 +4,6 @@ import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 public interface PlayerEvent extends Event {
 
-    ShelfPlayer getPlayer();
+    ShelfPlayer player();
 
 }

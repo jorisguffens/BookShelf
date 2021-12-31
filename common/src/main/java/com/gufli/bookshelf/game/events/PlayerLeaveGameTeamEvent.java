@@ -14,7 +14,7 @@ public class PlayerLeaveGameTeamEvent extends GameTeamEvent implements PlayerEve
         this.player = player;
     }
 
-    public ShelfPlayer getPlayer() {
+    public ShelfPlayer player() {
         return player;
     }
 }

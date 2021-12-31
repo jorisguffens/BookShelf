@@ -21,7 +21,7 @@ public class ConnectionListener implements Listener {
         this.shelf = shelf;
 
         for ( Player player : shelf.getServer().getOnlinePlayers() ) {
-            shelf.server.onLogin(new BukkitPlayer(player));
+            shelf.server().onLogin(new BukkitPlayer(player));
         }
 
         Events.subscribe(com.gufli.bookshelf.api.events.PlayerLoginEvent.class)
@@ -35,20 +35,20 @@ public class ConnectionListener implements Listener {
             return;
         }
 
-        shelf.server.onLogin(new BukkitPlayer(e.getPlayer()));
+        shelf.server().onLogin(new BukkitPlayer(e.getPlayer()));
     }
 
     // QUIT PLAYER
     @EventHandler(priority = EventPriority.MONITOR)
     public void onQuit(PlayerQuitEvent e) {
-        ShelfPlayer player = shelf.server.playerById(e.getPlayer().getUniqueId());
-        shelf.server.onQuit(player);
+        ShelfPlayer player = shelf.server().playerById(e.getPlayer().getUniqueId());
+        shelf.server().onQuit(player);
     }
 
     // JOIN PLAYER
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(PlayerJoinEvent e) {
-        ShelfPlayer player = shelf.server.playerById(e.getPlayer().getUniqueId());
+        ShelfPlayer player = shelf.server().playerById(e.getPlayer().getUniqueId());
 
         if (!player.has("LOGIN_SUCCESS")) {
             player.set("JOIN_SUCCESS", true);
@@ -60,12 +60,12 @@ public class ConnectionListener implements Listener {
 
     // LOGIN FINISHED -> POST LOGIN (sync)
     public void onLoginInternal(com.gufli.bookshelf.api.events.PlayerLoginEvent e) {
-        if (!e.getPlayer().has("JOIN_SUCCESS")) {
-            e.getPlayer().set("LOGIN_SUCCESS", true);
+        if (!e.player().has("JOIN_SUCCESS")) {
+            e.player().set("LOGIN_SUCCESS", true);
             return;
         }
 
-        Events.call(new PlayerPostLoginEvent(e.getPlayer()));
+        Events.call(new PlayerPostLoginEvent(e.player()));
     }
 
 }

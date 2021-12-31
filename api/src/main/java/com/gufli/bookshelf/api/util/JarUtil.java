@@ -60,7 +60,7 @@ public class JarUtil {
         URL url = sender.getClassLoader().getResource(name);
 
         if (url == null) {
-            return null;
+            throw new IOException("Cannot find resource '" + name + "' in classpath.");
         }
 
         URLConnection connection = url.openConnection();
@@ -69,13 +69,8 @@ public class JarUtil {
     }
 
     public static String findAndReadResource(Class<?> sender, String name) throws IOException {
-        InputStream inputStream = findResource(sender, name);
-        if (inputStream == null) {
-            return null;
-        }
-
         try (
-                inputStream;
+                InputStream inputStream = findResource(sender, name);
                 InputStreamReader isr = new InputStreamReader(inputStream, StandardCharsets.UTF_8);
                 BufferedReader br = new BufferedReader(isr);
         ) {

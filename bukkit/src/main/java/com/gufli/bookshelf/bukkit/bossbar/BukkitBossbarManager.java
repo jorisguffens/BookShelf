@@ -23,7 +23,7 @@ public class BukkitBossbarManager implements BossbarManager {
         Bossbars.register(this);
 
         Events.subscribe(PlayerQuitEvent.class)
-                .handler(e -> removeBossbar(e.getPlayer()));
+                .handler(e -> removeBossbar(e.player()));
 
         SchedulerTask task = Bookshelf.scheduler()
                 .asyncRepeating(this::update, 50, TimeUnit.MILLISECONDS);

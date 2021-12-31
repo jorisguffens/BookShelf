@@ -25,9 +25,9 @@ import java.util.concurrent.*;
 
 public abstract class AbstractScheduler implements Scheduler {
 
-    private final ScheduledThreadPoolExecutor scheduler;
-    private final CustomExecutor schedulerWorkerPool;
-    private final ForkJoinPool worker;
+    protected final ScheduledThreadPoolExecutor scheduler;
+    protected final CustomExecutor schedulerWorkerPool;
+    protected final ForkJoinPool worker;
 
     public AbstractScheduler(String id) {
         this.scheduler = new ScheduledThreadPoolExecutor(1, new ThreadFactoryBuilder()

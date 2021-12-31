@@ -18,20 +18,20 @@ public class DefaultGameEvents {
         return CompositeTerminable.create().withAll(
                 Events.subscribe(PlayerJoinGameEvent.class).filter(e -> e.getGame() == game).handler(DefaultGameEvents::onJoin),
                 Events.subscribe(PlayerLeaveGameEvent.class).filter(e -> e.getGame() == game).handler(DefaultGameEvents::onLeave),
-                Events.subscribe(PlayerDeathEvent.class).filter(e -> game.contains(e.getPlayer())).handler(DefaultGameEvents::onKill)
+                Events.subscribe(PlayerDeathEvent.class).filter(e -> game.contains(e.player())).handler(DefaultGameEvents::onKill)
             );
     }
 
     private static void onJoin(PlayerJoinGameEvent event) {
-        event.getGame().broadcast(ChatColor.GOLD + event.getPlayer().name() + ChatColor.YELLOW + " has joined the game!");
+        event.getGame().broadcast(ChatColor.GOLD + event.player().name() + ChatColor.YELLOW + " has joined the game!");
     }
 
     private static void onLeave(PlayerLeaveGameEvent event) {
-        event.getGame().broadcast(ChatColor.GOLD + event.getPlayer().name() + ChatColor.YELLOW + " has left the game!");
+        event.getGame().broadcast(ChatColor.GOLD + event.player().name() + ChatColor.YELLOW + " has left the game!");
     }
 
     private static void onKill(PlayerDeathEvent event) {
-        Game game = GameManager.getGame(event.getPlayer());
+        Game game = GameManager.getGame(event.player());
         if ( game == null ) {
             return;
         }
@@ -39,26 +39,26 @@ public class DefaultGameEvents {
         event.setDeathMessage(null);
 
         if ( game instanceof TeamGame) {
-            GameTeam team = ((TeamGame<?>) game).getTeam(event.getPlayer());
+            GameTeam team = ((TeamGame<?>) game).getTeam(event.player());
             String color = team == null ? ChatColor.GOLD + "" : team.getColor();
 
             if ( event.getKiller() == null ) {
-                game.broadcast(color + event.getPlayer().name() + ChatColor.YELLOW + " has died!");
+                game.broadcast(color + event.player().name() + ChatColor.YELLOW + " has died!");
                 return;
             }
 
             GameTeam kteam = ((TeamGame<?>) game).getTeam(event.getKiller());
             String kcolor = kteam == null ? ChatColor.GOLD + "" : kteam.getColor();
 
-            game.broadcast(color + event.getPlayer().name() + ChatColor.YELLOW + " was killed by "
+            game.broadcast(color + event.player().name() + ChatColor.YELLOW + " was killed by "
                     + kcolor + event.getKiller().name() + ChatColor.YELLOW + "!");
         } else {
             if (event.getKiller() == null) {
-                game.broadcast(ChatColor.GOLD + event.getPlayer().name() + ChatColor.YELLOW + " has died!");
+                game.broadcast(ChatColor.GOLD + event.player().name() + ChatColor.YELLOW + " has died!");
                 return;
             }
 
-            game.broadcast(ChatColor.GOLD + event.getPlayer().name() + ChatColor.YELLOW + " was killed by "
+            game.broadcast(ChatColor.GOLD + event.player().name() + ChatColor.YELLOW + " was killed by "
                     + ChatColor.GOLD + event.getKiller().name() + ChatColor.YELLOW + "!");
         }
     }

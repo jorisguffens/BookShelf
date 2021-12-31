@@ -24,7 +24,7 @@ public class BukkitSidebarManager implements SidebarManager {
         Sidebars.register(this);
 
         Events.subscribe(PlayerQuitEvent.class)
-                .handler(e -> removeSidebar(e.getPlayer()));
+                .handler(e -> removeSidebar(e.player()));
 
         SchedulerTask task = Bookshelf.scheduler()
                 .asyncRepeating(this::update, 50, TimeUnit.MILLISECONDS);

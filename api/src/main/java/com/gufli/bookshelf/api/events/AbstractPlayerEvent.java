@@ -16,7 +16,7 @@ public abstract class AbstractPlayerEvent extends AbstractEvent implements Playe
         this.player = player;
     }
 
-    public ShelfPlayer getPlayer() {
+    public ShelfPlayer player() {
         return player;
     }
 

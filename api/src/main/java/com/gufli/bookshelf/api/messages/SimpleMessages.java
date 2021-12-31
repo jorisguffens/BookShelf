@@ -17,9 +17,9 @@
 
 package com.gufli.bookshelf.api.messages;
 
+import com.gufli.bookshelf.api.color.TextColor;
 import com.gufli.bookshelf.api.config.Configuration;
 import com.gufli.bookshelf.api.entity.ShelfCommandSender;
-import com.gufli.bookshelf.api.messages.Messages;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -49,12 +49,12 @@ public class SimpleMessages implements Messages {
 
 	@Override
 	public final String prefix() {
-		return prefix;
+		return prefix != null ? prefix + " ": "";
 	}
 
 	@Override
 	public void changePrefix(String prefix) {
-		this.prefix = prefix;
+		this.prefix = TextColor.translate(prefix.trim());
 	}
 
 	protected final boolean isEmpty(String name) {
@@ -70,7 +70,9 @@ public class SimpleMessages implements Messages {
 		if ( msg == null ) {
 			return null;
 		}
-		return unescapeJava(msg);
+		msg = TextColor.translate(msg);
+		msg = unescapeJava(msg);
+		return msg;
 	}
 
 	@Override
@@ -79,8 +81,12 @@ public class SimpleMessages implements Messages {
 		if ( message == null ) return null;
 
 		for ( int i = 0; i < placeholders.length; i++ ) {
-			message = message.replace("{" + i + "}",
-					placeholders[i] == null ? "" : placeholders[i]);
+			String placeholder = "";
+			if ( placeholders[i] != null ) {
+				placeholder = TextColor.translate(placeholders[i]);
+			}
+
+			message = message.replace("{" + i + "}", placeholder);
 		}
 
 		return message;
@@ -89,7 +95,7 @@ public class SimpleMessages implements Messages {
 	@Override
 	public void send(ShelfCommandSender sender, String name, String... placeholders) {
 		if ( isEmpty(name) ) return;
-		sender.sendMessage(prefix + get(name, placeholders));
+		sender.sendMessage(prefix() + get(name, placeholders));
 	}
 
 }

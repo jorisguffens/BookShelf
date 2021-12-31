@@ -14,7 +14,7 @@ public class PlayerJoinGameTeamEvent extends GameTeamEvent implements PlayerEven
         this.player = player;
     }
 
-    public ShelfPlayer getPlayer() {
+    public ShelfPlayer player() {
         return player;
     }
 }

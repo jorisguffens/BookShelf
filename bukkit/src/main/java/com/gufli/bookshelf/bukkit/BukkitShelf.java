@@ -4,7 +4,7 @@ import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.api.events.ShelfShutdownEvent;
 import com.gufli.bookshelf.api.server.Bookshelf;
 import com.gufli.bookshelf.bukkit.bossbar.BukkitBossbarManager;
-import com.gufli.bookshelf.bukkit.color.TextColorMapper;
+import com.gufli.bookshelf.bukkit.color.BukkitTextColorMapper;
 import com.gufli.bookshelf.bukkit.api.command.BukkitCommandExecutor;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarAnimatedCommand;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarCommand;
@@ -31,15 +31,17 @@ import java.util.Objects;
 
 public class BukkitShelf extends JavaPlugin {
 
-    public final BukkitShelfServer server;
-
-    public BukkitShelf() {
-        this.server = new BukkitShelfServer(new BukkitScheduler(this));
-        Bookshelf.register(this.server);
-    }
+    private BukkitScheduler scheduler;
+    private BukkitShelfServer server;
 
     @Override
     public void onEnable() {
+        this.scheduler = new BukkitScheduler(this);
+
+        // Startup server
+        this.server = new BukkitShelfServer(scheduler);
+        Bookshelf.register(this.server);
+
         // Initialize and setup event system
         Events.register(new SimpleEventManager());
         BukkitEventHook injector = new BukkitEventHook(this);
@@ -56,7 +58,7 @@ public class BukkitShelf extends JavaPlugin {
         pm.registerEvents(new PlayerDeathEventListener(), this);
 
         // Bukkit manager imlementations
-        new TextColorMapper();
+        new BukkitTextColorMapper();
         new BukkitItemSerializer();
 
         // Protocollib required
@@ -81,7 +83,12 @@ public class BukkitShelf extends JavaPlugin {
 
     @EventHandler
     public void onDisable() {
+        this.scheduler.shutdown();
         Events.call(new ShelfShutdownEvent());
+    }
+
+    public BukkitShelfServer server() {
+        return server;
     }
 
 }
