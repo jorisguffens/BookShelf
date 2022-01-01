@@ -41,12 +41,11 @@ public class BukkitTitleManager implements TitleManager {
     }
 
     private void sendTitle(Player player, String text, int ticks, PacketType type) {
-        System.out.println("sending packets " + ticks + " '" + text + "'");
         PacketContainer animationPacket = new PacketContainer(PacketType.Play.Server.SET_TITLES_ANIMATION);
         animationPacket.getModifier().writeDefaults();
-        animationPacket.getIntegers().write(0, 10);
-        animationPacket.getIntegers().write(1, ticks);
-        animationPacket.getIntegers().write(2, 10);
+        animationPacket.getIntegers().write(0, 5);
+        animationPacket.getIntegers().write(1, Math.max(10, ticks - 10));
+        animationPacket.getIntegers().write(2, 5);
         sendPacket(player, animationPacket);
 
         PacketContainer textPacket = new PacketContainer(type);
