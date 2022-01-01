@@ -42,6 +42,13 @@ public class Color {
         return fromRGB(java.awt.Color.HSBtoRGB(hue, saturation, value));
     }
 
+    public static Color fromHEX(String hex) {
+        if ( !hex.startsWith("#") || hex.length() == 7 ) {
+            throw new IllegalArgumentException("Invalid hex color string.");
+        }
+        return fromRGB(Integer.parseInt(hex.substring(1), 16));
+    }
+
     // For internal use only
     private Color(String name, int rgb) {
         this(rgb);
@@ -85,11 +92,15 @@ public class Color {
     }
 
     public int rgb() {
-        return red() << 16 | green() << 8 | blue() << 0;
+        return red() << 16 | green() << 8 | blue();
     }
 
     public float[] hsv() {
         return java.awt.Color.RGBtoHSB(red, green, blue, null);
+    }
+
+    public String hex() {
+        return "#" + Integer.toHexString(rgb());
     }
 
     public int mse(int pixR, int pixG, int pixB) {

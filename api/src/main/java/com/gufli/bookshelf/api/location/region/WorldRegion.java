@@ -1,12 +1,14 @@
-package com.gufli.bookshelf.api.location.arena;
+package com.gufli.bookshelf.api.location.region;
 
 import com.gufli.bookshelf.api.location.ShelfLocation;
 
-public class WorldArena implements Arena {
+import java.util.UUID;
 
-    private final String worldId;
+public class WorldRegion implements Region {
 
-    public WorldArena(String worldId) {
+    private final UUID worldId;
+
+    public WorldRegion(UUID worldId) {
         this.worldId = worldId;
     }
 
@@ -15,7 +17,7 @@ public class WorldArena implements Arena {
         return loc.worldId().equals(worldId);
     }
 
-    public String worldId() {
+    public UUID worldId() {
         return worldId;
     }
 }

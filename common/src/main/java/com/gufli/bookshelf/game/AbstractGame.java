@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.api.location.arena.Arena;
+import com.gufli.bookshelf.api.location.region.Region;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.event.Events;
 import com.gufli.bookshelf.game.events.GameStartEvent;
@@ -19,7 +19,7 @@ public abstract class AbstractGame implements Game {
 
     protected final Map<ShelfPlayer, PlayerGameStatus> players = new ConcurrentHashMap<>();
 
-    private Arena arena;
+    private Region region;
     private GameStatus gameStatus = GameStatus.WAITING;
 
     @Override
@@ -74,12 +74,12 @@ public abstract class AbstractGame implements Game {
     }
 
     @Override
-    public Arena getArena() {
-        return arena;
+    public Region getArena() {
+        return region;
     }
 
-    public void setArena(Arena arena) {
-        this.arena = arena;
+    public void setArena(Region region) {
+        this.region = region;
     }
 
     public final void start() {

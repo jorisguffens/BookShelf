@@ -1,8 +1,7 @@
-package com.gufli.bookshelf.api.cooldowns;
+package com.gufli.bookshelf.api.cooldown;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 public interface CooldownManager {

@@ -1,6 +1,6 @@
 package com.gufli.bookshelf.game;
 
-import com.gufli.bookshelf.api.location.arena.Arena;
+import com.gufli.bookshelf.api.location.region.Region;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 import java.util.Set;
@@ -17,6 +17,6 @@ public interface Game {
 
     void broadcast(String msg);
 
-    Arena getArena();
+    Region getArena();
 
 }

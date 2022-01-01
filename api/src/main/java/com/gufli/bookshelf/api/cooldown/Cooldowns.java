@@ -1,7 +1,6 @@
-package com.gufli.bookshelf.api.cooldowns;
+package com.gufli.bookshelf.api.cooldown;
 
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
-import com.gufli.bookshelf.api.sidebar.SidebarManager;
 
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;

@@ -15,6 +15,7 @@ import com.gufli.bookshelf.bukkit.item.BukkitItemSerializer;
 import com.gufli.bookshelf.bukkit.listeners.InventoryMenuListener;
 import com.gufli.bookshelf.bukkit.listeners.PlayerAttackEventListener;
 import com.gufli.bookshelf.bukkit.listeners.PlayerDeathEventListener;
+import com.gufli.bookshelf.bukkit.listeners.PlayerMoveListener;
 import com.gufli.bookshelf.bukkit.nametags.BukkitNametagManager;
 import com.gufli.bookshelf.bukkit.server.BukkitShelfServer;
 import com.gufli.bookshelf.bukkit.server.ConnectionListener;
@@ -60,6 +61,7 @@ public class BukkitShelf extends JavaPlugin {
         pm.registerEvents(new PlayerAttackEventListener(), this);
         pm.registerEvents(new PlayerDeathEventListener(), this);
         pm.registerEvents(new ChatListener(), this);
+        pm.registerEvents(new PlayerMoveListener(), this);
 
         // Bukkit manager imlementations
         new BukkitTextColorMapper();

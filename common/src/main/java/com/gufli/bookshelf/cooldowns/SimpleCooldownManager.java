@@ -1,10 +1,9 @@
 package com.gufli.bookshelf.cooldowns;
 
-import com.gufli.bookshelf.api.cooldowns.CooldownManager;
+import com.gufli.bookshelf.api.cooldown.CooldownManager;
 import com.gufli.bookshelf.api.entity.ShelfPlayer;
 
 import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.time.temporal.TemporalUnit;
 
 public class SimpleCooldownManager implements CooldownManager {
