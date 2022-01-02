@@ -76,6 +76,16 @@ public class BukkitPlayer extends AbstractShelfPlayer {
     }
 
     @Override
+    public String locale() {
+        return handle.getLocale();
+    }
+
+    @Override
+    public String ipAddress() {
+        return handle.getAddress().getHostName();
+    }
+
+    @Override
     public boolean hasPermission(String permission) {
         return handle.hasPermission(permission);
     }

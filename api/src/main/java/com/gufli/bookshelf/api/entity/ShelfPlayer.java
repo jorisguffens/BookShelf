@@ -34,6 +34,10 @@ public interface ShelfPlayer extends ShelfCommandSender {
 
     ShelfLocation location();
 
+    String locale();
+
+    String ipAddress();
+
     // cache
 
     void set(String key, Object value);

@@ -46,7 +46,11 @@ public class Color {
         if ( !hex.startsWith("#") || hex.length() == 7 ) {
             throw new IllegalArgumentException("Invalid hex color string.");
         }
-        return fromRGB(Integer.parseInt(hex.substring(1), 16));
+        try {
+            return fromRGB(Integer.parseInt(hex.substring(1), 16));
+        } catch (NumberFormatException ex) {
+            throw new IllegalArgumentException("Invalid hex color string.", ex);
+        }
     }
 
     // For internal use only
