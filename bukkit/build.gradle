@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'com.github.johnrengelman.shadow' version '2.0.4'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
 }
 
 repositories {
@@ -18,8 +18,6 @@ dependencies {
     implementation project(':bukkit-api')
     implementation project(':common')
 
-    //compileOnly 'me.lucko:helper:5.6.2'
-
     compileOnly 'org.spigotmc:spigot-api:1.18-R0.1-SNAPSHOT'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
 }
@@ -33,6 +31,7 @@ processResources {
 }
 
 shadowJar {
+    archiveClassifier.set("")
     archiveBaseName.set("${rootProject.name}")
     archiveVersion.set("${rootProject.version}")
 

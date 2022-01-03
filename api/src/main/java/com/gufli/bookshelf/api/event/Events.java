@@ -41,6 +41,18 @@ public class Events {
     }
 
     /**
+     * Makes a MergedSubscriptionBuilder for a given super type
+     *
+     * @param handledClass the super type of the event handler
+     * @param <T>          the super type class
+     * @param priority     priority of the event
+     * @return a {@link SubscriptionBuilder} to construct the event handler
+     */
+    public static <T> SubscriptionBuilder<T> subscribe(Class<T> handledClass, EventPriority priority) {
+        return eventManager.subscribe(handledClass, priority);
+    }
+
+    /**
      * Makes a MergedSubscriptionBuilder for a super event class
      *
      * @param superClass   the abstract super event class

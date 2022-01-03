@@ -17,16 +17,17 @@
 
 package com.gufli.bookshelf.bukkit.api.entity;
 
+import com.gufli.bookshelf.api.entity.AbstractDataHolder;
+import com.gufli.bookshelf.api.entity.ShelfPlayer;
 import com.gufli.bookshelf.api.location.ShelfLocation;
 import com.gufli.bookshelf.bukkit.api.location.LocationConverter;
 import com.gufli.bookshelf.bukkit.api.menu.InventoryMenu;
-import com.gufli.bookshelf.entity.AbstractShelfPlayer;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
 
-public class BukkitPlayer extends AbstractShelfPlayer {
+public class BukkitPlayer extends AbstractDataHolder implements ShelfPlayer {
 
     private final Player handle;
 
@@ -97,7 +98,7 @@ public class BukkitPlayer extends AbstractShelfPlayer {
 
     // gui
 
-    private final String CUSTOM_MENU_KEY = "BUKKIT_INVENTORY_MENU";
+    public final static String CUSTOM_MENU_KEY = "BUKKIT_INVENTORY_MENU";
 
     public void openMenu(InventoryMenu inventoryMenu) {
         handle.openInventory(inventoryMenu.handle());

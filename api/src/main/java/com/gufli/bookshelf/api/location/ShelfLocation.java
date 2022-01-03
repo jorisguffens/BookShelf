@@ -95,6 +95,11 @@ public class ShelfLocation {
         return Math.sqrt(Math.pow(x - l.x, 2) + Math.pow(y - l.y, 2) + Math.pow(z - l.z, 2));
     }
 
+    public boolean isSimilar(ShelfLocation other) {
+        if ( other == null ) return false;
+        return this.worldId.equals(other.worldId) && this.x == other.x && this.y == other.y && this.z == other.z;
+    }
+
     public String serialize() {
         DecimalFormat df = new DecimalFormat("#.#", new DecimalFormatSymbols(Locale.ROOT));
         return worldId + " , "
@@ -103,6 +108,11 @@ public class ShelfLocation {
                 + df.format(z) + " , "
                 + df.format(yaw) + " , "
                 + df.format(pitch);
+    }
+
+    @Override
+    public String toString() {
+        return "ShelfLocation[" + serialize() + "]";
     }
 
     public static ShelfLocation deserialize(String str) {

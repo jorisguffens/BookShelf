@@ -92,6 +92,8 @@ public interface SubscriptionBuilder<T> {
      */
     Subscription<T> handler(Consumer<? super T> handler);
 
+    Subscription<T> handler(BiConsumer<Subscription<T>, ? super T> handler);
+
     <E> SubscriptionBuilder<T> bindEvent(Class<E> eventClass, Function<E, T> function);
 
     <E> SubscriptionBuilder<T> bindEvent(Class<E> eventClass, EventPriority priority, Function<E, T> function);

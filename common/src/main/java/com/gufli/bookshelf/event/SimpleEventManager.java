@@ -40,6 +40,12 @@ public class SimpleEventManager implements EventManager {
         return builder;
     }
 
+    public <T> SimpleSubscriptionBuilder<T> subscribe(Class<T> handledClass, EventPriority priority) {
+        SimpleSubscriptionBuilder<T> builder = SimpleSubscriptionBuilder.newBuilder(handledClass);
+        builder.bindEvent(handledClass, e -> e);
+        return builder;
+    }
+
     public <S> SimpleSubscriptionBuilder<S> merge(Class<S> superClass, Class<? extends S>... eventClasses) {
         return SimpleSubscriptionBuilder.newBuilder(superClass, eventClasses);
     }

@@ -22,7 +22,7 @@ import com.gufli.bookshelf.api.location.ShelfLocation;
 
 import java.util.UUID;
 
-public interface ShelfPlayer extends ShelfCommandSender {
+public interface ShelfPlayer extends ShelfCommandSender, DataHolder {
 
     UUID id();
 
@@ -38,15 +38,4 @@ public interface ShelfPlayer extends ShelfCommandSender {
 
     String ipAddress();
 
-    // cache
-
-    void set(String key, Object value);
-
-    boolean has(String key);
-
-    void remove(String key);
-
-    Object get(String key);
-
-    <T> T get(String key, Class<T> clazz);
 }

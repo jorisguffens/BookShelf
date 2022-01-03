@@ -59,7 +59,7 @@ public class SimpleSubscription<T> implements Subscription<T> {
     private final Map<EventHook<?>, EventHandler<?>> eventHandlers = new HashMap<>();
 
     @SuppressWarnings("unchecked")
-    SimpleSubscription(SimpleSubscriptionBuilder<T> builder, List<BiConsumer<SimpleSubscription<T>, ? super T>> handlers) {
+    SimpleSubscription(SimpleSubscriptionBuilder<T> builder, List<BiConsumer<Subscription<T>, ? super T>> handlers) {
         this.handledClass = builder.handledClass;
         this.mappings = ImmutableMap.copyOf(builder.mappings);
         this.exceptionConsumer = builder.exceptionConsumer;

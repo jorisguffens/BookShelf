@@ -53,7 +53,7 @@ public class InventoryMenuListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (!(e.getWhoClicked() instanceof Player)) {
+        if (!(e.getWhoClicked() instanceof Player p)) {
             return;
         }
 
@@ -97,7 +97,6 @@ public class InventoryMenuListener implements Listener {
             sound = Sound.valueOf("UI_BUTTON_CLICK"); // 1.9 +
         }
 
-        Player p = (Player) e.getWhoClicked();
         p.playSound(p.getLocation().add(0, 1.8, 0), sound, 1f, 1f);
     }
 
@@ -109,7 +108,7 @@ public class InventoryMenuListener implements Listener {
         }
 
         inv.dispatchClose(bp);
-        bp.closeMenu();
+        bp.remove(BukkitPlayer.CUSTOM_MENU_KEY);
     }
 
 }

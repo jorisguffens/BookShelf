@@ -26,6 +26,7 @@
 package com.gufli.bookshelf.event.subscription;
 
 import com.google.common.base.Preconditions;
+import com.gufli.bookshelf.api.event.subscription.Subscription;
 import com.gufli.bookshelf.api.util.delegates.Delegates;
 import com.gufli.bookshelf.api.event.EventPriority;
 import com.gufli.bookshelf.api.event.subscription.ExpiryTestStage;
@@ -135,7 +136,7 @@ public class SimpleSubscriptionBuilder<T> implements SubscriptionBuilder<T> {
      * @throws NullPointerException  if the handler is null
      * @throws IllegalStateException if no events have been bound to
      */
-    public SimpleSubscription<T> biHandler(BiConsumer<SimpleSubscription<T>, ? super T> handler) {
+    public SimpleSubscription<T> handler(BiConsumer<Subscription<T>, ? super T> handler) {
         return handlers().biConsumer(handler).register();
     }
 

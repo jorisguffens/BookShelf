@@ -25,6 +25,7 @@
 
 package com.gufli.bookshelf.event.subscription;
 
+import com.gufli.bookshelf.api.event.subscription.Subscription;
 import com.gufli.bookshelf.api.util.delegates.Delegates;
 import com.gufli.bookshelf.api.event.subscription.HandlerList;
 
@@ -34,10 +35,10 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-class SimpleHandlerList<T> implements HandlerList<T, SimpleSubscription<T>> {
+class SimpleHandlerList<T> implements HandlerList<T, Subscription<T>> {
 
     private final SimpleSubscriptionBuilder<T> builder;
-    private final List<BiConsumer<SimpleSubscription<T>, ? super T>> handlers = new ArrayList<>(1);
+    private final List<BiConsumer<Subscription<T>, ? super T>> handlers = new ArrayList<>(1);
 
     SimpleHandlerList(SimpleSubscriptionBuilder<T> builder) {
         this.builder = builder;
@@ -50,7 +51,7 @@ class SimpleHandlerList<T> implements HandlerList<T, SimpleSubscription<T>> {
     }
 
     @Override
-    public SimpleHandlerList<T> biConsumer(BiConsumer<SimpleSubscription<T>, ? super T> handler) {
+    public SimpleHandlerList<T> biConsumer(BiConsumer<Subscription<T>, ? super T> handler) {
         Objects.requireNonNull(handler, "handler");
         this.handlers.add(handler);
         return this;

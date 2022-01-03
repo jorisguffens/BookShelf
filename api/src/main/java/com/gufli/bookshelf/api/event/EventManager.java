@@ -15,6 +15,8 @@ public interface EventManager {
 
     <T> SubscriptionBuilder<T> subscribe(Class<T> handledClass);
 
+    <T> SubscriptionBuilder<T> subscribe(Class<T> handledClass, EventPriority priority);
+
     <S> SubscriptionBuilder<S> merge(Class<S> superClass, Class<? extends S>... eventClasses);
 
     <S> SubscriptionBuilder<S> merge(Class<S> superClass, EventPriority priority, Class<? extends S>... eventClasses);

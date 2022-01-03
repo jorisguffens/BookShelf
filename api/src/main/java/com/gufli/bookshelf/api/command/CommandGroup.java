@@ -60,7 +60,7 @@ public abstract class CommandGroup extends Command<ShelfCommandSender> {
         Command<?> bestcommand = null;
         for (Command<? extends ShelfCommandSender> subCmd : commands) {
             for (String alias : subCmd.info().commands()) {
-                if (!input.startsWith(alias.toLowerCase())) {
+                if (!(input + " ").startsWith(alias.toLowerCase() + " ")) {
                     continue;
                 }
 
@@ -121,11 +121,11 @@ public abstract class CommandGroup extends Command<ShelfCommandSender> {
         String input = String.join(" ", args).toLowerCase();
         List<String> result = new ArrayList<>();
 
-        // partial commands
+        // partial commands (cmd autocompletion)
         outer:
         for (Command<?> subCmd : commands) {
             for (String cmd : subCmd.info().commands()) {
-                if (!cmd.toLowerCase().startsWith(input)) {
+                if (!(cmd).toLowerCase().startsWith(input)) {
                     continue;
                 }
 
@@ -134,15 +134,17 @@ public abstract class CommandGroup extends Command<ShelfCommandSender> {
             }
         }
 
-        // full commands
+        // full commands (args autocompletion)
         int largestlength = 0;
         List<String> tempOptions = new ArrayList<>();
         outer:
         for (Command<?> subCmd : commands) {
             for (String cmd : subCmd.info().commands()) {
-                if (!input.startsWith(cmd.toLowerCase())) {
+                if (!(input + " ").startsWith(cmd.toLowerCase() + " ")) {
                     continue;
                 }
+
+
 
                 int length = (int) cmd.chars().filter(ch -> ch == ' ').count() + 1;
                 String[] cmdArgs = Arrays.copyOfRange(args, length, args.length);
