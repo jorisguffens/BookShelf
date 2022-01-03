@@ -13,3 +13,4 @@ cmd.bookshelf.bossbar=Your bossbar has been updated
 cmd.bookshelf.title=You have been sent a title
 cmd.bookshelf.nametag=Your nametag has been updated
 cmd.bookshelf.menu=You have opened a menu
+cmd.bookshelf.hologram=Showing hologram for 15 seconds.

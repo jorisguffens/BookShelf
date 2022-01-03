@@ -27,24 +27,24 @@ public class ShelfLocation {
 
     private final UUID worldId;
 
-    private double x;
-    private double y;
-    private double z;
+    private final double x;
+    private final double y;
+    private final double z;
 
-    private float yaw;
-    private float pitch;
+    private final float yaw;
+    private final float pitch;
 
-    public ShelfLocation(UUID worldId, double x, double y, double z) {
+    public ShelfLocation(UUID worldId, double x, double y, double z, float yaw, float pitch) {
         this.worldId = worldId;
         this.x = x;
         this.y = y;
         this.z = z;
-    }
-
-    public ShelfLocation(UUID worldId, double x, double y, double z, float yaw, float pitch) {
-        this(worldId, x, y, z);
         this.yaw = yaw;
         this.pitch = pitch;
+    }
+
+    public ShelfLocation(UUID worldId, double x, double y, double z) {
+        this(worldId, x, y, z, 0, 0);
     }
 
     public UUID worldId() {
@@ -71,26 +71,6 @@ public class ShelfLocation {
         return yaw;
     }
 
-    public void setX(double x) {
-        this.x = x;
-    }
-
-    public void setY(double y) {
-        this.y = y;
-    }
-
-    public void setZ(double z) {
-        this.z = z;
-    }
-
-    public void setYaw(float yaw) {
-        this.yaw = yaw;
-    }
-
-    public void setPitch(float pitch) {
-        this.pitch = pitch;
-    }
-
     public double distanceTo(ShelfLocation l) {
         return Math.sqrt(Math.pow(x - l.x, 2) + Math.pow(y - l.y, 2) + Math.pow(z - l.z, 2));
     }
@@ -98,6 +78,14 @@ public class ShelfLocation {
     public boolean isSimilar(ShelfLocation other) {
         if ( other == null ) return false;
         return this.worldId.equals(other.worldId) && this.x == other.x && this.y == other.y && this.z == other.z;
+    }
+
+    public ShelfLocation clone() {
+        return new ShelfLocation(worldId, x, y, z, yaw, pitch);
+    }
+
+    public ShelfLocation add(double x, double y, double z) {
+        return new ShelfLocation(worldId, this.x + x, this.y + y, this.z + z, yaw, pitch);
     }
 
     public String serialize() {
@@ -115,6 +103,7 @@ public class ShelfLocation {
         return "ShelfLocation[" + serialize() + "]";
     }
 
+
     public static ShelfLocation deserialize(String str) {
         if ( str == null ) {
             return null;
@@ -130,19 +119,22 @@ public class ShelfLocation {
             return null;
         }
 
-        ShelfLocation loc = new ShelfLocation(
+        float yaw = 0;
+        float pitch = 0;
+
+        if ( parts.length >= 5 ) {
+            yaw = Float.parseFloat(parts[4]);
+        }
+        if ( parts.length == 6 ) {
+            pitch = Float.parseFloat(parts[5]);
+        }
+
+        return new ShelfLocation(
                 UUID.fromString(parts[0]),
                 Double.parseDouble(parts[1]),
                 Double.parseDouble(parts[2]),
-                Double.parseDouble(parts[3]));
-
-        if ( parts.length >= 5 ) {
-            loc.setYaw(Float.parseFloat(parts[4]));
-        }
-
-        if ( parts.length == 6 ) {
-            loc.setPitch(Float.parseFloat(parts[5]));
-        }
-        return loc;
+                Double.parseDouble(parts[3]),
+                yaw,
+                pitch);
     }
 }

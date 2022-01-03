@@ -16,7 +16,13 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@CommandInfo(commands = "bossbar animated", argumentsHint = "<color> <style> <text>", minArguments = 3)
+@CommandInfo(
+        commands = "bossbar animated",
+        argumentsHint = "<color> <style> <text>",
+        minArguments = 3,
+        playerOnly = true,
+        permissions = "bookshelf.bossbar.animated"
+)
 public class BookshelfBossbarAnimatedCommand extends Command<ShelfPlayer> {
 
     @Override

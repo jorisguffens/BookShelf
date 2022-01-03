@@ -9,8 +9,10 @@ import com.gufli.bookshelf.bukkit.color.BukkitTextColorMapper;
 import com.gufli.bookshelf.bukkit.api.command.BukkitCommandExecutor;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarAnimatedCommand;
 import com.gufli.bookshelf.bukkit.commands.BookshelfBossbarCommand;
+import com.gufli.bookshelf.bukkit.commands.BookshelfHologramCommand;
 import com.gufli.bookshelf.bukkit.commands.BookshelfMenuCommand;
 import com.gufli.bookshelf.bukkit.event.BukkitEventHook;
+import com.gufli.bookshelf.bukkit.hologram.BukkitHologramManager;
 import com.gufli.bookshelf.bukkit.item.BukkitItemSerializer;
 import com.gufli.bookshelf.bukkit.listeners.InventoryMenuListener;
 import com.gufli.bookshelf.bukkit.listeners.PlayerAttackEventListener;
@@ -37,8 +39,15 @@ public class BukkitShelf extends JavaPlugin {
     private BukkitScheduler scheduler;
     private BukkitShelfServer server;
 
+
+    private static BukkitShelf instance;
+    public static BukkitShelf plugin() {
+        return instance;
+    }
+
     @Override
     public void onEnable() {
+        instance = this;
         this.scheduler = new BukkitScheduler(this);
 
         // Startup server
@@ -73,6 +82,7 @@ public class BukkitShelf extends JavaPlugin {
             new BukkitSidebarManager();
             new BukkitTitleManager();
             new BukkitBossbarManager();
+            new BukkitHologramManager();
         }
 
         // commands
@@ -83,6 +93,7 @@ public class BukkitShelf extends JavaPlugin {
         bcg.add(new BookshelfBossbarCommand());
         bcg.add(new BookshelfBossbarAnimatedCommand());
         bcg.add(new BookshelfMenuCommand());
+        bcg.add(new BookshelfHologramCommand());
 
         getLogger().info("Enabled " + getDescription().getName() + " v" + getDescription().getVersion() + ".");
     }

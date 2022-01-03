@@ -14,11 +14,12 @@ import com.gufli.bookshelf.bukkit.api.entity.BukkitPlayer;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class BukkitSidebarManager implements SidebarManager {
 
-    private final Map<ShelfPlayer, BukkitSidebar> players = new HashMap<>();
+    private final Map<ShelfPlayer, BukkitSidebar> players = new ConcurrentHashMap<>();
 
     public BukkitSidebarManager() {
         Sidebars.register(this);

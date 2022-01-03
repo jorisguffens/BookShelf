@@ -12,7 +12,12 @@ import com.gufli.bookshelf.bukkit.api.menu.InventoryMenuBuilder;
 import com.gufli.bookshelf.messages.DefaultMessages;
 import org.bukkit.inventory.ItemStack;
 
-@CommandInfo(commands = "menu", minArguments = 0)
+@CommandInfo(
+        commands = "menu",
+        minArguments = 0,
+        playerOnly = true,
+        permissions = "bookshelf.menu"
+)
 public class BookshelfMenuCommand extends Command<ShelfPlayer> {
 
     @Override
